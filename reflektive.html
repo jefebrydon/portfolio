@@ -19,8 +19,48 @@
   <link href="images/webclip.jpg" rel="apple-touch-icon">
   <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-173352983-1"></script>
   <script type="text/javascript">window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-173352983-1', {'anonymize_ip': false});</script>
+  <style>
+    /* Style the modal */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content/Box */
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto; /* 15% from the top and centered */
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%; /* Could be more or less, depending on screen size */
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    /* The Close Button */
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
+
   <div class="section">
     <div data-collapse="tiny" data-animation="default" data-duration="300" data-easing="ease-in-out" data-doc-height="1" data-easing2="ease-in-out" role="banner" class="navbar w-nav">
       <a href="index.html" class="brand w-clearfix w-nav-brand"><img src="images/J_big.png" alt="" class="img-clickable"></a>
@@ -112,6 +152,20 @@
       <div style="padding-top:56.17021276595745%" class="w-video w-embed"><iframe class="embedly-embed" src="https://cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.youtube.com%2Fembed%2F9OGzNWdycks&display_name=YouTube&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D9OGzNWdycks&key=96f1f04c5f4143bcb0f2e68c87d65feb&type=text%2Fhtml&schema=youtube" scrolling="no" title="YouTube embed" frameborder="0" allow="autoplay; fullscreen" allowfullscreen="true"></iframe></div>
     </div>
   </div>
+
+  <!-- The Modal -->
+  <div id="passwordModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p>This case study is password protected.</p>
+      <input type="password" id="passwordField" placeholder="Password">
+      <button id="submitPassword">Submit</button>
+    </div>
+
+  </div>
+
   <div>
     <div class="padded float-up w-container"></div>
     <div class="padded w-container"></div>
@@ -138,8 +192,8 @@
     <div class="padded w-container">
       <h2 class="subheader bottom80">Next Case Study</h2>
       <div class="float-from-left">
-        <a data-w-id="421e9b56-9bf2-02d7-9759-127cb091fe21" style="-webkit-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" href="jira-pricing-page.html" class="link-block-10 w-inline-block"><img src="images/Jira_logo_color.png" alt="" class="image-27">
-          <h2 class="vertically-centered-text">Jira Pricing Page</h2>
+        <a data-w-id="421e9b56-9bf2-02d7-9759-127cb091fe21" href="#" onclick="openPasswordModal(); return false;" class="link-block-10 w-inline-block"><img src="images/PeekLogo.png" alt="The Peek Pro logo" class="image-27">
+          <h2 class="vertically-centered-text">Booking Flow Redesign</h2>
         </a>
         <div class="pill-div">
           <div class="method-pill">
@@ -159,7 +213,7 @@
           </div>
         </div>
       </div>
-      <a href="jira-pricing-page.html" class="case-study-link bottom100 w-inline-block"><img src="images/Jira-Pricing-Page-Hero.png" loading="lazy" style="-webkit-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" data-w-id="421e9b56-9bf2-02d7-9759-127cb091fe36" alt="" class="box-shadow"></a>
+      <a href="#" onclick="openPasswordModal(); return false;" class="case-study-link bottom100 w-inline-block"><img src="images/Booking-Flow.png" loading="lazy" style="opacity:0;-webkit-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" data-w-id="45fc1ebb-bdfa-f9f3-6997-0c41aa0c49f9" alt="" class="box-shadow"></a>
       <a href="jira-pricing-page.html" class="image-link w-inline-block"></a>
     </div>
   </div>
@@ -170,5 +224,43 @@
   </div>
   <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=56eb215f7bfc872f557b1f9a" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
   <script src="js/webflow.js" type="text/javascript"></script>
+
+  <script>
+    // Get the modal
+    var modal = document.getElementById("passwordModal");
+
+    // Get the button that opens the modal
+    //var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the link, open the modal
+    function openPasswordModal() {
+      modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    // Password validation
+    document.getElementById("submitPassword").addEventListener("click", function() {
+      var password = document.getElementById("passwordField").value;
+      if (password === "Peek") {
+        window.location.href = "peek-pro-booking-flow.html"; // Redirect if correct
+      } else {
+        alert("Incorrect password. Please try again.");
+      }
+    });
+  </script>
 </body>
 </html>
