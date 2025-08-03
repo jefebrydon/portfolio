@@ -19,6 +19,29 @@
   <link href="images/webclip.jpg" rel="apple-touch-icon">
   <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-173352983-1"></script>
   <script type="text/javascript">window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-173352983-1', {'anonymize_ip': false});</script>
+  <style>
+    [data-w-id="title-fade-right"] {
+      animation: fadeInRight 1s ease-out 0.3s forwards;
+    }
+    
+    [data-w-id="image-fade-left"] {
+      animation: fadeInLeft 1s ease-out 0.6s forwards;
+    }
+    
+    @keyframes fadeInRight {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    @keyframes fadeInLeft {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="section">
@@ -40,8 +63,8 @@
     </div>
     <div data-w-id="fb7319e0-d864-970a-16df-454c4041b4d9" class="padded top40 w-container">
       <div class="bottom20"><img src="images/PeekLogo.png" alt="The Peek Pro logo" class="image-27 top--20">
-        <h1 class="heading-17">Booking Flow Redesign</h1>
-      </div><img src="images/Booking-Flow.png" loading="lazy" alt="The final Booking Flow (step 1)" class="bottom80">
+        <h1 data-w-id="title-fade-right" style="opacity:0;transform:translateX(-30px)" class="heading-17">Booking Flow Redesign</h1>
+      </div><img src="images/Booking-Flow.png" loading="lazy" data-w-id="image-fade-left" style="opacity:0;transform:translateX(30px)" alt="The final Booking Flow (step 1)" class="bottom80">
     </div>
     <div data-w-id="cfaf02fa-e4f9-a431-a8bf-06da59a61bcb" class="padded bottom-pad-100 w-container">
       <h2>Background</h2>
