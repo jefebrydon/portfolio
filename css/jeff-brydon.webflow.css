@@ -4337,6 +4337,14 @@ blockquote {
   height: 300px;
 }
 
+.hover-grow {
+  transition: transform 0.3s ease;
+}
+
+.hover-grow:hover {
+  transform: scale(1.05);
+}
+
 .image-28 {
   opacity: 0;
   background-image: url('../images/Jira_logo_color.png');
