@@ -74,7 +74,7 @@
         data-autoplay="true" data-loop="true" data-wf-ignore="true"
         class="background-video w-background-video w-background-video-atom"><video
           id="7e2a3ef3-709a-3efe-3b6d-bdc4c024d293-video" autoplay="" loop=""
-          style="background-image:url(&quot;https://uploads-ssl.webflow.com/56eb215f7bfc872f557b1f9a/5f80d64e4eec605945c005fe_Show reel prep-poster-00001.jpg&quot;)"
+          style="background-image:url(&quot;https://uploads-ssl.webflow.com/56eb215f7bfc872f557b1f9a/5f80d64e4eec605945c005fe_Show reel prep-poster-00001.jpg&quot;);opacity:0;transition:opacity 1s ease-in-out;"
           muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
           <source
             src="https://uploads-ssl.webflow.com/56eb215f7bfc872f557b1f9a/5f80d64e4eec605945c005fe_Show reel prep-transcode.mp4"
@@ -731,6 +731,22 @@
           cancelBtn.click();
         }
       });
+    });
+
+    // Video fade-in effect
+    document.addEventListener('DOMContentLoaded', function() {
+      const video = document.getElementById('7e2a3ef3-709a-3efe-3b6d-bdc4c024d293-video');
+      if (video) {
+        // Trigger fade-in when video can play
+        video.addEventListener('canplay', function() {
+          video.style.opacity = '1';
+        }, { once: true });
+        
+        // Fallback: if canplay already fired, fade in immediately
+        if (video.readyState >= 2) {
+          video.style.opacity = '1';
+        }
+      }
     });
   </script>
 </body>
