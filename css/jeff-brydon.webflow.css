@@ -4490,11 +4490,9 @@ blockquote {
 
 .paralax-bg-city {
   z-index: -1;
-  object-fit: cover;
-  background-image: url('../images/SF_white_edges.png');
-  background-position: 50% 0;
-  background-repeat: no-repeat;
-  background-size: contain;
+  object-fit: contain;
+  object-position: 50% 0;
+  width: 100%;
   height: auto;
   margin-top: 80px;
   position: absolute;
