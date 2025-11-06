@@ -4113,7 +4113,10 @@ blockquote {
 .navigation {
   color: #666;
   letter-spacing: .2px;
-  text-transform: uppercase;
+  text-transform: none;
+  font-family: Nunito Sans, sans-serif;
+  font-size: 16px;
+  font-weight: 300;
   flex-direction: row;
   justify-content: center;
   width: 130px;
@@ -4126,7 +4129,6 @@ blockquote {
 
 .navigation:hover {
   color: #222;
-  font-weight: 300;
 }
 
 .navigation.w--current {
