@@ -7473,23 +7473,26 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
 
   .menu-button-2 {
     color: #fff;
-    order: 1;
-    align-self: flex-end;
     width: 35px;
     margin-top: 14px;
     margin-right: 20px;
     padding: 0;
     font-size: 36px;
-    position: static;
+    position: absolute;
+    top: 14px;
+    right: 20px;
+    z-index: 3;
   }
 
   .menu-button-2.w--open {
     background-color: #c8c8c800;
-    align-self: flex-end;
     margin-top: 14px;
     margin-right: 20px;
     padding-left: 0;
     padding-right: 0;
+    position: absolute;
+    top: 14px;
+    right: 20px;
   }
 
   .brand {
