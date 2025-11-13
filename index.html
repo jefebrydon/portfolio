@@ -110,6 +110,14 @@
         color: #999;
       }
     }
+    /* Header slide-down animation */
+    .navbar {
+      transform: translateY(-100%);
+      transition: transform 1s ease-out;
+    }
+    .navbar.header-loaded {
+      transform: translateY(0);
+    }
   </style>
 </head>
 
@@ -886,6 +894,17 @@
         
         sparkleButton.addEventListener('mouseleave', function() {
           sparkleIcon.src = defaultSrc;
+        });
+      }
+    });
+
+    // Header slide-down animation on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      const navbar = document.querySelector('.navbar');
+      if (navbar) {
+        // Trigger animation after a brief delay to ensure smooth rendering
+        requestAnimationFrame(function() {
+          navbar.classList.add('header-loaded');
         });
       }
     });
