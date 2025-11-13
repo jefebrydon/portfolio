@@ -11,10 +11,10 @@
   --dark-cyan: #00ad92;
   --lighter-teal: #00576d;
   --link: #48b5d1;
-  --grey-50: #FBFBFB;
-  --grey-75: #F1F1F1;
-  --grey-100: #E5E8E9;
-  --grey-200: #97A4A9;
+  --grey-50: #fbfbfb;
+  --grey-75: #f1f1f1;
+  --grey-100: #e5e8e9;
+  --grey-200: #97a4a9;
   --grey-250: #898989;
   --grey-300: #666666;
 }
@@ -1971,10 +1971,24 @@ blockquote {
 }
 
 .navbar {
-  background-color: #fff0;
+  background-color: rgba(251, 251, 251, 0.6) !important;
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important;
+  border-bottom: 1px solid var(--grey-50);
   display: flex;
   position: fixed;
   inset: 0% 0% auto;
+  z-index: 1000;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  min-height: 70px;
+}
+
+.navbar.w-nav {
+  background-color: rgba(251, 251, 251, 0.6) !important;
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important;
 }
 
 .bottom-space {
@@ -3796,12 +3810,12 @@ blockquote {
 .shadow-div {
   z-index: -2;
   opacity: 1;
-  background-color: #fff;
-  border: 1px #000;
+  background-color: transparent;
+  border: 0;
   height: 76px;
   position: fixed;
   inset: 0% 0% auto;
-  box-shadow: 0 5px 20px #7584aa40;
+  box-shadow: none;
 }
 
 .shadow-div.visible {
@@ -5064,16 +5078,13 @@ blockquote {
   -webkit-text-fill-color: inherit;
   object-fit: scale-down;
   background-clip: border-box;
-  width: 810px;
-  max-width: 810px;
+  width: 650px;
   height: 550px;
-  margin-top: -60px;
-  margin-left: auto;
-  margin-right: -80px;
+  margin-top: 80px;
   padding-top: 0;
   padding-bottom: 0;
-  position: relative;
-  display: block;
+  position: absolute;
+  inset: 0% 0% 0% auto;
 }
 
 .div-block-41 {
@@ -5273,11 +5284,7 @@ blockquote {
 }
 
 .column-43 {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  position: relative;
-  overflow: visible;
+  height: 0;
 }
 
 .hover-grow {
@@ -6167,14 +6174,12 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
 
   .video-section {
     opacity: 1;
-    width: 710px;
-    max-width: 710px;
+    width: 550px;
     height: 480px;
-    margin-top: -30px;
-    margin-left: auto;
-    margin-right: -80px;
+    margin-top: 110px;
+    margin-right: -40px;
     display: block;
-    position: relative;
+    position: absolute;
   }
 
   .html-embed {
@@ -7290,9 +7295,19 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
   }
 
   .navbar {
+    background-color: rgba(251, 251, 251, 0.6) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border-bottom: 1px solid var(--grey-50);
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
+  }
+
+  .navbar.w-nav {
+    background-color: rgba(251, 251, 251, 0.6) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
   }
 
   .bottom-space {
