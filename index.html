@@ -130,6 +130,9 @@
         <div data-w-id="ad52a0ad-1789-8cad-1432-6fa8ea9894a7" class="gradient-div tab-highlight"></div>
       </div>
     </nav>
+    <button class="sparkle-button" aria-label="Open JeffBot">
+      <img src="images/JeffBot_button.svg" alt="" class="sparkle-icon">
+    </button>
     <div class="shadow-div"></div>
   </div>
   <div class="video-section w-clearfix">
@@ -865,6 +868,25 @@
         if (video.readyState >= 2) {
           video.style.opacity = '1';
         }
+      }
+    });
+
+    // JeffBot button hover image swap
+    document.addEventListener('DOMContentLoaded', function() {
+      const sparkleButton = document.querySelector('.sparkle-button');
+      const sparkleIcon = document.querySelector('.sparkle-icon');
+      
+      if (sparkleButton && sparkleIcon) {
+        const defaultSrc = 'images/JeffBot_button.svg';
+        const hoverSrc = 'images/JeffBot_button_hover.svg';
+        
+        sparkleButton.addEventListener('mouseenter', function() {
+          sparkleIcon.src = hoverSrc;
+        });
+        
+        sparkleButton.addEventListener('mouseleave', function() {
+          sparkleIcon.src = defaultSrc;
+        });
       }
     });
   </script>
