@@ -11,6 +11,12 @@
   --dark-cyan: #00ad92;
   --lighter-teal: #00576d;
   --link: #48b5d1;
+  --grey-50: #FBFBFB;
+  --grey-75: #F1F1F1;
+  --grey-100: #E5E8E9;
+  --grey-200: #97A4A9;
+  --grey-250: #898989;
+  --grey-300: #666666;
 }
 
 .w-backgroundvideo-backgroundvideoplaypausebutton:focus-visible {
@@ -5058,13 +5064,16 @@ blockquote {
   -webkit-text-fill-color: inherit;
   object-fit: scale-down;
   background-clip: border-box;
-  width: 650px;
+  width: 810px;
+  max-width: 810px;
   height: 550px;
-  margin-top: 80px;
+  margin-top: -60px;
+  margin-left: auto;
+  margin-right: -80px;
   padding-top: 0;
   padding-bottom: 0;
-  position: absolute;
-  inset: 0% 0% 0% auto;
+  position: relative;
+  display: block;
 }
 
 .div-block-41 {
@@ -5264,7 +5273,11 @@ blockquote {
 }
 
 .column-43 {
-  height: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  overflow: visible;
 }
 
 .hover-grow {
@@ -6154,12 +6167,14 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
 
   .video-section {
     opacity: 1;
-    width: 550px;
+    width: 710px;
+    max-width: 710px;
     height: 480px;
-    margin-top: 110px;
-    margin-right: -40px;
+    margin-top: -30px;
+    margin-left: auto;
+    margin-right: -80px;
     display: block;
-    position: absolute;
+    position: relative;
   }
 
   .html-embed {
