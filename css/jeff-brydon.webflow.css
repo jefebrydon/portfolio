@@ -8178,13 +8178,11 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
 
 /* Push layout - compress main content when sidebar is open */
 body.sidebar-open {
-  margin-right: 356px;
-  transition: margin-right 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* margin-right removed - max-width on sections already handles compression */
 }
 
 body.sidebar-closing {
-  margin-right: 0;
-  transition: margin-right 0.6s cubic-bezier(0.32, 0, 0.67, 0);
+  /* margin-right removed - max-width on sections already handles compression */
 }
 
 /* Ensure main content wrapper compresses */
