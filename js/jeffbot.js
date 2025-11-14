@@ -95,9 +95,9 @@
       sparkleButton.classList.add('is-open');
       sparkleButton.classList.remove('is-closing');
 
-      // Rotate icon +765° clockwise (spring animation, 1.6s)
+      // Rotate icon +765° clockwise (spring animation, 0.8s)
       // Keep it at 765° (which visually equals 45°) - don't normalize!
-      rotateIcon(0, 765, 1600, function() {
+      rotateIcon(0, 765, 800, function() {
         // Keep the full rotation value, don't normalize to 45°
         // The browser will display 765° as 45° visually anyway
         sparkleIcon.style.transform = 'rotate(765deg)';
@@ -133,10 +133,10 @@
       sparkleButton.classList.remove('is-open');
       sparkleButton.classList.add('is-closing');
 
-      // Rotate icon -765° counterclockwise (spring animation, 1.6s)
+      // Rotate icon -765° counterclockwise (spring animation, 0.8s)
       // Start from current rotation (765°) and go to 0°
       // This runs in parallel with the sidebar slide-out
-      rotateIcon(765, 0, 1600, function() {
+      rotateIcon(765, 0, 800, function() {
         // Keep it at 0°
         sparkleIcon.style.transform = 'rotate(0deg)';
         sparkleButton.classList.remove('is-closing');

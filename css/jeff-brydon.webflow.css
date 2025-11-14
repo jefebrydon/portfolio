@@ -1976,7 +1976,7 @@ blockquote {
   background-color: rgba(251, 251, 251, 0.6) !important;
   backdrop-filter: blur(15px) !important;
   -webkit-backdrop-filter: blur(15px) !important;
-  border-bottom: 1px solid var(--grey-50);
+  border-bottom: 1px solid var(--grey-100);
   display: flex;
   position: fixed;
   inset: 0% 0% auto;
@@ -7326,7 +7326,7 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
     background-color: rgba(251, 251, 251, 0.6) !important;
     backdrop-filter: blur(15px) !important;
     -webkit-backdrop-filter: blur(15px) !important;
-    border-bottom: 1px solid var(--grey-50);
+    border-bottom: 1px solid var(--grey-100);
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
@@ -8125,6 +8125,7 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
   width: 356px;
   height: 100vh;
   background: linear-gradient(to bottom, var(--grey-50), #ffffff);
+  border-left: 1px solid var(--grey-100);
   z-index: 999;
   overflow: hidden;
   transform: translateX(100%);
@@ -8195,7 +8196,7 @@ body.sidebar-closing .video-section {
 /* Sparkle icon rotation */
 .sparkle-icon {
   transform-origin: center;
-  transition: transform 1.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .sparkle-button.is-open .sparkle-icon {
@@ -8204,7 +8205,7 @@ body.sidebar-closing .video-section {
 
 .sparkle-button.is-closing .sparkle-icon {
   transform: rotate(0deg);
-  transition: transform 1.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* Prevent horizontal scrollbar */
