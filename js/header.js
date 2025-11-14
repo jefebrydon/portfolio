@@ -134,6 +134,11 @@
       // No existing header, insert both
       body.insertAdjacentHTML('afterbegin', headerHTML);
     }
+    
+    // Initialize gradient bar scroll after header is ready
+    if (isIndexPage()) {
+      setTimeout(initGradientBarScroll, 50);
+    }
   }
 
   // Initialize when DOM is ready
@@ -148,6 +153,62 @@
   // This handles cases where scripts load after DOM is ready
   if (document.readyState === 'complete') {
     setTimeout(initHeader, 100);
+  }
+
+  // Handle gradient bar sliding based on scroll position
+  let gradientBarScrollInitialized = false;
+  function initGradientBarScroll() {
+    // Only run on index.html
+    if (!isIndexPage() || gradientBarScrollInitialized) return;
+
+    const aboutSection = document.getElementById('About');
+    const contactSection = document.getElementById('Contact');
+    const gradientBar = document.querySelector('.gradient-div.tab-highlight');
+    
+    if (!aboutSection || !contactSection || !gradientBar) {
+      // Retry if elements aren't ready yet
+      setTimeout(initGradientBarScroll, 100);
+      return;
+    }
+
+    gradientBarScrollInitialized = true;
+
+    function updateGradientBar() {
+      const aboutRect = aboutSection.getBoundingClientRect();
+      const contactRect = contactSection.getBoundingClientRect();
+      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+      
+      // Remove all state classes first
+      gradientBar.classList.remove('about', 'contact');
+      
+      // Check sections from bottom to top (most specific first)
+      // If Contact section is in view, show Contact highlight
+      if (contactRect.top <= windowHeight * 0.5) {
+        gradientBar.classList.add('contact');
+      }
+      // Else if About section is in view, show About highlight
+      else if (aboutRect.top <= windowHeight * 0.5) {
+        gradientBar.classList.add('about');
+      }
+      // Otherwise, default to Work (no class needed)
+    }
+
+    // Update on scroll
+    let ticking = false;
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(function() {
+          updateGradientBar();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    
+    // Initial check
+    updateGradientBar();
   }
 })();
 
