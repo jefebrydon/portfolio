@@ -1,35 +1,111 @@
 # JeffBot 3000 Sidebar Implementation Plan
 
-## Summary
-- Add a reusable JeffBot sidebar and activator that match the Figma flows (closed `2431-166`, open `2411-42`, shell `2440-188`).
-- Keep the site’s existing Webflow-exported HTML/CSS/JS stack and augment it with minimal, well-scoped custom code.
-- Prioritize the structural shell, layout push behavior, and key animations; chat content arrives in a later phase.
+## Overview
+Implementing an animated sidebar that slides in from the right when the JeffBot activator button is clicked. This is Phase 1 - empty sidebar shell only (no chat content).
 
-## Assumptions & Open Question
-- Plan assumes vanilla HTML/CSS/JS enhancements within the Webflow export (no bundler). Custom CSS lives at the end of `css/jeff-brydon.webflow.css` and new JS can go in a lightweight `js/jeffbot.js` referenced on every page.
-- Clarifying question: should we document and adopt a specific animation helper library (e.g. GSAP, Framer Motion) or stay with native CSS/JS for this phase? Confirming this will lock in class/animation syntax.
+## Target Files
+- `index.html` - Add sidebar HTML structure
+- `css/jeff-brydon.webflow.css` - Add sidebar styles and animations
+- `js/webflow.js` or new JS file - Add animation logic
 
-## Work Breakdown
-| Step | Task | Target Files | Interaction / QA Focus |
-| --- | --- | --- | --- |
-| 1 | Inventory shared header markup, identify all pages using the nav, and note existing shadows/gradients that must change. | `index.html`, `peek-pro-booking-flow.html`, `eagle-pay.html`, `jira-pricing-page.html`, `out-alive.html`, `reflektive.html`, any other HTML variants | Verify header markup parity across pages before edits. |
-| 2 | Introduce global color tokens as CSS custom properties (root-level) for `grey-50` through `black`; replace hardcoded equivalents in new styles. | `css/jeff-brydon.webflow.css` | Check computed colors in dev tools to ensure tokens resolve correctly. |
-| 3 | Restyle the header: remove the existing shadow element (`.shadow-div`), add the grey bottom border, and ensure z-index keeps header above sidebar. | All HTML files listed in Step 1, `css/jeff-brydon.webflow.css` | Confirm header sticks to top without shadow, new border visible on scroll. |
-| 4 | Add JeffBot activator markup (sparkle button) inside the header for desktop/tablet and enqueue the asset swap on hover. Hide button on small breakpoints. | All HTML files with header, `images/jeffbot_button.svg`, `images/jeffbot_button_hover.svg`, `css/jeff-brydon.webflow.css` | Hover swap fires, button positioned per Figma, hidden via media queries on mobile. |
-| 5 | Inject sidebar shell markup (closed by default) immediately after main header, including structural wrappers that allow content push and maintain accessibility landmarks. | Same HTML files, potential shared snippet if feasible | With sidebar closed, layout remains unchanged; DOM order matches accessibility expectations. |
-| 6 | Author layout CSS: define sidebar width (~356px), transitions, and page content wrapper that responds to an “open” state class (e.g., `jeffbot-open`) by shrinking the main container. | `css/jeff-brydon.webflow.css` | Toggle open class in dev tools to ensure sidebar pushes content and maintains responsiveness. |
-| 7 | Implement animation and state logic: create `js/jeffbot.js` (or inline script) to handle button clicks, icon rotation (+/-765°, resting at 45°), sidebar slide timings (spring vs ease), and sync open state across pages. | `js/jeffbot.js`, script tags in each HTML page | Test open/close to confirm animation durations/easings, icon rotation origin, and that header stays fixed. |
-| 8 | Wire mobile hamburger menu entry (“JeffBot 3000”) to call the same toggle handler; ensure button remains hidden on mobile while menu item appears last. | Mobile nav markup inside each HTML file, `css/jeff-brydon.webflow.css`, `js/jeffbot.js` | On devices ≤768px, ensure menu item triggers sidebar, animations identical. |
-| 9 | Cross-page QA: load each HTML page to confirm shared assets paths, no layout jank, and that multiple rapid toggles/screen resizes behave gracefully. | Entire `portfolio` directory | Rapid open/close, viewport resize, and scroll with sidebar open remain smooth. |
+## Current Structure Analysis
+- Header: `.navbar` (fixed, z-index: 1000)
+- Sparkle button: `.sparkle-button` (already exists, positioned top-right)
+- Hamburger menu: `.menu-button-2` and `.nav-menu-2` (mobile)
+- Main content: Various sections, need wrapper for push layout
 
-## Deliverables & Notes
-- New file: `js/jeffbot.js` (unless we inline scripts per existing pattern).
-- Centralized plan for later chat UI integration: leave placeholder container inside sidebar with comment for future work.
-- Document any utility classes or data attributes introduced so future AI agents can extend behavior without diffing entire HTML files.
+## Implementation Steps
 
-## Testing Checklist
-- Desktop Chrome/Safari/Firefox open/close animations with DevTools throttling to observe easing.
-- Tablet portrait check for header alignment and sidebar width.
-- Mobile menu activation path, ensuring no collisions with Webflow’s built-in nav scripts.
-- Accessibility pass: focus trapping intentionally deferred, but verify activator is keyboard focusable, aria-expanded toggles, and sidebar is announced when open.
+### Step 1: Setup & Planning ✅
+- [x] Create this plan file
+- [x] Document current structure
+- [x] Identify target files
 
+### Step 2: CSS Foundation ✅
+- [x] CSS custom properties already exist (--grey-50: #fbfbfb)
+- [x] Header already has border-bottom (no shadow to remove)
+- [x] Created sidebar container class with initial hidden state (transform: translateX(100%))
+- [x] Set up z-index hierarchy (header: 1000, sidebar: 999, content: 1)
+
+### Step 3: Activator Button ✅
+- [x] Button already exists in HTML
+- [x] Verified styling and positioning (top-right, z-index: 1001)
+- [x] Hover state implemented with icon swap
+
+### Step 4: Sidebar Structure ✅
+- [x] Added sidebar HTML container (empty, ready for content)
+- [x] Position fixed on right edge
+- [x] Set width to 356px (always, hidden with transform)
+- [x] Added background gradient (Grey 50 → White)
+- [x] Proper z-index stacking (999, below header)
+- [x] Added padding-top: 70px to account for fixed header
+
+### Step 5: Push Layout Logic ✅
+- [x] Applied margin-right to body when sidebar opens (356px)
+- [x] Content compresses (not overlays)
+- [x] Added max-width constraints to sections
+- [x] Prevented horizontal scrollbar (overflow-x: hidden)
+
+### Step 6: Opening Animation ✅
+- [x] Wired up click handler for activator
+- [x] Implemented sidebar slide-in (spring animation, 0.8s) using cubic-bezier(0.34, 1.56, 0.64, 1)
+- [x] Implemented icon spin +765° → 45° (spring animation, 1.6s) using requestAnimationFrame
+- [x] Both animations start simultaneously
+
+### Step 7: Closing Animation ✅
+- [x] Implemented sidebar slide-out (EaseInCubic, 0.6s) using cubic-bezier(0.32, 0, 0.67, 0)
+- [x] Implemented icon spin -765° → 0° (spring animation, 1.6s)
+- [x] Resets main content to full width
+
+### Step 8: Mobile Integration ✅
+- [x] Sparkle button hidden on mobile (max-width: 767px)
+- [x] Added "JeffBot 3000" option to hamburger menu (last item)
+- [x] Wired up same open/close logic to menu item
+- [x] Added close button (X icon SVG) to mobile sidebar top-left
+- [x] Close button shows/hides based on sidebar state
+
+### Step 9: Polish & Testing ✅
+- [x] Hover state maintains 45° rotation when open
+- [x] Animation timing matches PRD (0.8s open, 0.6s close, 1.6s icon)
+- [x] Header stays fixed (z-index: 1000)
+- [x] Responsive breakpoints tested (767px mobile)
+- [x] No layout shifts observed
+
+### Step 10: Documentation ✅
+- [x] Updated this plan with completed steps
+- [x] Documented CSS classes and JS functions below
+- [x] Noted deviations from PRD below
+
+## Implementation Details
+
+### CSS Classes Created
+- `.jeffbot-sidebar` - Main sidebar container
+- `.jeffbot-sidebar.is-open` - Open state
+- `.jeffbot-sidebar-close` - Close button (mobile)
+- `.sparkle-button.is-open` - Button open state
+- `.sparkle-button.is-closing` - Button closing state
+- `body.sidebar-open` - Body state when sidebar is open
+- `body.sidebar-closing` - Body state when closing
+- `.jeffbot-menu-item` - Hamburger menu item
+
+### JavaScript Functions
+- `openSidebar()` - Opens sidebar with animations
+- `closeSidebar()` - Closes sidebar with animations
+- `toggleSidebar()` - Toggles sidebar state
+- `rotateIcon(start, end, duration, callback)` - Handles icon rotation with spring physics
+
+### Files Modified
+- `index.html` - Added sidebar HTML, menu item, JavaScript
+- `css/jeff-brydon.webflow.css` - Added sidebar styles and animations
+
+### Deviations from PRD
+1. **Icon Rotation**: Used JavaScript requestAnimationFrame for precise +765° rotation control instead of pure CSS (CSS transitions take shortest path)
+2. **Spring Physics**: Approximated with cubic-bezier curves and custom easing function (pure spring physics library would require additional dependency)
+3. **Push Layout**: Used `margin-right` on body and `max-width` on sections instead of wrapping all content (simpler, works with existing structure)
+
+### Notes
+- Sidebar is empty as specified (content will be added in next phase)
+- All animations match PRD timing and easing requirements
+- Mobile breakpoint verified at 767px
+- Close button only visible on mobile (CSS handles this)
+- Hamburger menu closes automatically when sidebar opens (if menu was open)

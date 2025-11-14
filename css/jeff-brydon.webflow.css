@@ -17,6 +17,8 @@
   --grey-200: #97a4a9;
   --grey-250: #898989;
   --grey-300: #666666;
+  --teal-dark: #307489;
+  --teal-light: #49C8D7;
 }
 
 .w-backgroundvideo-backgroundvideoplaypausebutton:focus-visible {
@@ -8068,6 +8070,237 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
   .sparkle-button {
     display: none;
   }
+}
+
+/* JeffBot Sidebar */
+.jeffbot-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 356px;
+  height: 100vh;
+  background: linear-gradient(to bottom, var(--grey-50), #ffffff);
+  z-index: 999;
+  overflow: hidden;
+  transform: translateX(100%);
+  transition: transform 0.6s cubic-bezier(0.32, 0, 0.67, 0);
+  padding-top: 70px;
+  box-sizing: border-box;
+}
+
+.jeffbot-sidebar.is-open {
+  transform: translateX(0);
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.jeffbot-sidebar-close {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jeffbot-sidebar-close svg {
+  width: 24px;
+  height: 24px;
+}
+
+.jeffbot-sidebar-close:hover svg path {
+  stroke: #222;
+}
+
+/* Show close button on mobile */
+@media screen and (max-width: 767px) {
+  .jeffbot-sidebar-close {
+    display: flex;
+  }
+}
+
+/* Push layout - compress main content when sidebar is open */
+body.sidebar-open {
+  margin-right: 356px;
+  transition: margin-right 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+body.sidebar-closing {
+  margin-right: 0;
+  transition: margin-right 0.6s cubic-bezier(0.32, 0, 0.67, 0);
+}
+
+/* Ensure main content wrapper compresses */
+body.sidebar-open .section,
+body.sidebar-open .video-section {
+  max-width: calc(100% - 356px);
+  transition: max-width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+body.sidebar-closing .section,
+body.sidebar-closing .video-section {
+  max-width: 100%;
+  transition: max-width 0.6s cubic-bezier(0.32, 0, 0.67, 0);
+}
+
+/* Sparkle icon rotation */
+.sparkle-icon {
+  transform-origin: center;
+  transition: transform 1.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sparkle-button.is-open .sparkle-icon {
+  transform: rotate(765deg); /* 765° visually equals 45° */
+}
+
+.sparkle-button.is-closing .sparkle-icon {
+  transform: rotate(0deg);
+  transition: transform 1.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Prevent horizontal scrollbar */
+body {
+  overflow-x: hidden;
+}
+
+/* JeffBot menu item styling - inherits from .navigation class */
+
+/* Hide JeffBot menu item on desktop/tablet, show only on mobile */
+@media screen and (min-width: 768px) {
+  .jeffbot-menu-item {
+    display: none !important;
+  }
+}
+
+/* JeffBot Sidebar Content */
+.jeffbot-sidebar-content {
+  padding: 24px 24px 0 24px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 70px - 24px);
+  justify-content: flex-end;
+  overflow-y: auto;
+}
+
+.jeffbot-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* Component 1: Response Message */
+.jeffbot-response-message {
+  background: var(--grey-75);
+  padding: 16px;
+  border-radius: 8px;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+.jeffbot-response-text {
+  margin: 0;
+  color: var(--black);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+/* Component 2: Input Suggestion Buttons */
+.jeffbot-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.jeffbot-suggestion-button {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--white);
+  border: 1px solid var(--grey-100);
+  border-radius: 8px;
+  color: var(--grey-300);
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.jeffbot-suggestion-button:hover {
+  border-color: var(--grey-200);
+  color: var(--black);
+}
+
+.jeffbot-suggestion-button:active {
+  transform: scale(0.98);
+}
+
+/* Component 3: Input Field */
+.jeffbot-input-container {
+  position: relative;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+}
+
+.jeffbot-input {
+  width: 100%;
+  padding: 12px 40px 12px 16px;
+  background: var(--white);
+  border: 1px solid var(--grey-100);
+  border-radius: 8px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: var(--grey-200);
+  outline: none;
+  transition: border 0.2s ease, color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.jeffbot-input::placeholder {
+  color: var(--grey-200);
+}
+
+.jeffbot-input:focus {
+  border: 3px solid transparent;
+  background-image: linear-gradient(white, white), linear-gradient(to right, var(--teal-dark), var(--teal-light));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  color: var(--grey-200);
+  padding: 10px 38px 10px 14px;
+}
+
+.jeffbot-input:not(:placeholder-shown) {
+  border: 3px solid transparent;
+  background-image: linear-gradient(white, white), linear-gradient(to right, var(--teal-dark), var(--teal-light));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  color: var(--grey-300);
+  padding: 10px 38px 10px 14px;
+}
+
+.jeffbot-input-arrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: var(--grey-200);
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.jeffbot-input:not(:placeholder-shown) + .jeffbot-input-arrow {
+  color: var(--teal-dark);
 }
 
 
