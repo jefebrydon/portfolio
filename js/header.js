@@ -92,9 +92,22 @@
       <!-- Input Field -->
       <div class="jeffbot-input-container">
         <input type="text" class="jeffbot-input" id="jeffbot-input" placeholder="Ask about Jeff" autocomplete="off">
-        <svg class="jeffbot-input-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M10 5L15 10L10 15M15 10H5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <button type="button" class="button-icon button-icon-primary jeffbot-input-submit" aria-label="Submit">
+          <svg
+            class="button-icon-svg button-icon-primary-svg"
+            width="15"
+            height="16"
+            viewBox="0 0 15 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              d="M6.25 16V4.67692L1.75 9.10769L0 7.38462L7.5 0L15 7.38462L13.25 9.10769L8.75 4.67692V16H6.25Z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
       </div>
     </div>
   </div>

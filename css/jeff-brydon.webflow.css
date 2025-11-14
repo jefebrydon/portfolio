@@ -19,6 +19,8 @@
   --grey-300: #666666;
   --teal-dark: #307489;
   --teal-light: #49C8D7;
+  --teal-primary: #229DB1;
+  --teal-hover-bg: #dffcff;
 }
 
 .w-backgroundvideo-backgroundvideoplaypausebutton:focus-visible {
@@ -8308,60 +8310,150 @@ body {
   padding-top: 24px;
   padding-bottom: 24px;
   margin-bottom: 24px;
+  display: flex;
+  align-items: center;
 }
 
 .jeffbot-input {
   width: 100%;
-  padding: 12px 40px 12px 16px;
+  /* Default: 1px border, so padding includes 1px border space */
+  padding: 12px 48px 12px 16px;
   background: var(--white);
-  border: 1px solid var(--grey-100);
-  border-radius: 8px;
+  border: 1px solid transparent;
+  border-radius: 20px;
   font-family: 'Nunito Sans', sans-serif;
   font-size: 16px;
   font-weight: 400;
-  line-height: 24px;
+  line-height: 30px;
   color: var(--grey-200);
   outline: none;
-  transition: border 0.2s ease, color 0.2s ease;
+  transition: background-image 0.2s ease, color 0.2s ease, border-width 0.2s ease, padding 0.2s ease;
   box-sizing: border-box;
+  /* Default state: 1px gradient border */
+  background-image: linear-gradient(var(--white), var(--white)), 
+                    linear-gradient(to right, var(--teal-dark), var(--teal-light));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
 }
 
 .jeffbot-input::placeholder {
   color: var(--grey-200);
 }
 
+/* Selected state (focus): 3px inner gradient border */
 .jeffbot-input:focus {
   border: 3px solid transparent;
-  background-image: linear-gradient(white, white), linear-gradient(to right, var(--teal-dark), var(--teal-light));
+  background-image: linear-gradient(var(--white), var(--white)), 
+                    linear-gradient(to right, var(--teal-dark), var(--teal-light));
   background-origin: border-box;
   background-clip: padding-box, border-box;
   color: var(--grey-200);
-  padding: 10px 38px 10px 14px;
+  /* Adjust padding to maintain outer dimensions: reduce by 2px (3px - 1px border difference) */
+  padding: 10px 46px 10px 14px;
 }
 
+/* Filled state: 3px inner gradient border, darker text */
 .jeffbot-input:not(:placeholder-shown) {
   border: 3px solid transparent;
-  background-image: linear-gradient(white, white), linear-gradient(to right, var(--teal-dark), var(--teal-light));
+  background-image: linear-gradient(var(--white), var(--white)), 
+                    linear-gradient(to right, var(--teal-dark), var(--teal-light));
   background-origin: border-box;
   background-clip: padding-box, border-box;
   color: var(--grey-300);
-  padding: 10px 38px 10px 14px;
+  /* Adjust padding to maintain outer dimensions: reduce by 2px (3px - 1px border difference) */
+  padding: 10px 46px 10px 14px;
 }
 
-.jeffbot-input-arrow {
+/* Submit button container - positioned absolutely to not affect input layout */
+.jeffbot-input-submit {
   position: absolute;
-  right: 12px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
-  color: var(--grey-200);
-  pointer-events: none;
-  transition: color 0.2s ease;
+  z-index: 1;
+  pointer-events: auto;
 }
 
-.jeffbot-input:not(:placeholder-shown) + .jeffbot-input-arrow {
-  color: var(--teal-dark);
+/* Button Icon Base Styles */
+.button-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease, opacity 150ms ease;
+  outline: none;
+  flex-shrink: 0;
+}
+
+.button-icon:focus-visible {
+  outline: 2px solid var(--teal-primary);
+  outline-offset: 2px;
+}
+
+.button-icon-svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Button Icon Primary */
+.button-icon-primary {
+  /* Default state: no background, teal icon */
+  background: transparent;
+  color: var(--teal-primary);
+}
+
+.button-icon-primary:hover:not(.disabled) {
+  /* Hover state: light teal background, teal icon */
+  background: var(--teal-hover-bg);
+  color: var(--teal-primary);
+}
+
+.button-icon-primary.disabled,
+.button-icon-primary:disabled {
+  /* Disabled state: no background, light grey icon */
+  background: transparent;
+  color: var(--grey-200);
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.button-icon-primary-svg {
+  width: 15px;
+  height: 16px;
+}
+
+/* Button Icon Secondary */
+.button-icon-secondary {
+  /* Default state: no background, dark grey icon */
+  background: transparent;
+  color: var(--grey-300);
+}
+
+.button-icon-secondary:hover:not(.disabled) {
+  /* Hover state: light grey background, dark grey icon */
+  background: var(--grey-75);
+  color: var(--grey-300);
+}
+
+.button-icon-secondary.disabled,
+.button-icon-secondary:disabled {
+  /* Disabled state: light grey background, light grey icon */
+  background: var(--grey-75);
+  color: var(--grey-200);
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.button-icon-secondary-svg {
+  width: 20px;
+  height: 20px;
 }
 
 
