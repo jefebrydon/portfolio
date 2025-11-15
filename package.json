@@ -1,0 +1,10 @@
+{
+  "name": "jeff-brydon-portfolio",
+  "version": "1.0.0",
+  "description": "Portfolio website with JeffBot RAG integration",
+  "type": "module",
+  "engines": {
+    "node": ">=18.x"
+  }
+}
+
