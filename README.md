@@ -16,3 +16,9 @@
 - Keep page-specific inline scripts colocated in their HTML files unless you have a clear reason to extract them; other pages reuse the modal logic.
 - The custom domain lives in `CNAME` (`www.jeffbrydon.com`); update it if deploying to a different host.
 - When adding new assets, follow existing naming conventions in `images/` and `videos/`, and ensure new videos include poster frames for Webflow background video elements.
+
+## JeffBot Integration
+- JeffBot sidebar uses OpenAI's Assistant API with file search (RAG) functionality.
+- Backend API server is in `jeffbot_rag/` directory - see `jeffbot_rag/README.md` for setup instructions.
+- Configuration is in `js/jeffbot-config.js` - update `assistantId` after running the vector store creation script.
+- Chat conversations persist in `sessionStorage` for the browser session.

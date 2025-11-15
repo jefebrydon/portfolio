@@ -8378,6 +8378,146 @@ body {
   pointer-events: auto;
 }
 
+.jeffbot-input-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.jeffbot-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Chat Thread Container */
+.jeffbot-chat-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  min-height: 0;
+}
+
+.jeffbot-chat-thread.hidden {
+  display: none;
+}
+
+/* Message Components */
+.jeffbot-message {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.jeffbot-message.user {
+  justify-content: flex-end;
+}
+
+.jeffbot-message.jeffbot {
+  justify-content: flex-start;
+}
+
+.jeffbot-message-content {
+  max-width: 85%;
+  padding: 16px;
+  border-radius: 16px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: var(--grey-300);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.jeffbot-message.user .jeffbot-message-content {
+  background: var(--white);
+  box-shadow: 0px 10px 40px 0px rgba(0, 0, 0, 0.03);
+  border-radius: 16px 16px 0px 16px;
+  margin: 0;
+}
+
+.jeffbot-message.jeffbot .jeffbot-message-content {
+  background: var(--grey-75);
+  border-radius: 16px 16px 16px 0px;
+  margin: 0;
+}
+
+/* Error Message */
+.jeffbot-error-message {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.jeffbot-error-message .jeffbot-message-content {
+  background: #fee;
+  border: 1px solid #fcc;
+  color: #c33;
+  border-radius: 16px 16px 16px 0px;
+  padding: 12px 16px;
+  font-size: 14px;
+}
+
+/* Loader Component */
+.jeffbot-loader {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 0;
+  width: 100%;
+}
+
+.jeffbot-loader.hidden {
+  display: none;
+}
+
+.jeffbot-loader-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--teal-primary);
+  animation: jeffbot-bounce 1.6s infinite ease-in-out;
+}
+
+.jeffbot-loader-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.jeffbot-loader-dot:nth-child(2) {
+  animation-delay: 0.27s;
+}
+
+.jeffbot-loader-dot:nth-child(3) {
+  animation-delay: 0.53s;
+}
+
+@keyframes jeffbot-bounce {
+  0%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Hide welcome message and suggestions after first interaction */
+.jeffbot-content-wrapper.has-messages .jeffbot-response-message,
+.jeffbot-content-wrapper.has-messages .jeffbot-suggestions {
+  display: none;
+}
+
+/* ARIA live region for screen readers */
+.jeffbot-aria-live {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 /* Button Icon Base Styles */
 .button-icon {
   width: 32px;

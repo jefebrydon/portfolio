@@ -211,32 +211,390 @@
       });
     }
 
-    // JeffBot Sidebar Interactive Functionality
-    const jeffbotInput = document.getElementById('jeffbot-input');
-    const suggestionButtons = document.querySelectorAll('.jeffbot-suggestion-button');
+    // ============================================
+    // JeffBot Chat Functionality
+    // ============================================
 
+    // Configuration
+    const config = window.JEFFBOT_CONFIG || {};
+    const assistantId = config.assistantId;
+    const apiBaseUrl = config.apiBaseUrl || 'http://localhost:3001/api';
+    
+    // Chat state
+    let currentThreadId = null;
+    let isLoading = false;
+    let errorTimeout = null;
+    
+    // DOM elements
+    const jeffbotInput = document.getElementById('jeffbot-input');
+    const submitButton = document.querySelector('.jeffbot-input-submit');
+    const suggestionButtons = document.querySelectorAll('.jeffbot-suggestion-button');
+    const chatThread = document.getElementById('jeffbot-chat-thread');
+    const contentWrapper = document.querySelector('.jeffbot-content-wrapper');
+    const ariaLive = document.getElementById('jeffbot-aria-live') || createAriaLiveRegion();
+    
+    // Suggestion button to question mapping
+    const suggestionMap = {
+      "Jeff's designer shape": "What is Jeff's designer shape?",
+      "AI in his design process": "How does Jeff use AI in his design process?",
+      "His design philosophy": "What is his design philosophy?",
+      "His approach to prototyping": "What is his approach to prototyping?"
+    };
+    
+    // Load conversation from sessionStorage
+    function loadConversation() {
+      try {
+        const saved = sessionStorage.getItem('jeffbot_conversation');
+        if (saved) {
+          const data = JSON.parse(saved);
+          currentThreadId = data.threadId;
+          
+          // Restore messages if any
+          if (data.messages && data.messages.length > 0) {
+            showChatThread();
+            data.messages.forEach(msg => {
+              addMessageToThread(msg.text, msg.isUser, false);
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error loading conversation:', error);
+      }
+    }
+    
+    // Save conversation to sessionStorage
+    function saveConversation() {
+      try {
+        const messages = Array.from(chatThread.querySelectorAll('.jeffbot-message')).map(msgEl => {
+          const isUser = msgEl.classList.contains('user');
+          const text = msgEl.querySelector('.jeffbot-message-content').textContent;
+          return { text, isUser };
+        });
+        
+        sessionStorage.setItem('jeffbot_conversation', JSON.stringify({
+          threadId: currentThreadId,
+          messages: messages
+        }));
+      } catch (error) {
+        console.error('Error saving conversation:', error);
+      }
+    }
+    
+    // Create ARIA live region for screen readers
+    function createAriaLiveRegion() {
+      const region = document.createElement('div');
+      region.id = 'jeffbot-aria-live';
+      region.className = 'jeffbot-aria-live';
+      region.setAttribute('role', 'status');
+      region.setAttribute('aria-live', 'polite');
+      region.setAttribute('aria-atomic', 'true');
+      document.body.appendChild(region);
+      return region;
+    }
+    
+    // Show chat thread and hide welcome message
+    function showChatThread() {
+      if (chatThread) {
+        chatThread.classList.remove('hidden');
+      }
+      if (contentWrapper) {
+        contentWrapper.classList.add('has-messages');
+      }
+    }
+    
+    // Create message element
+    function createMessageElement(text, isUser) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'jeffbot-message ' + (isUser ? 'user' : 'jeffbot');
+      messageDiv.setAttribute('role', 'listitem');
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'jeffbot-message-content';
+      contentDiv.textContent = text;
+      
+      messageDiv.appendChild(contentDiv);
+      return messageDiv;
+    }
+    
+    // Create loader element
+    function createLoaderElement() {
+      const loaderDiv = document.createElement('div');
+      loaderDiv.className = 'jeffbot-loader';
+      loaderDiv.setAttribute('role', 'status');
+      loaderDiv.setAttribute('aria-label', 'Loading response');
+      
+      for (let i = 0; i < 3; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'jeffbot-loader-dot';
+        loaderDiv.appendChild(dot);
+      }
+      
+      return loaderDiv;
+    }
+    
+    // Create error message element
+    function createErrorMessage(text) {
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'jeffbot-error-message';
+      errorDiv.setAttribute('role', 'alert');
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'jeffbot-message-content';
+      contentDiv.textContent = 'Error: ' + text;
+      
+      errorDiv.appendChild(contentDiv);
+      return errorDiv;
+    }
+    
+    // Remove loader from chat thread
+    function removeLoader() {
+      const loader = chatThread.querySelector('.jeffbot-loader');
+      if (loader) {
+        loader.remove();
+      }
+    }
+    
+    // Remove error messages
+    function removeErrors() {
+      const errors = chatThread.querySelectorAll('.jeffbot-error-message');
+      errors.forEach(err => err.remove());
+      if (errorTimeout) {
+        clearTimeout(errorTimeout);
+        errorTimeout = null;
+      }
+    }
+    
+    // Scroll chat to bottom
+    function scrollToBottom() {
+      if (chatThread && chatThread.parentElement) {
+        const sidebarContent = chatThread.closest('.jeffbot-sidebar-content');
+        if (sidebarContent) {
+          sidebarContent.scrollTop = sidebarContent.scrollHeight;
+        }
+      }
+    }
+    
+    // Add message to chat thread
+    function addMessageToThread(text, isUser, shouldSave = true) {
+      if (!chatThread) return;
+      
+      showChatThread();
+      removeLoader();
+      removeErrors();
+      
+      const messageEl = createMessageElement(text, isUser);
+      chatThread.appendChild(messageEl);
+      
+      // Announce to screen readers
+      if (ariaLive) {
+        ariaLive.textContent = (isUser ? 'You said: ' : 'JeffBot said: ') + text;
+        setTimeout(() => {
+          ariaLive.textContent = '';
+        }, 1000);
+      }
+      
+      if (shouldSave) {
+        saveConversation();
+      }
+      
+      scrollToBottom();
+    }
+    
+    // Validate input
+    function validateInput(text) {
+      const trimmed = text.trim();
+      if (!trimmed) {
+        return { valid: false, error: 'Please enter a message' };
+      }
+      if (trimmed.length > 2000) {
+        return { valid: false, error: 'Message is too long (max 2000 characters)' };
+      }
+      return { valid: true, text: trimmed };
+    }
+    
+    // Send message to assistant
+    async function sendMessageToAssistant(messageText) {
+      if (isLoading) return;
+      if (!assistantId) {
+        addMessageToThread('Error: Assistant ID not configured. Please check your configuration.', false);
+        return;
+      }
+      
+      const validation = validateInput(messageText);
+      if (!validation.valid) {
+        // Show validation error briefly
+        const errorEl = createErrorMessage(validation.error);
+        if (chatThread) {
+          chatThread.appendChild(errorEl);
+          errorTimeout = setTimeout(() => {
+            errorEl.remove();
+          }, 3000);
+        }
+        return;
+      }
+      
+      isLoading = true;
+      
+      // Disable input and submit button
+      if (jeffbotInput) {
+        jeffbotInput.disabled = true;
+      }
+      if (submitButton) {
+        submitButton.disabled = true;
+      }
+      
+      // Show loader
+      if (chatThread) {
+        showChatThread();
+        const loader = createLoaderElement();
+        chatThread.appendChild(loader);
+        scrollToBottom();
+      }
+      
+      // Prepare request
+      const requestBody = {
+        message: validation.text,
+        assistantId: assistantId
+      };
+      
+      if (currentThreadId) {
+        requestBody.threadId = currentThreadId;
+      }
+      
+      // Make API call with timeout and retry
+      let retries = 1;
+      let lastError = null;
+      
+      while (retries >= 0) {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 60000);
+          
+          const response = await fetch(apiBaseUrl + '/chat', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody),
+            signal: controller.signal
+          });
+          
+          clearTimeout(timeoutId);
+          
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+          }
+          
+          const data = await response.json();
+          
+          // Success
+          removeLoader();
+          currentThreadId = data.threadId;
+          
+          if (data.response) {
+            addMessageToThread(data.response, false);
+          } else {
+            addMessageToThread('Sorry, I didn\'t receive a response. Please try again.', false);
+          }
+          
+          // Re-enable input
+          if (jeffbotInput) {
+            jeffbotInput.disabled = false;
+            jeffbotInput.focus();
+          }
+          if (submitButton) {
+            submitButton.disabled = false;
+          }
+          
+          isLoading = false;
+          return;
+          
+        } catch (error) {
+          lastError = error;
+          
+          // Retry on network errors only
+          if (retries > 0 && (error.name === 'TypeError' || error.name === 'AbortError')) {
+            retries--;
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            continue;
+          }
+          
+          break;
+        }
+      }
+      
+      // Error handling
+      removeLoader();
+      const errorMessage = lastError.message || 'Failed to get response. Please try again.';
+      addMessageToThread(errorMessage, false);
+      
+      // Re-enable input
+      if (jeffbotInput) {
+        jeffbotInput.disabled = false;
+        jeffbotInput.focus();
+      }
+      if (submitButton) {
+        submitButton.disabled = false;
+      }
+      
+      isLoading = false;
+    }
+    
     // Handle suggestion button clicks
-    if (suggestionButtons.length > 0 && jeffbotInput) {
+    if (suggestionButtons.length > 0) {
       suggestionButtons.forEach(function(button) {
         button.addEventListener('click', function() {
           const buttonText = button.textContent.trim();
-          jeffbotInput.value = buttonText;
-          jeffbotInput.focus();
-          // Trigger input event to update filled state styling
-          jeffbotInput.dispatchEvent(new Event('input', { bubbles: true }));
+          const fullQuestion = suggestionMap[buttonText] || buttonText;
+          
+          // Immediately display user message
+          addMessageToThread(fullQuestion, true);
+          
+          // Send to assistant
+          sendMessageToAssistant(fullQuestion);
         });
       });
     }
-
-    // Handle Enter key in input field (prevent default, no submission)
+    
+    // Handle input field submission
+    function handleInputSubmit() {
+      if (!jeffbotInput || isLoading) return;
+      
+      const message = jeffbotInput.value;
+      if (!message.trim()) return;
+      
+      // Display user message immediately
+      addMessageToThread(message, true);
+      
+      // Clear input
+      jeffbotInput.value = '';
+      jeffbotInput.dispatchEvent(new Event('input', { bubbles: true }));
+      
+      // Send to assistant
+      sendMessageToAssistant(message);
+    }
+    
+    // Handle Enter key in input field
     if (jeffbotInput) {
       jeffbotInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && !e.shiftKey) {
           e.preventDefault();
-          // No backend functionality yet - just prevent form submission
+          handleInputSubmit();
         }
       });
     }
+    
+    // Handle submit button click
+    if (submitButton) {
+      submitButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        handleInputSubmit();
+      });
+    }
+    
+    // Load conversation on init
+    loadConversation();
   }
 
   // Header slide-down animation on page load
@@ -262,4 +620,6 @@
     initJeffBot();
   }
 })();
+
+
 

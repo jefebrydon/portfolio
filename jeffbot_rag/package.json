@@ -1,0 +1,27 @@
+{
+  "name": "jeffbot-rag",
+  "version": "1.0.0",
+  "description": "Vector store creation and backend API for JeffBot",
+  "main": "create-vector-store.js",
+  "scripts": {
+    "create-store": "node create-vector-store.js",
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "openai",
+    "vector-store",
+    "rag"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "openai": "^4.20.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}
+
+
+

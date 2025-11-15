@@ -87,6 +87,9 @@
           <button class="jeffbot-suggestion-button" type="button">His design philosophy</button>
           <button class="jeffbot-suggestion-button" type="button">His approach to prototyping</button>
         </div>
+        
+        <!-- Chat Thread Container -->
+        <div class="jeffbot-chat-thread hidden" id="jeffbot-chat-thread" role="log" aria-live="polite" aria-label="Chat conversation"></div>
       </div>
       
       <!-- Input Field -->
