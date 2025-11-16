@@ -18,7 +18,10 @@
 - When adding new assets, follow existing naming conventions in `images/` and `videos/`, and ensure new videos include poster frames for Webflow background video elements.
 
 ## JeffBot Integration
-- JeffBot sidebar uses OpenAI's Assistant API with file search (RAG) functionality.
-- Backend API server is in `jeffbot_rag/` directory - see `jeffbot_rag/README.md` for setup instructions.
-- Configuration is in `js/jeffbot-config.js` - update `assistantId` after running the vector store creation script.
-- Chat conversations persist in `sessionStorage` for the browser session.
+- JeffBot sidebar uses OpenAI's Assistants API with file search (RAG) functionality.
+- **Frontend**: the chat UI is rendered on all portfolio pages and runs entirely in the browser (hosted on GitHub Pages at `www.jeffbrydon.com`).
+- **Backend**: OpenAI calls are proxied through a serverless function deployed on Vercel at `/api/chat` in this repo (`api/chat.js`); the frontend talks to it via HTTPS.
+- **Secrets**: `OPENAI_API_KEY` and `ASSISTANT_ID` are stored as environment variables in Vercel (Project → Settings → Environment Variables) and **never** exposed to the browser.
+- **Local development**: a separate Express server for JeffBot lives in `jeffbot_rag/server.js` and uses a local `.env` (see `jeffbot_rag/README.md` for setup); the browser points to `http://localhost:3001/api` when running locally.
+- **Production config**: `js/jeffbot-config.js` detects `localhost` for dev; otherwise it calls the Vercel deployment URL (e.g. `https://portfolio-six-nu-9myb2s6fia.vercel.app/api`) so the GitHub Pages frontend can use the Vercel backend without DNS changes.
+- Chat conversations persist in `sessionStorage` for the duration of the browser session.
