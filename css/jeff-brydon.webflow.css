@@ -107,7 +107,7 @@ p {
   font-family: "Nunito Sans", sans-serif;
   font-weight: 300;
   font-size: 16px;
-  line-height: 30px;
+  line-height: 24px;
   color: #666;
   letter-spacing: .2px;
   -webkit-text-stroke-width: 0px;
@@ -136,7 +136,7 @@ blockquote {
   margin-bottom: 10px;
   padding: 10px 20px;
   font-size: 17px;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .hero {
@@ -318,7 +318,7 @@ blockquote {
   padding: 0;
   font-family: Lato, sans-serif;
   font-size: 24px;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .logo:hover {
@@ -1096,12 +1096,12 @@ blockquote {
   color: #fff;
   margin-bottom: 30px;
   font-size: 24px;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .centered-column.morespace.light {
   color: var(--black);
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .centered-three-column {
@@ -1123,7 +1123,7 @@ blockquote {
   padding-bottom: 5px;
   font-family: Lato, sans-serif;
   font-size: 16px;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .quote.bottom60 {
@@ -2513,13 +2513,13 @@ blockquote {
   font-family: Nunito Sans, sans-serif;
   font-size: 17px;
   font-weight: 300;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .text25.topspace25 {
   margin-top: 25px;
   padding-top: 0;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .text25.fontsize18 {
@@ -2602,7 +2602,7 @@ blockquote {
   font-family: Nunito Sans, sans-serif;
   font-size: 17px;
   font-weight: 300;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .text25-onwhite.topspace25 {
@@ -2644,7 +2644,7 @@ blockquote {
   margin-top: 20px;
   margin-bottom: 40px;
   font-family: Nunito Sans, sans-serif;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .heading-4-dark.centered.text-clickable:hover {
@@ -2665,7 +2665,7 @@ blockquote {
   font-family: Nunito Sans, sans-serif;
   font-size: 28px;
   font-weight: 800;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .text15-copy {
@@ -2690,7 +2690,7 @@ blockquote {
   color: #666;
   font-family: Nunito Sans, sans-serif;
   font-size: 20px;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .bottom80 {
@@ -2802,7 +2802,7 @@ blockquote {
   letter-spacing: .5px;
   margin-bottom: 0;
   font-weight: 300;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .list-item.text25 {
@@ -2946,7 +2946,7 @@ blockquote {
 
 .block-quote-2 {
   margin-bottom: 20px;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .quote-onwhite {
@@ -2954,13 +2954,13 @@ blockquote {
   border: 1px #000;
   font-family: Lato, sans-serif;
   font-size: 16px;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .block-quote-3 {
   color: #222;
   font-family: Lato, sans-serif;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .link-block-6 {
@@ -3246,7 +3246,7 @@ blockquote {
   margin-bottom: 15px;
   font-family: Nunito Sans, sans-serif;
   font-size: 20px;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .large-link {
@@ -3432,7 +3432,7 @@ blockquote {
   font-family: Nunito Sans, sans-serif;
   font-size: 20px;
   font-weight: 800;
-  line-height: 30px;
+  line-height: 24px;
   display: block;
 }
 
@@ -3502,7 +3502,7 @@ blockquote {
   font-family: Nunito Sans, sans-serif;
   font-size: 16px;
   font-weight: 300;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .column-21 {
@@ -3593,7 +3593,7 @@ blockquote {
   font-size: 16px;
   font-style: normal;
   font-weight: 300;
-  line-height: 30px;
+  line-height: 24px;
   display: block;
 }
 
@@ -3618,13 +3618,13 @@ blockquote {
   letter-spacing: .2px;
   text-shadow: 0 0 5px #fff;
   font-size: 16px;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .text-shadow.inline {
   letter-spacing: .2px;
   font-size: 16px;
-  line-height: 30px;
+  line-height: 24px;
   display: inline-block;
 }
 
@@ -3950,7 +3950,7 @@ blockquote {
   margin: 0 10px 0 0;
   padding-top: 0;
   font-size: 26px;
-  line-height: 30px;
+  line-height: 24px;
   display: inline-block;
 }
 
@@ -7689,12 +7689,12 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
 
   .text-shadow.rotating {
     font-size: 17px;
-    line-height: 30px;
+    line-height: 24px;
   }
 
   .text-shadow.white-shadow, .text-shadow.inline {
     font-size: 16px;
-    line-height: 30px;
+    line-height: 24px;
   }
 
   .text-shadow.bold-text {
@@ -7714,7 +7714,7 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
 
   .rotating-word, .rotating-word-2 {
     font-size: 17px;
-    line-height: 30px;
+    line-height: 24px;
     left: 110px;
   }
 
@@ -7724,7 +7724,7 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
 
   .rotating-word-3 {
     font-size: 17px;
-    line-height: 30px;
+    line-height: 24px;
     left: 110px;
   }
 
@@ -8328,7 +8328,7 @@ body {
   font-family: 'Nunito Sans', sans-serif;
   font-size: 16px;
   font-weight: 400;
-  line-height: 30px;
+  line-height: 24px;
   color: var(--grey-200);
   outline: none;
   transition: background-image 0.2s ease, color 0.2s ease, border-width 0.2s ease, padding 0.2s ease;
@@ -8418,16 +8418,19 @@ body {
 }
 
 .jeffbot-message-content {
-  max-width: 85%;
+  max-width: 90% !important;
   padding: 16px;
   border-radius: 16px;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: "Nunito Sans", sans-serif;
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 300 !important;
   line-height: 24px;
-  color: var(--grey-300);
+  color: #666;
+  letter-spacing: .2px;
+  -webkit-text-stroke-width: 0px;
   white-space: pre-wrap;
   word-wrap: break-word;
+  display: block;
 }
 
 .jeffbot-message.user .jeffbot-message-content {

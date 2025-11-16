@@ -373,21 +373,30 @@
         }
       }
     }
+
+    // Sanitize message text (e.g., remove citation/source markers like )
+    function sanitizeMessageText(text) {
+      if (!text) return '';
+      // Remove any content inside full-width brackets 【...】
+      return text.replace(/【[^】]*】/g, '');
+    }
     
     // Add message to chat thread
     function addMessageToThread(text, isUser, shouldSave = true) {
       if (!chatThread) return;
       
+      const cleanText = sanitizeMessageText(text);
+      
       showChatThread();
       removeLoader();
       removeErrors();
       
-      const messageEl = createMessageElement(text, isUser);
+      const messageEl = createMessageElement(cleanText, isUser);
       chatThread.appendChild(messageEl);
       
       // Announce to screen readers
       if (ariaLive) {
-        ariaLive.textContent = (isUser ? 'You said: ' : 'JeffBot said: ') + text;
+        ariaLive.textContent = (isUser ? 'You said: ' : 'JeffBot said: ') + cleanText;
         setTimeout(() => {
           ariaLive.textContent = '';
         }, 1000);
