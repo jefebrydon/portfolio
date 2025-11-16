@@ -11,9 +11,30 @@ const OPENAI_BASE_URL = 'https://api.openai.com/v1';
 const TIMEOUT_MS = 60000;
 
 export default async function handler(req, res) {
+  const allowedOrigins = new Set([
+    'https://www.jeffbrydon.com',
+    'https://jeffbrydon.com',
+    'https://portfolio-six-nu-9myb2s6fia.vercel.app',
+  ]);
+
+  const requestOrigin = req.headers.origin;
+  if (requestOrigin && allowedOrigins.has(requestOrigin)) {
+    res.setHeader('Access-Control-Allow-Origin', requestOrigin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', 'https://www.jeffbrydon.com');
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Max-Age', '86400');
+
+  // Handle CORS preflight
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   // Only allow POST requests; return 405 for others
   if (req.method !== 'POST') {
-    res.setHeader('Allow', ['POST']);
+    res.setHeader('Allow', ['POST', 'OPTIONS']);
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 

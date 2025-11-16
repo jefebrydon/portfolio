@@ -18,8 +18,9 @@
       if (hostname === 'localhost' || hostname === '127.0.0.1') {
         return 'http://localhost:3001/api';
       }
-      // Production: use relative URL or set via window.JEFFBOT_CONFIG.apiBaseUrl
-      return '/api';
+
+      // Production: call the Vercel serverless function directly
+      return 'https://portfolio-six-nu-9myb2s6fia.vercel.app/api';
     })()
   };
 })();
