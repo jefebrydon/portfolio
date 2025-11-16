@@ -8131,7 +8131,7 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
   right: 0;
   width: 356px;
   height: 100vh;
-  background: linear-gradient(to bottom, var(--grey-50), #ffffff);
+  background: var(--grey-50);
   border-left: 1px solid var(--grey-100);
   z-index: 999;
   overflow: hidden;
