@@ -8243,15 +8243,29 @@ body {
   display: flex;
   flex-direction: column;
   height: calc(100vh - 70px - 24px);
-  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.jeffbot-scrollable-area {
+  flex: 1 1 auto;
   overflow-y: auto;
+  min-height: 0;
 }
 
 .jeffbot-content-wrapper {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 24px;
+}
+
+.jeffbot-bottom-container {
+  flex: 0 0 auto;
+  padding-top: 0;
+  padding-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 24px;
 }
 
 /* Component 1: Response Message */
@@ -8282,13 +8296,10 @@ body {
 
 .jeffbot-suggestion-button {
   width: 100%;
-  padding: 12px 16px;
+  padding: 8px 16px;
   background: var(--white);
   border: 1px solid var(--grey-100);
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 0px;
-  border-bottom-left-radius: 20px;
+  border-radius: 20px;
   color: var(--grey-300);
   font-family: 'Nunito Sans', sans-serif;
   font-size: 16px;
@@ -8311,9 +8322,6 @@ body {
 /* Component 3: Input Field */
 .jeffbot-input-container {
   position: relative;
-  padding-top: 24px;
-  padding-bottom: 24px;
-  margin-bottom: 24px;
   display: flex;
   align-items: center;
 }
@@ -8506,11 +8514,8 @@ body {
   }
 }
 
-/* Hide welcome message and suggestions after first interaction */
-.jeffbot-content-wrapper.has-messages .jeffbot-response-message,
-.jeffbot-content-wrapper.has-messages .jeffbot-suggestions {
-  display: none;
-}
+/* Suggestions container is hidden via JavaScript when all buttons are removed */
+/* Default message remains visible when has-messages class is added */
 
 /* ARIA live region for screen readers */
 .jeffbot-aria-live {

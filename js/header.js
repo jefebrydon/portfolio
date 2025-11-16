@@ -74,43 +74,48 @@
     </button>
     
     <div class="jeffbot-sidebar-content">
-      <div class="jeffbot-content-wrapper">
-        <!-- Response Message -->
-        <div class="jeffbot-response-message">
-          <p class="jeffbot-response-text">JeffBot 3000 here.<br>Ask me about Jeff!</p>
+      <!-- Scrollable Chat Area -->
+      <div class="jeffbot-scrollable-area">
+        <div class="jeffbot-content-wrapper">
+          <!-- Response Message -->
+          <div class="jeffbot-response-message">
+            <p class="jeffbot-response-text">Greetings, I'm JeffBot 3000. Ask me about Jeff!</p>
+          </div>
+          
+          <!-- Chat Thread Container -->
+          <div class="jeffbot-chat-thread hidden" id="jeffbot-chat-thread" role="log" aria-live="polite" aria-label="Chat conversation"></div>
         </div>
-        
-        <!-- Suggestion Buttons -->
-        <div class="jeffbot-suggestions">
-          <button class="jeffbot-suggestion-button" type="button">Jeff's designer shape</button>
-          <button class="jeffbot-suggestion-button" type="button">AI in his design process</button>
-          <button class="jeffbot-suggestion-button" type="button">His design philosophy</button>
-          <button class="jeffbot-suggestion-button" type="button">His approach to prototyping</button>
-        </div>
-        
-        <!-- Chat Thread Container -->
-        <div class="jeffbot-chat-thread hidden" id="jeffbot-chat-thread" role="log" aria-live="polite" aria-label="Chat conversation"></div>
       </div>
       
-      <!-- Input Field -->
-      <div class="jeffbot-input-container">
-        <input type="text" class="jeffbot-input" id="jeffbot-input" placeholder="Ask about Jeff" autocomplete="off">
-        <button type="button" class="button-icon button-icon-primary jeffbot-input-submit" aria-label="Submit">
-          <svg
-            class="button-icon-svg button-icon-primary-svg"
-            width="15"
-            height="16"
-            viewBox="0 0 15 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              d="M6.25 16V4.67692L1.75 9.10769L0 7.38462L7.5 0L15 7.38462L13.25 9.10769L8.75 4.67692V16H6.25Z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
+      <!-- Fixed Bottom Area (Suggestions and Input) -->
+      <div class="jeffbot-bottom-container">
+        <!-- Suggestion Buttons -->
+        <div class="jeffbot-suggestions">
+          <button class="jeffbot-suggestion-button" type="button">🧩  Jeff's designer shape</button>
+          <button class="jeffbot-suggestion-button" type="button">🤖  AI in his design process</button>
+          <button class="jeffbot-suggestion-button" type="button">🧪  His design philosophy</button>
+        </div>
+        
+        <!-- Input Field -->
+        <div class="jeffbot-input-container">
+          <input type="text" class="jeffbot-input" id="jeffbot-input" placeholder="Ask about Jeff" autocomplete="off">
+          <button type="button" class="button-icon button-icon-primary jeffbot-input-submit" aria-label="Submit">
+            <svg
+              class="button-icon-svg button-icon-primary-svg"
+              width="15"
+              height="16"
+              viewBox="0 0 15 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                d="M6.25 16V4.67692L1.75 9.10769L0 7.38462L7.5 0L15 7.38462L13.25 9.10769L8.75 4.67692V16H6.25Z"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>

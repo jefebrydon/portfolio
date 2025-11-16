@@ -235,10 +235,9 @@
     
     // Suggestion button to question mapping
     const suggestionMap = {
-      "Jeff's designer shape": "What is Jeff's designer shape?",
-      "AI in his design process": "How does Jeff use AI in his design process?",
-      "His design philosophy": "What is his design philosophy?",
-      "His approach to prototyping": "What is his approach to prototyping?"
+      "🧩  Jeff's designer shape": "What is Jeff's designer shape?",
+      "🤖  AI in his design process": "How does Jeff use AI in his design process?",
+      "🧪  His design philosophy": "What is his design philosophy?"
     };
     
     // Load conversation from sessionStorage
@@ -367,9 +366,9 @@
     // Scroll chat to bottom
     function scrollToBottom() {
       if (chatThread && chatThread.parentElement) {
-        const sidebarContent = chatThread.closest('.jeffbot-sidebar-content');
-        if (sidebarContent) {
-          sidebarContent.scrollTop = sidebarContent.scrollHeight;
+        const scrollableArea = chatThread.closest('.jeffbot-scrollable-area');
+        if (scrollableArea) {
+          scrollableArea.scrollTop = scrollableArea.scrollHeight;
         }
       }
     }
@@ -556,6 +555,18 @@
         button.addEventListener('click', function() {
           const buttonText = button.textContent.trim();
           const fullQuestion = suggestionMap[buttonText] || buttonText;
+          
+          // Remove only this clicked button immediately
+          button.remove();
+          
+          // Hide suggestions container if no buttons remain
+          const suggestionsContainer = document.querySelector('.jeffbot-suggestions');
+          if (suggestionsContainer) {
+            const remainingButtons = suggestionsContainer.querySelectorAll('.jeffbot-suggestion-button');
+            if (remainingButtons.length === 0) {
+              suggestionsContainer.style.display = 'none';
+            }
+          }
           
           // Immediately display user message
           addMessageToThread(fullQuestion, true);
