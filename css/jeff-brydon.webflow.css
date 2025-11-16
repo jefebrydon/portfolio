@@ -8261,7 +8261,7 @@ body {
 .jeffbot-bottom-container {
   flex: 0 0 auto;
   padding-top: 0;
-  padding-bottom: 24px;
+  padding-bottom: 0px;
   display: flex;
   flex-direction: column;
   gap: 24px;
