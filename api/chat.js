@@ -91,7 +91,7 @@ export default async function handler(req, res) {
 
     // 1) Create thread if none provided
     if (!currentThreadId) {
-      const thread = await openaiFetch('/beta/threads', {
+      const thread = await openaiFetch('/threads', {
         method: 'POST',
         body: JSON.stringify({}),
       });
@@ -99,7 +99,7 @@ export default async function handler(req, res) {
     }
 
     // 2) Add user message to thread
-    await openaiFetch(`/beta/threads/${currentThreadId}/messages`, {
+    await openaiFetch(`/threads/${currentThreadId}/messages`, {
       method: 'POST',
       body: JSON.stringify({
         role: 'user',
@@ -108,7 +108,7 @@ export default async function handler(req, res) {
     });
 
     // 3) Create a run for this assistant
-    const run = await openaiFetch(`/beta/threads/${currentThreadId}/runs`, {
+    const run = await openaiFetch(`/threads/${currentThreadId}/runs`, {
       method: 'POST',
       body: JSON.stringify({
         assistant_id: assistantId,
@@ -127,7 +127,7 @@ export default async function handler(req, res) {
       }
 
       const runStatus = await openaiFetch(
-        `/beta/threads/${currentThreadId}/runs/${runId}`,
+        `/threads/${currentThreadId}/runs/${runId}`,
         { method: 'GET' },
       );
 
@@ -149,7 +149,7 @@ export default async function handler(req, res) {
 
     // 5) Fetch assistant messages (most recent first)
     const messages = await openaiFetch(
-      `/beta/threads/${currentThreadId}/messages?limit=5&order=desc`,
+      `/threads/${currentThreadId}/messages?limit=5&order=desc`,
       { method: 'GET' },
     );
 
