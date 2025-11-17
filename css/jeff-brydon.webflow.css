@@ -107,7 +107,7 @@ p {
   font-family: "Nunito Sans", sans-serif;
   font-weight: 300;
   font-size: 16px;
-  line-height: 24px;
+  line-height: 28px;
   color: #666;
   letter-spacing: .2px;
   -webkit-text-stroke-width: 0px;
@@ -1123,7 +1123,7 @@ blockquote {
   padding-bottom: 5px;
   font-family: Lato, sans-serif;
   font-size: 16px;
-  line-height: 24px;
+  line-height: 28px;
 }
 
 .quote.bottom60 {
@@ -2406,6 +2406,7 @@ blockquote {
 .paragraph-dark {
   color: #111;
   font-size: 16px;
+  line-height: 28px;
 }
 
 .link-block {
@@ -3502,7 +3503,7 @@ blockquote {
   font-family: Nunito Sans, sans-serif;
   font-size: 16px;
   font-weight: 300;
-  line-height: 24px;
+  line-height: 28px;
 }
 
 .column-21 {
@@ -3593,7 +3594,7 @@ blockquote {
   font-size: 16px;
   font-style: normal;
   font-weight: 300;
-  line-height: 24px;
+  line-height: 28px;
   display: block;
 }
 
@@ -3618,13 +3619,13 @@ blockquote {
   letter-spacing: .2px;
   text-shadow: 0 0 5px #fff;
   font-size: 16px;
-  line-height: 24px;
+  line-height: 28px;
 }
 
 .text-shadow.inline {
   letter-spacing: .2px;
   font-size: 16px;
-  line-height: 24px;
+  line-height: 28px;
   display: inline-block;
 }
 
@@ -4866,6 +4867,7 @@ blockquote {
 
 .quote-text {
   font-size: 16px;
+  line-height: 28px;
 }
 
 .column-34 {
@@ -5028,6 +5030,7 @@ blockquote {
 
 .paragraph-15 {
   font-size: 16px;
+  line-height: 28px;
 }
 
 .div-block-39 {
@@ -5038,6 +5041,7 @@ blockquote {
 
 .paragraph-16 {
   font-size: 16px;
+  line-height: 28px;
 }
 
 .accordion-link-h2 {
@@ -8284,7 +8288,7 @@ body {
 .jeffbot-response-text {
   margin: 0;
   color: var(--black);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 400;
   line-height: 24px;
 }
@@ -8304,7 +8308,7 @@ body {
   border-radius: 20px;
   color: var(--grey-300);
   font-family: 'Nunito Sans', sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 400;
   line-height: 24px;
   text-align: left;
@@ -8336,7 +8340,7 @@ body {
   border: 1px solid transparent;
   border-radius: 20px;
   font-family: 'Nunito Sans', sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 400;
   line-height: 24px;
   color: var(--grey-200);
@@ -8432,7 +8436,7 @@ body {
   padding: 16px;
   border-radius: 16px;
   font-family: "Nunito Sans", sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 300 !important;
   line-height: 24px;
   color: #666;
@@ -8454,6 +8458,7 @@ body {
   background: var(--grey-75);
   border-radius: 16px 16px 16px 0px;
   margin: 0;
+  font-size: 15px;
 }
 
 /* Error Message */
@@ -8470,7 +8475,7 @@ body {
   color: #c33;
   border-radius: 16px 16px 16px 0px;
   padding: 12px 16px;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 /* Loader Component */
