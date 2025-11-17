@@ -404,6 +404,24 @@
         }
       }
     }
+    
+    // Disable suggestion buttons (change color to gray-200)
+    function disableSuggestionButtons() {
+      const buttons = document.querySelectorAll('.jeffbot-suggestion-button');
+      buttons.forEach(function(button) {
+        button.disabled = true;
+        button.style.color = 'var(--grey-200)';
+      });
+    }
+    
+    // Enable suggestion buttons (restore original color)
+    function enableSuggestionButtons() {
+      const buttons = document.querySelectorAll('.jeffbot-suggestion-button');
+      buttons.forEach(function(button) {
+        button.disabled = false;
+        button.style.color = ''; // Reset to default CSS color
+      });
+    }
 
     // Sanitize message text (e.g., remove citation/source markers like )
     function sanitizeMessageText(text) {
@@ -483,6 +501,9 @@
         submitButton.disabled = true;
       }
       
+      // Disable suggestion buttons
+      disableSuggestionButtons();
+      
       // Show loader
       if (chatThread) {
         showChatThread();
@@ -547,6 +568,9 @@
             submitButton.disabled = false;
           }
           
+          // Re-enable suggestion buttons
+          enableSuggestionButtons();
+          
           isLoading = false;
           return;
           
@@ -578,6 +602,9 @@
         submitButton.disabled = false;
       }
       
+      // Re-enable suggestion buttons
+      enableSuggestionButtons();
+      
       isLoading = false;
     }
     
@@ -587,6 +614,9 @@
         button.addEventListener('click', function() {
           const buttonText = button.textContent.trim();
           const fullQuestion = suggestionMap[buttonText] || buttonText;
+          
+          // Disable remaining suggestion buttons before removing clicked one
+          disableSuggestionButtons();
           
           // Remove only this clicked button immediately
           button.remove();
@@ -623,7 +653,7 @@
       jeffbotInput.value = '';
       jeffbotInput.dispatchEvent(new Event('input', { bubbles: true }));
       
-      // Send to assistant
+      // Send to assistant (will disable buttons inside if processing starts)
       sendMessageToAssistant(message);
     }
     

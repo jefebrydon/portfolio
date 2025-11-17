@@ -8333,13 +8333,17 @@ body {
   transition: border-color 0.2s ease, color 0.2s ease;
 }
 
-.jeffbot-suggestion-button:hover {
+.jeffbot-suggestion-button:hover:not(:disabled) {
   border-color: var(--grey-200);
   color: var(--black);
 }
 
-.jeffbot-suggestion-button:active {
+.jeffbot-suggestion-button:active:not(:disabled) {
   transform: scale(0.98);
+}
+
+.jeffbot-suggestion-button:disabled {
+  cursor: not-allowed;
 }
 
 /* Component 3: Input Field */
