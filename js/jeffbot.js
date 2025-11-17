@@ -219,6 +219,30 @@
       });
     }
 
+    // Prevent main page scroll when hovering over sidebar (desktop) or when sidebar is open (mobile)
+    if (sidebar) {
+      // Desktop: handle hover to prevent scroll only when hovering over sidebar
+      sidebar.addEventListener('mouseenter', function() {
+        if (window.innerWidth >= 768) {
+          body.classList.add('sidebar-hovered');
+        }
+      });
+      
+      sidebar.addEventListener('mouseleave', function() {
+        body.classList.remove('sidebar-hovered');
+      });
+      
+      // Handle window resize - remove hover class if switching to mobile
+      window.addEventListener('resize', function() {
+        if (window.innerWidth < 768) {
+          body.classList.remove('sidebar-hovered');
+        }
+      });
+      
+      // Mobile: prevent scroll when sidebar is open (handled by CSS with body.sidebar-open)
+      // The openSidebar() and closeSidebar() functions already add/remove 'sidebar-open' class
+    }
+
     // ============================================
     // JeffBot Chat Functionality
     // ============================================

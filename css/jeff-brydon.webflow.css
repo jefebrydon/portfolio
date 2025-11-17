@@ -8192,6 +8192,20 @@ body.sidebar-closing {
   /* margin-right removed - max-width on sections already handles compression */
 }
 
+/* Prevent main page scroll when sidebar is open (mobile only) */
+@media screen and (max-width: 767px) {
+  body.sidebar-open {
+    overflow: hidden;
+  }
+}
+
+/* Desktop: prevent scroll only when hovering over sidebar */
+@media screen and (min-width: 768px) {
+  body.sidebar-hovered {
+    overflow: hidden;
+  }
+}
+
 /* Ensure main content wrapper compresses */
 body.sidebar-open .section,
 body.sidebar-open .video-section {
