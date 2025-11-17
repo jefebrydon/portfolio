@@ -8704,12 +8704,24 @@ body {
   
   /* Adjust sidebar content - exactly 24px top padding */
   /* Mobile header is fixed at top: 70px with height ~73px (ends at ~143px from viewport) */
-  /* Content needs to start below header. Sidebar has padding-top: 70px for navbar. */
-  /* To have content start 24px below header bottom (at 167px), we need: 167px - 70px = 97px padding-top */
-  /* But user wants 24px spacing, so we'll set padding-top to account for header + 24px spacing */
+  /* Sidebar-content starts at: 70px (sidebar padding) + 97px (content padding-top) = 167px from viewport top */
+  /* Height: Make it 76px taller than current and position input 24px above viewport bottom */
+  /* Current: calc(100vh - 167px). 76px taller: calc(100vh - 91px) */
+  /* For input 24px above bottom: sidebar-content bottom at (100vh - 24px), height = (100vh - 24px) - 167px = calc(100vh - 191px) */
+  /* Combining: calc(100vh - 191px + 76px) = calc(100vh - 115px) */
   .jeffbot-sidebar-content {
     padding-top: calc(73px + 24px); /* Header height (73px) + desired spacing (24px) = 97px from sidebar top */
-    height: calc(100vh - 70px - 73px - 24px); /* Viewport height - navbar (70px) - header (73px) - spacing (24px) */
+    height: calc(100vh - 69px); /* User-specified height calculation */
+    width: 100%; /* Ensure full width of viewport */
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Adjust bottom container to position input 24px above viewport bottom */
+  .jeffbot-bottom-container {
+    margin-bottom: 24px; /* 24px spacing above viewport bottom */
   }
   
   /* Scrollable area - allow content to scroll up into the 24px spacing area */
