@@ -8631,6 +8631,7 @@ body {
     max-width: 100vw;
     left: 0;
     right: 0;
+    padding-top: 70px; /* Account for navbar, same as desktop */
   }
   
   /* Show and style mobile header */
@@ -8701,17 +8702,23 @@ body {
     flex-shrink: 0;
   }
   
-  /* Adjust sidebar content to account for fixed header */
-  /* Header: 24px top padding + ~24px text (h2 with line-height 1.2) + 24px bottom padding + 1px border = ~73px */
+  /* Adjust sidebar content - exactly 24px top padding */
+  /* Mobile header is fixed at top: 70px with height ~73px (ends at ~143px from viewport) */
+  /* Content needs to start below header. Sidebar has padding-top: 70px for navbar. */
+  /* To have content start 24px below header bottom (at 167px), we need: 167px - 70px = 97px padding-top */
+  /* But user wants 24px spacing, so we'll set padding-top to account for header + 24px spacing */
   .jeffbot-sidebar-content {
-    padding-top: calc(70px + 73px); /* navbar height + header height */
-    height: calc(100vh - 70px - 73px);
+    padding-top: calc(73px + 24px); /* Header height (73px) + desired spacing (24px) = 97px from sidebar top */
+    height: calc(100vh - 70px - 73px - 24px); /* Viewport height - navbar (70px) - header (73px) - spacing (24px) */
   }
   
-  /* Ensure scrollable area accounts for header */
+  /* Scrollable area - allow content to scroll up into the 24px spacing area */
+  /* Negative margin trick: margin-top: -24px allows content to scroll into the 24px padding space above */
+  /* padding-top: 24px restores the spacing so content starts in correct position */
+  /* When scrolling up, content becomes visible in the 24px area, then disappears beneath the fixed header */
   .jeffbot-scrollable-area {
-    margin-top: 0;
-    padding-top: 0;
+    margin-top: -24px;
+    padding-top: 24px;
   }
 }
 
