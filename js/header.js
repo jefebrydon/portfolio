@@ -74,6 +74,14 @@
     </button>
     
     <div class="jeffbot-sidebar-content">
+      <!-- Mobile Header Container (mobile only) -->
+      <div class="jeffbot-mobile-header">
+        <h2 class="jeffbot-mobile-header-title">JeffBot 3000</h2>
+        <button type="button" class="button-icon button-icon-primary jeffbot-mobile-header-close" aria-label="Close JeffBot">
+          <img src="images/close_small.svg" alt="" class="jeffbot-mobile-header-close-icon" aria-hidden="true">
+        </button>
+      </div>
+      
       <!-- Scrollable Chat Area -->
       <div class="jeffbot-scrollable-area">
         <div class="jeffbot-content-wrapper">

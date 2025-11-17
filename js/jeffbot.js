@@ -8,6 +8,7 @@
     const sparkleButton = document.querySelector('.sparkle-button');
     const sparkleIcon = document.querySelector('.sparkle-icon');
     const closeButton = document.querySelector('.jeffbot-sidebar-close');
+    const mobileHeaderCloseButton = document.querySelector('.jeffbot-mobile-header-close');
     const menuTrigger = document.getElementById('jeffbot-menu-trigger');
     const body = document.body;
     
@@ -167,6 +168,13 @@
 
     if (closeButton) {
       closeButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        closeSidebar();
+      });
+    }
+
+    if (mobileHeaderCloseButton) {
+      mobileHeaderCloseButton.addEventListener('click', function(e) {
         e.preventDefault();
         closeSidebar();
       });
