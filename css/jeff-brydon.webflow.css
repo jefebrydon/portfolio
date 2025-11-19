@@ -2209,6 +2209,16 @@ blockquote {
   margin-top: 100px;
 }
 
+.padded.hero-container .w-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.padded.hero-container .w-row .w-col {
+  float: none;
+}
+
 .padded.top40, .padded.jira-hero {
   margin-top: 40px;
 }
@@ -5326,11 +5336,21 @@ blockquote {
   height: 0;
 }
 
-.hero-placeholder-box {
+.hero-video-container {
   width: 100%;
-  background-color: #e5e5e5;
+  position: relative;
   padding-bottom: 87.5%;
   /* 8:7 aspect ratio (7/8 = 0.875) */
+  overflow: hidden;
+}
+
+.hero-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .hover-grow {
