@@ -2207,16 +2207,25 @@ blockquote {
 
 .padded.hero-container {
   margin-top: 100px;
+  overflow: visible;
+  /* Allow shifted video container to extend past container edge */
 }
 
 .padded.hero-container .w-row {
   display: flex;
   align-items: center;
   gap: 8px;
+  overflow: visible;
+  /* Allow shifted video container to extend past row edge */
 }
 
 .padded.hero-container .w-row .w-col {
   float: none;
+}
+
+.padded.hero-container .w-row .w-col-8 {
+  overflow: visible;
+  /* Allow shifted video container to extend past column edge */
 }
 
 .padded.top40, .padded.jira-hero {
@@ -5342,6 +5351,8 @@ blockquote {
   padding-bottom: 87.5%;
   /* 8:7 aspect ratio (7/8 = 0.875) */
   overflow: hidden;
+  transform: translateX(30px);
+  /* Shift container 30px to the right, allowing it to extend past column edge */
 }
 
 .hero-video {
