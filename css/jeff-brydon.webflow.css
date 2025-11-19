@@ -5326,6 +5326,13 @@ blockquote {
   height: 0;
 }
 
+.hero-placeholder-box {
+  width: 100%;
+  background-color: #e5e5e5;
+  padding-bottom: 87.5%;
+  /* 8:7 aspect ratio (7/8 = 0.875) */
+}
+
 .hover-grow {
   max-width: 100%;
 }
