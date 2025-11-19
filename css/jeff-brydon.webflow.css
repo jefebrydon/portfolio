@@ -8133,6 +8133,30 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
     padding-left: 0;
     padding-right: 0;
   }
+
+  /* Hero section: Stack columns vertically on mobile/tablet */
+  .padded.hero-container .w-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .padded.hero-container .w-row .w-col-4,
+  .padded.hero-container .w-row .w-col-8 {
+    width: 100%;
+  }
+
+  /* Remove left and right padding from video column on mobile/tablet */
+  .padded.hero-container .w-row .w-col-8 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Remove 30px right shift on mobile/tablet */
+  .hero-video-container {
+    transform: translateX(0);
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
 }
 
 /* Sparkle Button (JeffBot Button) */
