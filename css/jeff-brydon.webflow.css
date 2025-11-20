@@ -4074,7 +4074,7 @@ blockquote {
 }
 
 .card-highlight.gradient {
-  background-image: linear-gradient(#41cada, #17778e);
+  background-image: linear-gradient(#0b5f79, #41cada);
   height: 80px;
 }
 
@@ -4119,7 +4119,7 @@ blockquote {
 }
 
 .method-pill.pill-turquois {
-  background-image: linear-gradient(125deg, #238ea3 5%, #3cc0d1 68%);
+  background-image: linear-gradient(125deg, #0b5f79, #41cada);
 }
 
 .paragraph-4 {
@@ -5412,7 +5412,7 @@ blockquote {
 }
 
 .method-pill-2.pill-turquois {
-  background-image: linear-gradient(125deg, #238ea3 5%, #3cc0d1 68%);
+  background-image: linear-gradient(125deg, #0b5f79, #41cada);
 }
 
 .hover-text-2 {
