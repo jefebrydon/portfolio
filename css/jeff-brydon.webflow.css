@@ -56,6 +56,19 @@ h1 {
   line-height: 44px;
 }
 
+h1.bricolage-grotesque {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 46px;
+  font-weight: 800;
+  line-height: 1.2;
+  overflow: visible;
+  background-image: linear-gradient(to right, #0b5f79, #41cada);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
 h2 {
   color: #222;
   margin-top: 0;
