@@ -71,6 +71,28 @@ h1.bricolage-grotesque {
   color: transparent;
 }
 
+h1.bricolage-grotesque-solid {
+  font-family: "Bricolage Grotesque", sans-serif !important;
+  font-size: 46px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  overflow: visible;
+  display: inline-block;
+  width: fit-content;
+  color: #222 !important;
+}
+
+h2.bricolage-grotesque-solid {
+  font-family: "Bricolage Grotesque", sans-serif !important;
+  font-size: 30px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  overflow: visible;
+  display: inline-block;
+  width: fit-content;
+  color: #222 !important;
+}
+
 h2 {
   color: #222;
   margin-top: 0;
