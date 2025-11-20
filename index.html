@@ -708,17 +708,16 @@
   <!-- Password Protection Modal -->
   <div id="password-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999;">
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 40px; border-radius: 8px; max-width: 400px; width: 90%;">
-      <h3 style="font-family: 'Nunito Sans', sans-serif; font-size: 24px; font-weight: 800; color: #222; margin-bottom: 20px; text-align: center;">Password Protected</h3>
-      <p style="font-family: 'Nunito Sans', sans-serif; font-size: 16px; font-weight: 300; color: #666; margin-bottom: 30px; text-align: center;">This case study is password protected.</p>
+      <h2 class="bricolage-grotesque-solid" style="margin-bottom: 20px;">Password Protected</h2>
       <div style="margin-bottom: 20px;">
         <label style="font-family: 'Nunito Sans', sans-serif; font-size: 14px; font-weight: 700; color: #333; display: block; margin-bottom: 5px;">Password</label>
         <input type="password" id="modal-password" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Nunito Sans', sans-serif; font-size: 14px; box-sizing: border-box;" placeholder="Enter password">
       </div>
-      <div style="text-align: center;">
+      <div style="text-align: left;">
         <button id="modal-submit" style="background: linear-gradient(to right, #0b5f79, #41cada); color: white; border: none; padding: 12px 24px; border-radius: 4px; font-family: 'Nunito Sans', sans-serif; font-size: 16px; font-weight: 600; cursor: pointer; margin-right: 10px;">Submit</button>
         <button id="modal-cancel" style="background: #f5f5f5; color: #666; border: 1px solid #ccc; padding: 12px 24px; border-radius: 4px; font-family: 'Nunito Sans', sans-serif; font-size: 16px; cursor: pointer;">Cancel</button>
       </div>
-      <div id="modal-error" style="display: none; color: #ea384c; font-family: 'Nunito Sans', sans-serif; font-size: 14px; text-align: center; margin-top: 15px;">Incorrect password. Please try again.</div>
+      <div id="modal-error" style="display: none; color: #ea384c; font-family: 'Nunito Sans', sans-serif; font-size: 14px; text-align: left; margin-top: 15px;">Incorrect password. Please try again.</div>
     </div>
   </div>
 
