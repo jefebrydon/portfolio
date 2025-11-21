@@ -168,6 +168,72 @@
     if (isIndexPage()) {
       setTimeout(initGradientBarScroll, 50);
     }
+    
+    // Initialize smooth scroll with offset for anchor links
+    initSmoothScroll();
+  }
+  
+  // Handle smooth scrolling with offset for fixed header
+  function initSmoothScroll() {
+    const navbar = document.querySelector('.navbar');
+    if (!navbar) {
+      // Retry if navbar isn't ready yet
+      setTimeout(initSmoothScroll, 100);
+      return;
+    }
+    
+    // Get navbar height (default to 76px if not found)
+    const navbarHeight = navbar.offsetHeight || 76;
+    
+    // Function to scroll to element with offset
+    function scrollToElement(element, smooth) {
+      if (!element) return;
+      
+      const targetPosition = element.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+      
+      window.scrollTo({
+        top: Math.max(0, targetPosition),
+        behavior: smooth ? 'smooth' : 'auto'
+      });
+    }
+    
+    // Handle clicks on anchor links
+    document.addEventListener('click', function(e) {
+      const link = e.target.closest('a[href^="#"]');
+      if (!link) return;
+      
+      const href = link.getAttribute('href');
+      if (!href || href === '#') return;
+      
+      // Get the target element
+      const targetId = href.substring(1);
+      const targetElement = document.getElementById(targetId);
+      
+      if (targetElement) {
+        e.preventDefault();
+        
+        // Scroll to target with offset
+        scrollToElement(targetElement, true);
+        
+        // Update URL hash without triggering scroll
+        if (history.pushState) {
+          history.pushState(null, null, href);
+        } else {
+          window.location.hash = href;
+        }
+      }
+    });
+    
+    // Handle initial hash on page load (after a short delay to ensure DOM is ready)
+    if (window.location.hash) {
+      setTimeout(function() {
+        const targetId = window.location.hash.substring(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          scrollToElement(targetElement, false); // Use instant scroll on page load
+        }
+      }, 200);
+    }
   }
 
   // Initialize when DOM is ready
