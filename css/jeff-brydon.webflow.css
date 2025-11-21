@@ -3071,12 +3071,15 @@ blockquote {
 .brand,
 .brand.w-nav-brand {
   max-width: 30px;
-  margin: 18px 0 24px 25px;
+  margin: 0;
   display: flex;
   align-items: center;
-  align-self: flex-start;
+  align-self: center;
   float: none !important;
-  position: relative;
+  position: absolute;
+  left: 25px;
+  top: 0;
+  height: 100%;
 }
 
 .brand .img-clickable {
@@ -3089,12 +3092,15 @@ blockquote {
 .brand.w--current,
 .brand.w--current.w-nav-brand {
   max-width: 30px;
-  margin: 18px 0 24px 25px;
+  margin: 0;
   display: flex;
   align-items: center;
-  align-self: flex-start;
+  align-self: center;
   float: none !important;
-  position: relative;
+  position: absolute;
+  left: 25px;
+  top: 0;
+  height: 100%;
 }
 
 .brand.w--current .img-clickable {
@@ -3976,11 +3982,11 @@ blockquote {
 }
 
 .div-block-12 {
-  float: right;
   flex-direction: column;
   align-self: center;
   align-items: flex-start;
   display: flex;
+  pointer-events: auto;
 }
 
 .div-block-13 {
@@ -4697,7 +4703,11 @@ blockquote {
   align-self: center;
   width: 100%;
   display: flex;
-  position: static;
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 100%;
+  pointer-events: none;
   inset: 0% 0% auto;
 }
 
@@ -7655,6 +7665,7 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
     display: flex;
     align-items: center;
     height: 100%;
+    position: relative;
   }
 
   .brand .img-clickable {
@@ -7989,6 +8000,9 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
     align-items: center;
     display: flex;
     box-shadow: 7px 7px 10px -5px #2223;
+    position: static;
+    pointer-events: auto;
+    height: auto;
   }
 
   .paragraph-5 {
