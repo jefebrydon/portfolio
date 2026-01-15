@@ -98,21 +98,7 @@
       <p class="max-width-600 bottom30">I used Cursor to build the app. I built an upload flow that sent each rulebook (PDF) to its own OpenAI vector store through the API. The chat interface then used ChatGPT 5.1 to query those vector stores for answers about each game. However, I ran into similar hallucination issues as my “competitors”.</p>
       <p class="max-width-600 bottom30"><em>Why did uploading PDFs to OpenAI’s vector stores produce such unreliable answers?</em></p>
       <p class="max-width-600 bottom30">After digging in, I learned why: the vectorization process was scanning pages left-to-right across the entire page. Most rulebooks use multi-column layouts, causing text to interleave and confuse the model. This is likely why my “competitors” were so unreliable.</p>
-      <p class="max-width-600 bottom30">To fix this, I added a preprocessing step to the Upload flow: <strong>Gemini 2.5 Flash</strong> can read PDFs as visual documents and extract clean text. So before ingestion:</p>
-      <ul role="list" class="list-2 bottom30">
-        <li class="list-item-3">
-          <p>Gemini converts each page to structured text</p>
-          <p>Section headers are detected and tagged</p>
-        </li>
-      </ul>
-      <p class="max-width-600 bottom30">This allows OpenAI to:</p>
-      <ul role="list" class="list-2 bottom30">
-        <li class="list-item-3">
-          <p>Quote rules accurately</p>
-          <p>Reference the <em>exact section</em> each quote came from</p>
-        </li>
-      </ul>
-      <p class="max-width-600 bottom30">The OpenAI answers became consistently accurate.</p>
+      <p class="max-width-600 bottom30">To fix this, I used <strong>Gemini 2.5 Flash to clean the PDFs</strong> during the Upload flow. Before ingestion to OpenAI, Gemini 2.5 Flash reads PDFs as visual documents, and converts each page to clean text with section headers tagged. This allowed OpenAI to quote the exact section each quote came from, and it's responses became 100% accurate!</p>
       <p class="max-width-600 bottom_80">Now that the core flow was working, I shifted to design.</p>
 
       <h2 class="bricolage-grotesque-solid" style="margin-bottom: 50px;">Design</h2>
@@ -161,9 +147,6 @@
       </ul>
       <h3 class="subheader bottom30">Debugging and Version Control</h3>
       <p class="max-width-600 bottom_80">Errors are the norm. If a few rounds of telling Opus 4.5 to debug didn’t work, I could always roll back to the last stable version in GitHub.</p>
-      <h2 class="bricolage-grotesque-solid">Background</h2>
-      <p class="subheader">Team<br></p>
-      <p class="bottom_80 max-width-600">In 2020, I joined Reflektive as a full-time product designer. Our team included 1 other product designer, 4 PMs, and around 30 engineers.<br></p>
     </div>
     <div class="padded w-container"></div>
     <div class="padded w-container"></div>
