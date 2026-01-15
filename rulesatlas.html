@@ -70,6 +70,104 @@
       </div>
     </div>
     <div data-w-id="cfaf02fa-e4f9-a431-a8bf-06da59a61bcb" style="opacity:0" class="padded top40 w-container"><img src="images/Rules_Atlas_home.png" data-w-id="cfaf02fa-e4f9-a431-a8bf-06da59a61bdb" alt="" class="box-shadow bottom100">
+      <h2 class="bricolage-grotesque-solid" style="margin-bottom: 50px;">Overview</h2>
+      <h3 class="subheader bottom30">The Problem</h3>
+      <p class="max-width-600 bottom30">Modern board games often require rules clarification. Finding answers is slow and disruptive, forcing players to dig through 20–40-page rulebooks mid-game.</p>
+      <h3 class="subheader bottom30">The Goal</h3>
+      <p class="max-width-600 bottom30">An AI tool that quickly clarifies board game rules.</p>
+      <h3 class="subheader bottom30">Stack</h3>
+      <ul role="list" class="list-2 bottom_80">
+        <li class="list-item-3">
+          <p>Cursor + Opus 4.5 for agentic coding</p>
+          <p>Gemini for PDF cleanup</p>
+          <p>OpenAI for RAG</p>
+          <p>GitHub for version control</p>
+          <p>Nano Banana → Kling for hero video</p>
+          <p>Supabase for backend</p>
+          <p>Vercel for deployment</p>
+        </li>
+      </ul>
+
+      <h2 class="bricolage-grotesque-solid" style="margin-bottom: 50px;">Research</h2>
+      <h3 class="subheader bottom30">Testing “Competitors”</h3>
+      <p class="max-width-600 bottom30">I tested several AI rulebook clarification tools. They all used RAG through a standard chat interface. When they returned an answer, I inevitably wondered, “Is that correct?” It only took a few tests (asking questions I already knew the answer to) to get a wrong answer and decide I couldn’t trust the tool.</p>
+      <h3 class="subheader bottom30">What Users Are Saying</h3>
+      <p class="max-width-600 bottom_80">I read through BoardGameGeek forums about AI rule clarification, and the take was consistent: players need certainty, and RAG-based rule clarification wasn’t trustworthy enough.</p>
+
+      <h2 class="bricolage-grotesque-solid" style="margin-bottom: 50px;">Building</h2>
+      <h3 class="subheader bottom30">Flipping the Design Process</h3>
+      <p class="max-width-600 bottom30">Since I was coding with AI, I flipped the design process on its head. My biggest unknown wasn’t the design—it was whether I could even vibe-code certain key features. Before I designed anything, I used Cursor to build a bare-bones v0.</p>
+      <h3 class="subheader bottom30">Solution: Verifiable RAG</h3>
+      <p class="max-width-600 bottom30">I created an AI interface that gave answers users could quickly verify. Alongside the RAG chat, an adjacent Rulebook Viewer jumps to the relevant rulebook page, so users can confirm the answer.</p>
+      <h3 class="subheader bottom30">The Edge of Vibe Coding</h3>
+      <p class="max-width-600 bottom30">Initially, I hoped to <em>highlight</em> the exact quote in the rulebook, but it’s hard. This feature was beyond what I could reliably vibe-code. After many attempts, I decided that feature would have to wait for a future version (or a real coder).</p>
+      <h3 class="subheader bottom30">How I Built It</h3>
+      <p class="max-width-600 bottom30">I used Cursor to build the app. I built an upload flow that sent each rulebook (PDF) to its own OpenAI vector store through the API. The chat interface then used ChatGPT 5.1 to query those vector stores for answers about each game. However, I ran into similar hallucination issues as my “competitors”.</p>
+      <p class="max-width-600 bottom30"><em>Why did uploading PDFs to OpenAI’s vector stores produce such unreliable answers?</em></p>
+      <p class="max-width-600 bottom30">After digging in, I learned why: the vectorization process was scanning pages left-to-right across the entire page. Most rulebooks use multi-column layouts, causing text to interleave and confuse the model. This is likely why my “competitors” were so unreliable.</p>
+      <p class="max-width-600 bottom30">To fix this, I added a preprocessing step to the Upload flow: <strong>Gemini 2.5 Flash</strong> can read PDFs as visual documents and extract clean text. So before ingestion:</p>
+      <ul role="list" class="list-2 bottom30">
+        <li class="list-item-3">
+          <p>Gemini converts each page to structured text</p>
+          <p>Section headers are detected and tagged</p>
+        </li>
+      </ul>
+      <p class="max-width-600 bottom30">This allows OpenAI to:</p>
+      <ul role="list" class="list-2 bottom30">
+        <li class="list-item-3">
+          <p>Quote rules accurately</p>
+          <p>Reference the <em>exact section</em> each quote came from</p>
+        </li>
+      </ul>
+      <p class="max-width-600 bottom30">The OpenAI answers became consistently accurate.</p>
+      <p class="max-width-600 bottom_80">Now that the core flow was working, I shifted to design.</p>
+
+      <h2 class="bricolage-grotesque-solid" style="margin-bottom: 50px;">Design</h2>
+      <p class="max-width-600 bottom30"><em>Note: since this project was focused on AI coding, I won’t cover my design process in detail.</em></p>
+      <h3 class="subheader bottom30">Visual Design</h3>
+      <p class="max-width-600 bottom30">I used Figma to mock up the main pages and compare different fonts, color palettes, page layouts, and other visual design choices.</p>
+      <p class="max-width-600 bottom30">My goal was to convey authority and trust, so the visual design leans established rather than AI-forward. Serif headers and a paper-and-brass color palette evoke printed rulebooks, shifting attention from AI to the authority of the source.</p>
+      <h3 class="subheader bottom30">Frontend</h3>
+      <p class="max-width-600 bottom30">I handled styling using <strong>Tailwind CSS</strong> (colors, radius, typography). I started from <strong>shadcn-style components</strong> (buttons, inputs, etc.) and created a hidden <code>/ui</code> page that acted as a component sandbox—showing all components, variants, text styles, and colors in one place.</p>
+      <h3 class="subheader bottom30">Branding</h3>
+      <p class="max-width-600 bottom_80">With the name and logo, I tried to convey “authoritative” and “comprehensive” to match the product’s promise.</p>
+
+      <h2 class="bricolage-grotesque-solid" style="margin-bottom: 50px;">Vibe Coding Learnings</h2>
+      <p class="max-width-600 bottom30">As a product designer with a high-level understanding of code, vibe coding still feels like flying blind. While much of the code was unfamiliar, I did learn some tricks to get better results.</p>
+      <h3 class="subheader bottom30">Rules and Documentation</h3>
+      <p class="max-width-600 bottom30">Clear constraints matter. I added User Rules in Cursor, such as:</p>
+      <ul role="list" class="list-2 bottom30">
+        <li class="list-item-3">
+          <p><strong>Code:</strong> Small functions, early returns, explicit types</p>
+          <p><strong>Dependencies:</strong> Use existing libraries; suggest new ones only if they meaningfully reduce complexity.</p>
+        </li>
+      </ul>
+      <p class="max-width-600 bottom30">I also ensured coding agents referenced two key context files:</p>
+      <ul role="list" class="list-2 bottom30">
+        <li class="list-item-3">
+          <p><strong>README.md</strong> — a minimal “how to run it” checklist</p>
+          <p><strong>AGENTS.md</strong></p>
+          <ul role="list" class="list-2">
+            <li class="list-item-3">
+              <p><strong>Critical rules:</strong> e.g. <em>“Use gpt-5.1 for Ask”</em></p>
+              <p><strong>Architecture map:</strong> Repo + feature index</p>
+              <p><strong>Tech stack:</strong> Choices and hard deployment constraints</p>
+              <p><strong>Data-flow diagrams:</strong> Upload, Ask, and ingestion flows</p>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <h3 class="subheader bottom30">Prompting Techniques</h3>
+      <p class="max-width-600 bottom30"><strong>For simple changes:</strong> Cursor’s Composer model was fastest and most token-efficient.</p>
+      <p class="max-width-600 bottom30"><strong>For complex changes:</strong></p>
+      <ul role="list" class="list-2 bottom30">
+        <li class="list-item-3">
+          <p>First, I used ChatGPT 5.2 to improve the prompt by asking clarifying questions</p>
+          <p>Then, I used Cursor’s Plan mode to generate a PM-style spec for Opus 4.5 to build</p>
+        </li>
+      </ul>
+      <h3 class="subheader bottom30">Debugging and Version Control</h3>
+      <p class="max-width-600 bottom_80">Errors are the norm. If a few rounds of telling Opus 4.5 to debug didn’t work, I could always roll back to the last stable version in GitHub.</p>
       <h2 class="bricolage-grotesque-solid">Background</h2>
       <p class="subheader">Team<br></p>
       <p class="bottom_80 max-width-600">In 2020, I joined Reflektive as a full-time product designer. Our team included 1 other product designer, 4 PMs, and around 30 engineers.<br></p>
