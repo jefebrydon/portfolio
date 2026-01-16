@@ -380,22 +380,22 @@ blockquote {
   color: #fff;
   text-align: center;
   letter-spacing: .5px;
-  text-transform: uppercase;
+  text-transform: capitalize;
   object-fit: fill;
   background-color: #0000;
   background-image: linear-gradient(to right, #0052cc, #2684ff);
   border: 1px #25d9ff;
-  border-radius: 3px;
+  border-radius: 99px;
   order: 1;
   justify-content: center;
   align-self: center;
   align-items: center;
   width: auto;
   margin: 0 10px 30px 0;
-  padding: 15px 20px;
+  padding: 12px 20px;
   font-family: Nunito Sans, sans-serif;
-  font-size: 18px;
-  font-weight: 300;
+  font-size: 16px;
+  font-weight: 700;
   line-height: 20px;
   transition: background-color .15s;
   display: block;
@@ -609,6 +609,49 @@ blockquote {
 .button.gradient.no-bottom-space {
   margin-bottom: 0;
   font-size: 17px;
+}
+
+.button.secondary {
+  background-color: #fff;
+  background-image: none;
+  color: var(--teal-primary);
+  border: none;
+  position: relative;
+}
+
+.button.secondary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 99px;
+  padding: 1px;
+  background: linear-gradient(to right, #0b5f79, #41cada);
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.button.secondary > * {
+  position: relative;
+  z-index: 1;
+}
+
+.button.secondary:hover {
+  color: var(--teal-dark);
+}
+
+.button.secondary:hover::before {
+  background: var(--teal-dark);
 }
 
 .button._100-side-pad {
