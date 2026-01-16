@@ -58,6 +58,28 @@
       text-decoration: none;
       cursor: pointer;
     }
+
+    .list-item-3 {
+      margin-top: 4px;
+    }
+
+    .list-item-3:first-child {
+      margin-top: 0;
+    }
+
+    .list-item-3 p {
+      margin: 0;
+    }
+
+    /* Reduce spacing between paragraph and list to 4px */
+    p.bottom30 + ul.list-2 {
+      margin-top: -26px;
+    }
+
+    /* Add spacing below nested list's last item (Data-flow diagrams) */
+    .list-2 .list-2 .list-item-3:last-child p {
+      margin-bottom: 50px;
+    }
   </style>
 </head>
 <body>
@@ -116,35 +138,25 @@
       <h3 class="subheader bottom30">Rules and Documentation</h3>
       <p class="max-width-600 bottom30">Clear constraints matter. I added User Rules in Cursor, such as:</p>
       <ul role="list" class="list-2 bottom30">
-        <li class="list-item-3">
-          <p><strong>Code:</strong> Small functions, early returns, explicit types</p>
-          <p><strong>Dependencies:</strong> Use existing libraries; suggest new ones only if they meaningfully reduce complexity.</p>
-        </li>
+        <li class="list-item-3"><p><strong>Code:</strong> Small functions, early returns, explicit types</p></li>
+        <li class="list-item-3"><p><strong>Dependencies:</strong> Use existing libraries; suggest new ones only if they meaningfully reduce complexity.</p></li>
       </ul>
       <p class="max-width-600 bottom30">I also ensured coding agents referenced two key context files:</p>
       <ul role="list" class="list-2 bottom30">
+        <li class="list-item-3"><p><strong>README.md</strong> — a minimal "how to run it" checklist</p></li>
         <li class="list-item-3">
-          <p><strong>README.md</strong> — a minimal “how to run it” checklist</p>
-          <p><strong>AGENTS.md</strong></p>
+          <p><strong>AGENTS.md</strong> — included context such as:</p>
           <ul role="list" class="list-2">
-            <li class="list-item-3">
-              <p><strong>Critical rules:</strong> e.g. <em>“Use gpt-5.1 for Ask”</em></p>
-              <p><strong>Architecture map:</strong> Repo + feature index</p>
-              <p><strong>Tech stack:</strong> Choices and hard deployment constraints</p>
-              <p><strong>Data-flow diagrams:</strong> Upload, Ask, and ingestion flows</p>
-            </li>
+            <li class="list-item-3"><p><strong>Critical rules:</strong> e.g. <em>"Use gpt-5.1 for Ask"</em></p></li>
+            <li class="list-item-3"><p><strong>Architecture map:</strong> Repo + feature index</p></li>
+            <li class="list-item-3"><p><strong>Tech stack:</strong> Choices and hard deployment constraints</p></li>
+            <li class="list-item-3"><p><strong>Data-flow diagrams:</strong> Upload, Ask, and ingestion flows</p></li>
           </ul>
         </li>
       </ul>
       <h3 class="subheader bottom30">Prompting Techniques</h3>
       <p class="max-width-600 bottom30"><strong>For simple changes:</strong> Cursor’s Composer model was fastest and most token-efficient.</p>
-      <p class="max-width-600 bottom30"><strong>For complex changes:</strong></p>
-      <ul role="list" class="list-2 bottom30">
-        <li class="list-item-3">
-          <p>First, I used ChatGPT 5.2 to improve the prompt by asking clarifying questions</p>
-          <p>Then, I used Cursor’s Plan mode to generate a PM-style spec for Opus 4.5 to build</p>
-        </li>
-      </ul>
+      <p class="max-width-600 bottom30"><strong>For complex changes:</strong> First, I used ChatGPT 5.2 to improve my prompt, then Cursor's Plan mode to generate a PM-style spec, then Opus 4.5 to build it.</p>
       <h3 class="subheader bottom30">Debugging and Version Control</h3>
       <p class="max-width-600 bottom_80">Errors are the norm. If a few rounds of telling Opus 4.5 to debug didn’t work, I could always roll back to the last stable version in GitHub.</p>
     </div>
