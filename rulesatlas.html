@@ -80,6 +80,20 @@
     .list-2 .list-2 .list-item-3:last-child p {
       margin-bottom: 50px;
     }
+
+    /* Mobile: stack hero header vertically */
+    @media screen and (max-width: 767px) {
+      .ra-hero-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
+        gap: 20px;
+      }
+      .ra-hero-header .button {
+        align-self: flex-start !important;
+        float: none !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -87,7 +101,7 @@
   <div class="section">
     <!-- Header will be injected by header.js -->
     <div data-w-id="fb7319e0-d864-970a-16df-454c4041b4d9" style="opacity:0" class="padded jira-hero w-container">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="ra-hero-header" style="display: flex; justify-content: space-between; align-items: center;">
         <div><img src="images/logo_compass.png" alt="" class="image-27 top--20">
           <h1 class="bricolage-grotesque-solid heading-17">Rules Atlas</h1>
         </div>
