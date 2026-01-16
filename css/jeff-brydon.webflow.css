@@ -8263,7 +8263,7 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
 }
 
 /* Hide button on mobile */
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 479px) {
   .sparkle-button {
     display: none;
   }
@@ -8390,7 +8390,7 @@ body {
 /* JeffBot menu item styling - inherits from .navigation class */
 
 /* Hide JeffBot menu item on desktop/tablet, show only on mobile */
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 480px) {
   .jeffbot-menu-item {
     display: none !important;
   }
