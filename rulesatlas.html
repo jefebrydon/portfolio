@@ -133,12 +133,12 @@
           pointer-events: auto;
         }
       </style>
-      <div class="video-container-replay" style="position: relative; width: 100%; margin-bottom: 30px;">
+      <div class="video-container-replay" style="position: relative; width: 100%; margin-bottom: 50px;">
         <video id="ra-chat-video" style="width: 100%; display: block;" muted playsinline>
           <source src="videos/RA-Chat.mov" type="video/quicktime">
           <source src="videos/RA-Chat.mov" type="video/mp4">
         </video>
-        <button id="ra-chat-replay" class="button secondary with-icon replay-btn-hidden" style="position: absolute; top: 50%; left: 50%; margin: 0; z-index: 10; transition: opacity 0.4s ease, transform 0.4s ease;">
+        <button id="ra-chat-replay" class="button secondary with-icon replay-btn-hidden" style="position: absolute; top: 50%; left: 50%; margin: 0; z-index: 10; transition: opacity 0.4s ease, transform 0.4s ease; box-shadow: 3px 7px 20px -2px #5a757d40;">
           <svg class="button-icon-inline" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
         </button>
       </div>
@@ -146,9 +146,22 @@
         (function() {
           const video = document.getElementById('ra-chat-video');
           const replayBtn = document.getElementById('ra-chat-replay');
+          let hasPlayed = false;
           
-          // Auto-play on page load
-          video.play();
+          // Auto-play when video scrolls into view (only once)
+          const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+              if (entry.isIntersecting && !hasPlayed) {
+                video.play();
+                hasPlayed = true;
+                observer.unobserve(video);
+              }
+            });
+          }, {
+            threshold: 0.5
+          });
+          
+          observer.observe(video);
           
           // Show replay button when video ends
           video.addEventListener('ended', function() {
@@ -167,11 +180,12 @@
       </script>
       
       <h3 class="subheader bottom30">The Edge of Vibe Coding</h3>
-      <p class="max-width-600 bottom30">Initially, I hoped to <em>highlight</em> the exact quote in the rulebook, but it’s hard. This feature was beyond what I could reliably vibe-code. After many attempts, I decided that feature would have to wait for a future version (or a real coder).</p>
-      <h3 class="subheader bottom30">How I Built It</h3>
-      <p class="max-width-600 bottom30">I used Cursor to build the app. I built an upload flow that sent each rulebook (PDF) to its own OpenAI vector store through the API. The chat interface then used ChatGPT 5.1 to query those vector stores for answers about each game. However, I ran into similar hallucination issues as my “competitors”.</p>
+      <p class="max-width-600 bottom30">Initially, I hoped to highlight the exact quote in the rulebook, but it was too technically difficult to vibe-code and would have to wait for a future version, or a real coder.</p>
+      <h3 class="subheader bottom30">The RAG Pipeline</h3>
+      <p class="max-width-600 bottom30">Using Cursor, I built an upload flow: it sends each rulebook PDF to its own OpenAI Vector Store via the API. Then I created a chat interface that uses ChatGPT 5.1 to query those Vector Stores for answers about each game. However, I ran into hallucination issues, just like with my “competitors”.</p>
       <p class="max-width-600 bottom30"><em>Why did uploading PDFs to OpenAI’s vector stores produce such unreliable answers?</em></p>
-      <p class="max-width-600 bottom30">After digging in, I learned why: the vectorization process was scanning pages left-to-right across the entire page. Most rulebooks use multi-column layouts, causing text to interleave and confuse the model. This is likely why my “competitors” were so unreliable.</p>
+      <p class="max-width-600 bottom30" style="margin-bottom: 50px;">After digging in, I learned why: the vectorization process was scanning pages left-to-right across the entire page. Most rulebooks use multi-column layouts, causing text to interleave and confuse the model. This is likely why my “competitors” were so unreliable.</p>
+      <h3 class="subheader bottom30">AI Orchestation</h3>
       <p class="max-width-600 bottom30">To fix this, I used <strong>Gemini 2.5 Flash to clean the PDFs</strong> during the Upload flow. Before ingestion to OpenAI, Gemini 2.5 Flash reads PDFs as visual documents, and converts each page to clean text with section headers tagged. This allowed OpenAI to quote the exact section each quote came from, and it's responses became 100% accurate!</p>
       <p class="max-width-600 bottom_80">Now that the core flow was working, I shifted to design.</p>
 
@@ -180,10 +194,12 @@
       <h3 class="subheader bottom30">Visual Design</h3>
       <p class="max-width-600 bottom30">I used Figma to mock up the main pages and compare different fonts, color palettes, page layouts, and other visual design choices.</p>
       <p class="max-width-600 bottom30">My goal was to convey authority and trust, so the visual design leans established rather than AI-forward. Serif headers and a paper-and-brass color palette evoke printed rulebooks, shifting attention from AI to the authority of the source.</p>
+      <img src="images/RA-Styles.png" alt="Rules Atlas Styles" style="width: 100%; max-width: 592px; margin-bottom: 50px;">
       <h3 class="subheader bottom30">Frontend</h3>
       <p class="max-width-600 bottom30">I handled styling using <strong>Tailwind CSS</strong> (colors, radius, typography). I started from <strong>shadcn-style components</strong> (buttons, inputs, etc.) and created a hidden <code>/ui</code> page that acted as a component sandbox—showing all components, variants, text styles, and colors in one place.</p>
       <h3 class="subheader bottom30">Branding</h3>
-      <p class="max-width-600 bottom_80">With the name and logo, I tried to convey “authoritative” and “comprehensive” to match the product’s promise.</p>
+      <p class="max-width-600 bottom30">With the name and logo, I tried to convey “authoritative” and “comprehensive” to match the product’s promise.</p>
+      <img src="images/RA-logo.png" alt="Rules Atlas Logo" style="width: 296px; margin-top: 30px; margin-bottom: 80px; display: block;">
 
       <h2 class="bricolage-grotesque-solid" style="margin-bottom: 50px;">Vibe Coding Learnings</h2>
       <p class="max-width-600 bottom30">As a product designer with a high-level understanding of code, vibe coding still feels like flying blind. While much of the code was unfamiliar, I did learn some tricks to get better results.</p>
