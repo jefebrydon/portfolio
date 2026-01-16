@@ -120,6 +120,52 @@
       <p class="max-width-600 bottom30">Since I was coding with AI, I flipped the design process on its head. My biggest unknown wasn’t the design—it was whether I could even vibe-code certain key features. Before I designed anything, I used Cursor to build a bare-bones v0.</p>
       <h3 class="subheader bottom30">Solution: Verifiable RAG</h3>
       <p class="max-width-600 bottom30">I created an AI interface that gave answers users could quickly verify. Alongside the RAG chat, an adjacent Rulebook Viewer jumps to the relevant rulebook page, so users can confirm the answer.</p>
+      
+      <style>
+        .replay-btn-hidden {
+          opacity: 0;
+          transform: translate(-50%, calc(-50% + 40px));
+          pointer-events: none;
+        }
+        .replay-btn-visible {
+          opacity: 1;
+          transform: translate(-50%, -50%);
+          pointer-events: auto;
+        }
+      </style>
+      <div class="video-container-replay" style="position: relative; width: 100%; margin-bottom: 30px;">
+        <video id="ra-chat-video" style="width: 100%; display: block;" muted playsinline>
+          <source src="videos/RA-Chat.mov" type="video/quicktime">
+          <source src="videos/RA-Chat.mov" type="video/mp4">
+        </video>
+        <button id="ra-chat-replay" class="button secondary with-icon replay-btn-hidden" style="position: absolute; top: 50%; left: 50%; margin: 0; z-index: 10; transition: opacity 0.4s ease, transform 0.4s ease;">
+          <svg class="button-icon-inline" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+        </button>
+      </div>
+      <script>
+        (function() {
+          const video = document.getElementById('ra-chat-video');
+          const replayBtn = document.getElementById('ra-chat-replay');
+          
+          // Auto-play on page load
+          video.play();
+          
+          // Show replay button when video ends
+          video.addEventListener('ended', function() {
+            replayBtn.classList.remove('replay-btn-hidden');
+            replayBtn.classList.add('replay-btn-visible');
+          });
+          
+          // Replay on button click
+          replayBtn.addEventListener('click', function() {
+            replayBtn.classList.remove('replay-btn-visible');
+            replayBtn.classList.add('replay-btn-hidden');
+            video.currentTime = 0;
+            video.play();
+          });
+        })();
+      </script>
+      
       <h3 class="subheader bottom30">The Edge of Vibe Coding</h3>
       <p class="max-width-600 bottom30">Initially, I hoped to <em>highlight</em> the exact quote in the rulebook, but it’s hard. This feature was beyond what I could reliably vibe-code. After many attempts, I decided that feature would have to wait for a future version (or a real coder).</p>
       <h3 class="subheader bottom30">How I Built It</h3>
