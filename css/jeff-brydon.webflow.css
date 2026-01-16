@@ -663,6 +663,19 @@ blockquote {
   background: var(--teal-dark);
 }
 
+.button.with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.button-icon-inline {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
 .button._100-side-pad {
   margin-right: 0;
   padding: 10px 95px;
