@@ -21,6 +21,10 @@
   --teal-light: #49C8D7;
   --teal-primary: #229DB1;
   --teal-hover-bg: #dffcff;
+  --primary-gradient-start: #0b5f79;
+  --primary-gradient-end: #41cada;
+  --primary-gradient-hover-start: #084a5e;
+  --primary-gradient-hover-end: #35a8b8;
 }
 
 .w-backgroundvideo-backgroundvideoplaypausebutton:focus-visible {
@@ -602,8 +606,13 @@ blockquote {
 
 .button.gradient {
   letter-spacing: .2px;
-  background-image: linear-gradient(to right, #0b5f79, #41cada);
+  background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
   margin-top: 100px;
+}
+
+.button.gradient:hover {
+  color: #fff;
+  background-image: linear-gradient(to right, var(--primary-gradient-hover-start), var(--primary-gradient-hover-end));
 }
 
 .button.gradient.no-bottom-space {
