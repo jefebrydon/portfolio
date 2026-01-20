@@ -2,24 +2,43 @@
  * JeffBot Configuration
  * 
  * Configuration file for JeffBot frontend integration.
- * Update the assistantId after running the vector store creation script.
+ * Uses the Responses API with file_search for RAG capabilities.
  */
 
 (function() {
   'use strict';
   
-  // Assistant ID - Update this after running create-vector-store.js
-  // You can also set this via window.JEFFBOT_CONFIG.assistantId in your HTML
+  // System prompt for JeffBot - defines personality and behavior
+  const SYSTEM_PROMPT = `You are JeffBot, a helpful assistant that answers questions about Jeff Brydon's design work, process, and philosophy using the provided case study documents. Be conversational and friendly. When answering questions, reference specific examples from the case studies when relevant.
+
+Keep responses concise but informative. If you don't find relevant information in the documents, say so honestly rather than making things up.`;
+
   window.JEFFBOT_CONFIG = window.JEFFBOT_CONFIG || {
-    assistantId: 'asst_LmZ4JnFT5GAdJ8gydgYIVncj', // Update if you recreate the Assistant
+    // Vector Store ID - contains the indexed case study documents
+    // Update this if you recreate the vector store
+    vectorStoreId: 'vs_6917bbec722c8191a53395ce618e6498',
+    
+    // System prompt for the assistant
+    systemPrompt: SYSTEM_PROMPT,
+    
+    // Model to use for responses
+    model: 'gpt-4o',
+    
+    // File search configuration
+    fileSearch: {
+      maxNumResults: 10  // Limit chunks for faster responses
+    },
+    
+    // API endpoint - auto-detect environment
     apiBaseUrl: (function() {
-      // Auto-detect environment
       const hostname = window.location.hostname;
-      if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      const protocol = window.location.protocol;
+      
+      // Local development: localhost, 127.0.0.1, or file:// protocol
+      if (hostname === 'localhost' || hostname === '127.0.0.1' || protocol === 'file:') {
         return 'http://localhost:3001/api';
       }
-
-      // Production: call the Vercel serverless function directly
+      // Production: Vercel serverless function
       return 'https://portfolio-six-nu-9myb2s6fia.vercel.app/api';
     })()
   };

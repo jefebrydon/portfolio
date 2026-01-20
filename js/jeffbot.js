@@ -244,18 +244,18 @@
     }
 
     // ============================================
-    // JeffBot Chat Functionality
+    // JeffBot Chat Functionality (Responses API + Streaming)
     // ============================================
 
     // Configuration
     const config = window.JEFFBOT_CONFIG || {};
-    const assistantId = config.assistantId;
     const apiBaseUrl = config.apiBaseUrl || 'http://localhost:3001/api';
     
-    // Chat state
-    let currentThreadId = null;
+    // Chat state - stateless approach with client-side history
+    let conversationHistory = []; // Array of {role, content} for API
     let isLoading = false;
     let errorTimeout = null;
+    let currentStreamingMessage = null; // Reference to message being streamed
     
     // DOM elements
     const jeffbotInput = document.getElementById('jeffbot-input');
@@ -275,36 +275,31 @@
     // Load conversation from sessionStorage
     function loadConversation() {
       try {
-        const saved = sessionStorage.getItem('jeffbot_conversation');
+        const saved = sessionStorage.getItem('jeffbot_conversation_v2');
         if (saved) {
           const data = JSON.parse(saved);
-          currentThreadId = data.threadId;
+          conversationHistory = data.history || [];
           
-          // Restore messages if any
-          if (data.messages && data.messages.length > 0) {
+          // Restore messages to UI
+          if (conversationHistory.length > 0) {
             showChatThread();
-            data.messages.forEach(msg => {
-              addMessageToThread(msg.text, msg.isUser, false);
+            conversationHistory.forEach(function(msg) {
+              const isUser = msg.role === 'user';
+              addMessageToThread(msg.content, isUser, false);
             });
           }
         }
       } catch (error) {
         console.error('Error loading conversation:', error);
+        conversationHistory = [];
       }
     }
     
     // Save conversation to sessionStorage
     function saveConversation() {
       try {
-        const messages = Array.from(chatThread.querySelectorAll('.jeffbot-message')).map(msgEl => {
-          const isUser = msgEl.classList.contains('user');
-          const text = msgEl.querySelector('.jeffbot-message-content').textContent;
-          return { text, isUser };
-        });
-        
-        sessionStorage.setItem('jeffbot_conversation', JSON.stringify({
-          threadId: currentThreadId,
-          messages: messages
+        sessionStorage.setItem('jeffbot_conversation_v2', JSON.stringify({
+          history: conversationHistory
         }));
       } catch (error) {
         console.error('Error saving conversation:', error);
@@ -470,13 +465,59 @@
       return { valid: true, text: trimmed };
     }
     
-    // Send message to assistant
+    // Create an empty message element for streaming
+    function createStreamingMessageElement() {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'jeffbot-message jeffbot streaming';
+      messageDiv.setAttribute('role', 'listitem');
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'jeffbot-message-content';
+      contentDiv.textContent = '';
+      
+      messageDiv.appendChild(contentDiv);
+      return messageDiv;
+    }
+    
+    // Update streaming message content
+    function updateStreamingMessage(text) {
+      if (currentStreamingMessage) {
+        const contentDiv = currentStreamingMessage.querySelector('.jeffbot-message-content');
+        if (contentDiv) {
+          contentDiv.textContent = sanitizeMessageText(text);
+          scrollToBottom();
+        }
+      }
+    }
+    
+    // Finalize streaming message
+    function finalizeStreamingMessage(finalText) {
+      if (currentStreamingMessage) {
+        currentStreamingMessage.classList.remove('streaming');
+        const contentDiv = currentStreamingMessage.querySelector('.jeffbot-message-content');
+        if (contentDiv) {
+          const cleanText = sanitizeMessageText(finalText);
+          contentDiv.textContent = cleanText;
+          
+          // Add to conversation history
+          conversationHistory.push({ role: 'assistant', content: cleanText });
+          saveConversation();
+          
+          // Announce to screen readers
+          if (ariaLive) {
+            ariaLive.textContent = 'JeffBot said: ' + cleanText;
+            setTimeout(function() {
+              ariaLive.textContent = '';
+            }, 1000);
+          }
+        }
+        currentStreamingMessage = null;
+      }
+    }
+    
+    // Send message to assistant with streaming
     async function sendMessageToAssistant(messageText) {
       if (isLoading) return;
-      if (!assistantId) {
-        addMessageToThread('Error: Assistant ID not configured. Please check your configuration.', false);
-        return;
-      }
       
       const validation = validateInput(messageText);
       if (!validation.valid) {
@@ -484,7 +525,7 @@
         const errorEl = createErrorMessage(validation.error);
         if (chatThread) {
           chatThread.appendChild(errorEl);
-          errorTimeout = setTimeout(() => {
+          errorTimeout = setTimeout(function() {
             errorEl.remove();
           }, 3000);
         }
@@ -504,7 +545,7 @@
       // Disable suggestion buttons
       disableSuggestionButtons();
       
-      // Show loader
+      // Show loader initially
       if (chatThread) {
         showChatThread();
         const loader = createLoaderElement();
@@ -512,88 +553,153 @@
         scrollToBottom();
       }
       
-      // Prepare request
+      // Prepare request with conversation history
       const requestBody = {
         message: validation.text,
-        assistantId: assistantId
+        history: conversationHistory,
+        config: {
+          vectorStoreId: config.vectorStoreId,
+          systemPrompt: config.systemPrompt,
+          model: config.model,
+          maxNumResults: config.fileSearch?.maxNumResults
+        }
       };
       
-      if (currentThreadId) {
-        requestBody.threadId = currentThreadId;
-      }
+      // Create abort controller for timeout (2 minutes)
+      var abortController = new AbortController();
+      var timeoutId = setTimeout(function() {
+        abortController.abort();
+      }, 120000);
       
-      // Make API call with timeout and retry
-      let retries = 1;
-      let lastError = null;
-      
-      while (retries >= 0) {
-        try {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 60000);
-          
-          const response = await fetch(apiBaseUrl + '/chat', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(requestBody),
-            signal: controller.signal
-          });
-          
-          clearTimeout(timeoutId);
-          
-          if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
-          }
-          
+      try {
+        var response = await fetch(apiBaseUrl + '/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestBody),
+          signal: abortController.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) {
+          // Try to parse error from response
+          const errorData = await response.json().catch(function() { return {}; });
+          throw new Error(errorData.error || 'HTTP ' + response.status + ': ' + response.statusText);
+        }
+        
+        // Check if response is SSE stream
+        const contentType = response.headers.get('content-type') || '';
+        if (!contentType.includes('text/event-stream')) {
+          // Fallback for non-streaming response
           const data = await response.json();
-          
-          // Success
           removeLoader();
-          currentThreadId = data.threadId;
-          
           if (data.response) {
+            conversationHistory.push({ role: 'assistant', content: data.response });
             addMessageToThread(data.response, false);
           } else {
             addMessageToThread('Sorry, I didn\'t receive a response. Please try again.', false);
           }
-          
-          // Re-enable input
-          if (jeffbotInput) {
-            jeffbotInput.disabled = false;
-            jeffbotInput.focus();
-          }
-          if (submitButton) {
-            submitButton.disabled = false;
-          }
-          
-          // Re-enable suggestion buttons
-          enableSuggestionButtons();
-          
-          isLoading = false;
+          finishLoading();
           return;
+        }
+        
+        // Process SSE stream
+        removeLoader();
+        
+        // Create streaming message element
+        currentStreamingMessage = createStreamingMessageElement();
+        chatThread.appendChild(currentStreamingMessage);
+        scrollToBottom();
+        
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let accumulatedText = '';
+        
+        while (true) {
+          const { done, value } = await reader.read();
           
-        } catch (error) {
-          lastError = error;
-          
-          // Retry on network errors only
-          if (retries > 0 && (error.name === 'TypeError' || error.name === 'AbortError')) {
-            retries--;
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            continue;
+          if (done) {
+            // Stream ended - finalize
+            finalizeStreamingMessage(accumulatedText);
+            break;
           }
           
-          break;
+          // Decode chunk and add to buffer
+          buffer += decoder.decode(value, { stream: true });
+          
+          // Process complete SSE events from buffer
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || ''; // Keep incomplete line in buffer
+          
+          for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            if (line.startsWith('data: ')) {
+              var data = line.slice(6);
+              
+              if (data === '[DONE]') {
+                finalizeStreamingMessage(accumulatedText);
+                continue;
+              }
+              
+              try {
+                var event = JSON.parse(data);
+                
+                if (event.type === 'delta') {
+                  // Append text delta
+                  accumulatedText += event.content;
+                  updateStreamingMessage(accumulatedText);
+                }
+                else if (event.type === 'text_done') {
+                  // Use final text
+                  accumulatedText = event.content;
+                  finalizeStreamingMessage(accumulatedText);
+                }
+                else if (event.type === 'error') {
+                  throw new Error(event.error || 'Stream error');
+                }
+                // Ignore 'searching' and 'search_complete' events (could show indicator if desired)
+              } catch (parseError) {
+                // Skip malformed JSON
+                if (parseError.message !== 'Stream error' && !parseError.message.startsWith('Stream error')) {
+                  continue;
+                }
+                throw parseError;
+              }
+            }
+          }
         }
+        
+        finishLoading();
+        
+      } catch (error) {
+        console.error('Chat error:', error);
+        clearTimeout(timeoutId);
+        removeLoader();
+        
+        // Clean up any streaming message
+        if (currentStreamingMessage) {
+          currentStreamingMessage.remove();
+          currentStreamingMessage = null;
+        }
+        
+        // Provide user-friendly error messages
+        var errorMessage;
+        if (error.name === 'AbortError') {
+          errorMessage = 'Request timed out. Please try again.';
+        } else {
+          errorMessage = error.message || 'Failed to get response. Please try again.';
+        }
+        addMessageToThread(errorMessage, false);
+        
+        finishLoading();
       }
-      
-      // Error handling
-      removeLoader();
-      const errorMessage = lastError.message || 'Failed to get response. Please try again.';
-      addMessageToThread(errorMessage, false);
-      
-      // Re-enable input
+    }
+    
+    // Helper to re-enable UI after loading
+    function finishLoading() {
       if (jeffbotInput) {
         jeffbotInput.disabled = false;
         jeffbotInput.focus();
@@ -601,10 +707,7 @@
       if (submitButton) {
         submitButton.disabled = false;
       }
-      
-      // Re-enable suggestion buttons
       enableSuggestionButtons();
-      
       isLoading = false;
     }
     
@@ -612,8 +715,8 @@
     if (suggestionButtons.length > 0) {
       suggestionButtons.forEach(function(button) {
         button.addEventListener('click', function() {
-          const buttonText = button.textContent.trim();
-          const fullQuestion = suggestionMap[buttonText] || buttonText;
+          var buttonText = button.textContent.trim();
+          var fullQuestion = suggestionMap[buttonText] || buttonText;
           
           // Disable remaining suggestion buttons before removing clicked one
           disableSuggestionButtons();
@@ -622,13 +725,16 @@
           button.remove();
           
           // Hide suggestions container if no buttons remain
-          const suggestionsContainer = document.querySelector('.jeffbot-suggestions');
+          var suggestionsContainer = document.querySelector('.jeffbot-suggestions');
           if (suggestionsContainer) {
-            const remainingButtons = suggestionsContainer.querySelectorAll('.jeffbot-suggestion-button');
+            var remainingButtons = suggestionsContainer.querySelectorAll('.jeffbot-suggestion-button');
             if (remainingButtons.length === 0) {
               suggestionsContainer.style.display = 'none';
             }
           }
+          
+          // Add to conversation history
+          conversationHistory.push({ role: 'user', content: fullQuestion });
           
           // Immediately display user message
           addMessageToThread(fullQuestion, true);
@@ -643,8 +749,11 @@
     function handleInputSubmit() {
       if (!jeffbotInput || isLoading) return;
       
-      const message = jeffbotInput.value;
+      var message = jeffbotInput.value;
       if (!message.trim()) return;
+      
+      // Add to conversation history
+      conversationHistory.push({ role: 'user', content: message.trim() });
       
       // Display user message immediately
       addMessageToThread(message, true);

@@ -1,8 +1,8 @@
 /**
  * JeffBot Backend API Server
  * 
- * Express server that proxies OpenAI Assistant API calls
- * Keeps API keys secure on the server-side
+ * Express server using OpenAI Responses API with file_search for RAG.
+ * Streams responses back to the client via Server-Sent Events (SSE).
  */
 
 require('dotenv').config();
@@ -13,14 +13,31 @@ const { OpenAI } = require('openai');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Initialize OpenAI client
+// Initialize OpenAI client with timeout
 const apiKey = process.env.OPENAI_API_KEY;
 if (!apiKey) {
-  console.error('❌ Error: OPENAI_API_KEY not found in .env file');
+  console.error('Error: OPENAI_API_KEY not found in .env file');
   process.exit(1);
 }
 
-const openai = new OpenAI({ apiKey });
+const REQUEST_TIMEOUT_MS = 120000; // 2 minutes
+const openai = new OpenAI({ 
+  apiKey,
+  timeout: REQUEST_TIMEOUT_MS,
+});
+
+// Configuration
+const VECTOR_STORE_ID = process.env.VECTOR_STORE_ID;
+if (!VECTOR_STORE_ID) {
+  console.warn('Warning: VECTOR_STORE_ID not found in .env file');
+  console.warn('The API will require vectorStoreId in request body');
+}
+
+const DEFAULT_MODEL = 'gpt-4o';
+const DEFAULT_MAX_RESULTS = 10;
+const DEFAULT_SYSTEM_PROMPT = `You are JeffBot, a helpful assistant that answers questions about Jeff Brydon's design work, process, and philosophy using the provided case study documents. Be conversational and friendly. When answering questions, reference specific examples from the case studies when relevant.
+
+Keep responses concise but informative. If you don't find relevant information in the documents, say so honestly rather than making things up.`;
 
 // Middleware
 app.use(cors({
@@ -35,12 +52,13 @@ app.use(cors({
       return callback(null, true);
     }
     
-    // In production, add your specific domain here
-    // if (origin === 'https://www.jeffbrydon.com') {
-    //   return callback(null, true);
-    // }
+    // Production domains
+    if (origin === 'https://www.jeffbrydon.com' || 
+        origin === 'https://jeffbrydon.com') {
+      return callback(null, true);
+    }
     
-    // For now, allow all origins (restrict in production)
+    // For development, allow all origins
     callback(null, true);
   },
   credentials: true
@@ -48,84 +66,12 @@ app.use(cors({
 
 app.use(express.json());
 
-// Configuration
-const ASSISTANT_ID = process.env.ASSISTANT_ID;
-if (!ASSISTANT_ID) {
-  console.warn('⚠️  Warning: ASSISTANT_ID not found in .env file');
-  console.warn('   The API will require assistantId in request body');
-}
-
-const TIMEOUT_MS = 60000; // 60 seconds
-const POLL_INTERVAL = 1000; // 1 second
-const MAX_POLL_ATTEMPTS = 120; // 2 minutes max
-
 /**
- * Poll run status until completion
- */
-async function pollRunStatus(threadId, runId) {
-  let attempts = 0;
-  
-  while (attempts < MAX_POLL_ATTEMPTS) {
-    try {
-      const run = await openai.beta.threads.runs.retrieve(threadId, runId);
-      
-      if (run.status === 'completed') {
-        return { status: 'completed', run };
-      } else if (run.status === 'failed') {
-        return { 
-          status: 'failed', 
-          error: run.last_error?.message || 'Run failed' 
-        };
-      } else if (run.status === 'requires_action') {
-        return { 
-          status: 'requires_action', 
-          error: 'Assistant requires action (tool use)' 
-        };
-      } else if (run.status === 'cancelled' || run.status === 'expired') {
-        return { 
-          status: run.status, 
-          error: `Run was ${run.status}` 
-        };
-      }
-      
-      // Still processing: queued, in_progress, cancelling
-      attempts++;
-      await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL));
-      
-    } catch (error) {
-      return { 
-        status: 'error', 
-        error: error.message || 'Error polling run status' 
-      };
-    }
-  }
-  
-  return { 
-    status: 'timeout', 
-    error: 'Request timed out after 2 minutes' 
-  };
-}
-
-/**
- * Extract text content from assistant message
- */
-function extractMessageContent(message) {
-  if (!message.content || !Array.isArray(message.content)) {
-    return '';
-  }
-  
-  return message.content
-    .filter(item => item.type === 'text')
-    .map(item => item.text?.value || '')
-    .join('\n\n');
-}
-
-/**
- * POST /api/chat - Send a message to the assistant
+ * POST /api/chat - Send a message and stream the response
  */
 app.post('/api/chat', async (req, res) => {
   try {
-    const { message, threadId, assistantId } = req.body;
+    const { message, history = [], config = {} } = req.body;
     
     // Validation
     if (!message || typeof message !== 'string' || message.trim().length === 0) {
@@ -140,103 +86,119 @@ app.post('/api/chat', async (req, res) => {
       });
     }
     
-    const finalAssistantId = assistantId || ASSISTANT_ID;
-    if (!finalAssistantId) {
+    const vectorStoreId = config.vectorStoreId || VECTOR_STORE_ID;
+    if (!vectorStoreId) {
       return res.status(500).json({ 
-        error: 'Assistant ID not configured. Please set ASSISTANT_ID in .env or provide in request.' 
+        error: 'Vector Store ID not configured. Please set VECTOR_STORE_ID in .env or provide in request.' 
       });
     }
     
-    let currentThreadId = threadId;
-    
-    // Create thread if not provided
-    if (!currentThreadId) {
-      try {
-        const thread = await openai.beta.threads.create();
-        currentThreadId = thread.id;
-      } catch (error) {
-        return res.status(500).json({ 
-          error: `Failed to create thread: ${error.message}` 
-        });
-      }
-    }
-    
-    // Add user message to thread
-    try {
-      await openai.beta.threads.messages.create(currentThreadId, {
+    // Build conversation input from history + new message
+    const conversationInput = [
+      // Include previous messages from history
+      ...history.map(msg => ({
+        type: 'message',
+        role: msg.role,
+        content: msg.content,
+      })),
+      // Add the new user message
+      {
+        type: 'message',
         role: 'user',
-        content: message.trim()
-      });
-    } catch (error) {
-      return res.status(500).json({ 
-        error: `Failed to add message to thread: ${error.message}` 
-      });
-    }
+        content: message.trim(),
+      },
+    ];
     
-    // Run assistant
-    let run;
+    // Extract configuration with defaults
+    const model = config.model || DEFAULT_MODEL;
+    const maxNumResults = config.maxNumResults || DEFAULT_MAX_RESULTS;
+    const systemPrompt = config.systemPrompt || DEFAULT_SYSTEM_PROMPT;
+    
+    // Set up SSE headers and flush immediately to start streaming
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache, no-transform');
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader('X-Accel-Buffering', 'no'); // Disable nginx/proxy buffering
+    res.flushHeaders();
+    
     try {
-      run = await openai.beta.threads.runs.create(currentThreadId, {
-        assistant_id: finalAssistantId
-      });
-    } catch (error) {
-      return res.status(500).json({ 
-        error: `Failed to run assistant: ${error.message}` 
-      });
-    }
-    
-    // Poll for completion with timeout
-    const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('Request timeout')), TIMEOUT_MS);
-    });
-    
-    const pollPromise = pollRunStatus(currentThreadId, run.id);
-    
-    let pollResult;
-    try {
-      pollResult = await Promise.race([pollPromise, timeoutPromise]);
-    } catch (error) {
-      return res.status(504).json({ 
-        error: 'Request timed out. Please try again.' 
-      });
-    }
-    
-    if (pollResult.status !== 'completed') {
-      return res.status(500).json({ 
-        error: pollResult.error || 'Assistant run did not complete successfully' 
-      });
-    }
-    
-    // Retrieve assistant's response
-    try {
-      const messages = await openai.beta.threads.messages.list(currentThreadId, {
-        limit: 1,
-        order: 'desc'
+      // Create streaming response using OpenAI SDK
+      const stream = await openai.responses.create({
+        model,
+        instructions: systemPrompt,
+        input: conversationInput,
+        tools: [
+          {
+            type: 'file_search',
+            vector_store_ids: [vectorStoreId],
+            max_num_results: maxNumResults,
+          },
+        ],
+        stream: true,
       });
       
-      const assistantMessage = messages.data.find(msg => msg.role === 'assistant');
-      if (!assistantMessage) {
-        return res.status(500).json({ 
-          error: 'No response from assistant' 
-        });
+      // Process stream events
+      for await (const event of stream) {
+        // Forward text delta events to client
+        if (event.type === 'response.output_text.delta') {
+          res.write(`data: ${JSON.stringify({
+            type: 'delta',
+            content: event.delta,
+          })}\n\n`);
+        }
+        // Forward completion events
+        else if (event.type === 'response.output_text.done') {
+          res.write(`data: ${JSON.stringify({
+            type: 'text_done',
+            content: event.text,
+          })}\n\n`);
+        }
+        // Forward file search events for transparency
+        else if (event.type === 'response.file_search_call.searching') {
+          res.write(`data: ${JSON.stringify({
+            type: 'searching',
+          })}\n\n`);
+        }
+        else if (event.type === 'response.file_search_call.completed') {
+          res.write(`data: ${JSON.stringify({
+            type: 'search_complete',
+          })}\n\n`);
+        }
+        // Handle errors
+        else if (event.type === 'error') {
+          res.write(`data: ${JSON.stringify({
+            type: 'error',
+            error: event.error?.message || 'Unknown error',
+          })}\n\n`);
+        }
       }
       
-      const responseText = extractMessageContent(assistantMessage);
+      // Send done event
+      res.write('data: [DONE]\n\n');
+      res.end();
       
-      return res.json({
-        threadId: currentThreadId,
-        response: responseText,
-        success: true
-      });
-      
-    } catch (error) {
-      return res.status(500).json({ 
-        error: `Failed to retrieve response: ${error.message}` 
-      });
+    } catch (streamError) {
+      console.error('Stream error:', streamError);
+      res.write(`data: ${JSON.stringify({
+        type: 'error',
+        error: streamError.message || 'Streaming error',
+      })}\n\n`);
+      res.end();
     }
     
   } catch (error) {
     console.error('Error in /api/chat:', error);
+    
+    // If headers already sent (streaming started), send error via SSE
+    if (res.headersSent) {
+      res.write(`data: ${JSON.stringify({
+        type: 'error',
+        error: error.message || 'Internal server error',
+      })}\n\n`);
+      res.end();
+      return;
+    }
+    
     return res.status(500).json({ 
       error: error.message || 'Internal server error' 
     });
@@ -249,18 +211,14 @@ app.post('/api/chat', async (req, res) => {
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'ok', 
-    assistantId: ASSISTANT_ID ? 'configured' : 'not configured',
+    vectorStoreId: VECTOR_STORE_ID ? 'configured' : 'not configured',
     timestamp: new Date().toISOString()
   });
 });
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 JeffBot API server running on http://localhost:${PORT}`);
-  console.log(`   Assistant ID: ${ASSISTANT_ID ? 'configured' : 'NOT CONFIGURED'}`);
-  console.log(`   Health check: http://localhost:${PORT}/api/health`);
+  console.log(`JeffBot API server running on http://localhost:${PORT}`);
+  console.log(`  Vector Store ID: ${VECTOR_STORE_ID ? 'configured' : 'NOT CONFIGURED'}`);
+  console.log(`  Health check: http://localhost:${PORT}/api/health`);
 });
-
-
-
-
