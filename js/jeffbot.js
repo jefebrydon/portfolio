@@ -349,11 +349,22 @@
       loaderDiv.setAttribute('role', 'status');
       loaderDiv.setAttribute('aria-label', 'Loading response');
       
-      for (let i = 0; i < 3; i++) {
-        const dot = document.createElement('div');
-        dot.className = 'jeffbot-loader-dot';
-        loaderDiv.appendChild(dot);
-      }
+      // Base icon (always visible)
+      const baseIcon = document.createElement('img');
+      baseIcon.className = 'jeffbot-loader-base';
+      baseIcon.src = 'images/JeffBot_button.svg';
+      baseIcon.alt = '';
+      baseIcon.setAttribute('aria-hidden', 'true');
+      
+      // Overlay icon (pulses in/out)
+      const overlayIcon = document.createElement('img');
+      overlayIcon.className = 'jeffbot-loader-overlay';
+      overlayIcon.src = 'images/JeffBot_button_hover.svg';
+      overlayIcon.alt = '';
+      overlayIcon.setAttribute('aria-hidden', 'true');
+      
+      loaderDiv.appendChild(baseIcon);
+      loaderDiv.appendChild(overlayIcon);
       
       return loaderDiv;
     }
@@ -465,7 +476,7 @@
       return { valid: true, text: trimmed };
     }
     
-    // Create an empty message element for streaming
+    // Create a streaming message element with inline loader
     function createStreamingMessageElement() {
       const messageDiv = document.createElement('div');
       messageDiv.className = 'jeffbot-message jeffbot streaming';
@@ -473,7 +484,11 @@
       
       const contentDiv = document.createElement('div');
       contentDiv.className = 'jeffbot-message-content';
-      contentDiv.textContent = '';
+      
+      // Add loader inside the message bubble (shows until first text arrives)
+      const loader = createLoaderElement();
+      loader.classList.add('inline-loader');
+      contentDiv.appendChild(loader);
       
       messageDiv.appendChild(contentDiv);
       return messageDiv;
@@ -484,6 +499,11 @@
       if (currentStreamingMessage) {
         const contentDiv = currentStreamingMessage.querySelector('.jeffbot-message-content');
         if (contentDiv) {
+          // Remove inline loader on first text chunk
+          const inlineLoader = contentDiv.querySelector('.jeffbot-loader.inline-loader');
+          if (inlineLoader) {
+            inlineLoader.remove();
+          }
           contentDiv.textContent = sanitizeMessageText(text);
           scrollToBottom();
         }
