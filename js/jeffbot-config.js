@@ -38,8 +38,9 @@ Keep responses concise but informative. If you don't find relevant information i
       if (hostname === 'localhost' || hostname === '127.0.0.1' || protocol === 'file:') {
         return 'http://localhost:3001/api';
       }
-      // Production: Vercel serverless function
-      return 'https://portfolio-six-nu-9myb2s6fia.vercel.app/api';
+      // Production/Preview: Use same origin for API calls
+      // This ensures preview deployments call their own API, not a different deployment
+      return `${protocol}//${hostname}/api`;
     })()
   };
 })();

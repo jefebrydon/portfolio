@@ -13,17 +13,21 @@ const DEFAULT_SYSTEM_PROMPT = `You are JeffBot, a helpful assistant that answers
 
 Keep responses concise but informative. If you don't find relevant information in the documents, say so honestly rather than making things up.`;
 
-// Check if origin is allowed (includes localhost for development)
+// Check if origin is allowed (includes localhost and Vercel previews)
 function isAllowedOrigin(origin) {
   if (!origin) return false;
   
   const allowedOrigins = [
     'https://www.jeffbrydon.com',
     'https://jeffbrydon.com',
-    'https://portfolio-six-nu-9myb2s6fia.vercel.app',
   ];
   
   if (allowedOrigins.includes(origin)) return true;
+  
+  // Allow all Vercel preview and production deployments
+  if (origin.endsWith('.vercel.app')) {
+    return true;
+  }
   
   // Allow localhost for development
   if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
