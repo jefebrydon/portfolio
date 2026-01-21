@@ -565,11 +565,12 @@
       // Disable suggestion buttons
       disableSuggestionButtons();
       
-      // Show loader initially
+      // Show streaming message element with inline loader immediately
+      // This ensures the loader only appears inside the response bubble, not standalone
       if (chatThread) {
         showChatThread();
-        const loader = createLoaderElement();
-        chatThread.appendChild(loader);
+        currentStreamingMessage = createStreamingMessageElement();
+        chatThread.appendChild(currentStreamingMessage);
         scrollToBottom();
       }
       
@@ -612,26 +613,19 @@
         // Check if response is SSE stream
         const contentType = response.headers.get('content-type') || '';
         if (!contentType.includes('text/event-stream')) {
-          // Fallback for non-streaming response
+          // Fallback for non-streaming response - use the already-created streaming message
           const data = await response.json();
-          removeLoader();
           if (data.response) {
-            conversationHistory.push({ role: 'assistant', content: data.response });
-            addMessageToThread(data.response, false);
+            finalizeStreamingMessage(data.response);
           } else {
-            addMessageToThread('Sorry, I didn\'t receive a response. Please try again.', false);
+            finalizeStreamingMessage('Sorry, I didn\'t receive a response. Please try again.');
           }
           finishLoading();
           return;
         }
         
         // Process SSE stream
-        removeLoader();
-        
-        // Create streaming message element
-        currentStreamingMessage = createStreamingMessageElement();
-        chatThread.appendChild(currentStreamingMessage);
-        scrollToBottom();
+        // Note: streaming message element with inline loader was already created above
         
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
@@ -697,9 +691,8 @@
       } catch (error) {
         console.error('Chat error:', error);
         clearTimeout(timeoutId);
-        removeLoader();
         
-        // Clean up any streaming message
+        // Clean up the streaming message (which contains the inline loader)
         if (currentStreamingMessage) {
           currentStreamingMessage.remove();
           currentStreamingMessage = null;
