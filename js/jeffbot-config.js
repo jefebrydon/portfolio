@@ -39,13 +39,8 @@ Keep responses concise but informative. If you don't find relevant information i
         return 'http://localhost:3001/api';
       }
       
-      // Custom domains: Use Vercel production URL for API
-      // (needed because jeffbrydon.com is hosted on GitHub Pages, not Vercel)
-      if (hostname === 'www.jeffbrydon.com' || hostname === 'jeffbrydon.com') {
-        return 'https://portfolio-jeff-brydons-projects.vercel.app/api';
-      }
-      
-      // Vercel preview/production deployments: Use same origin
+      // Production and Vercel deployments: Use same origin
+      // Works for www.jeffbrydon.com, jeffbrydon.com, and *.vercel.app
       return `${protocol}//${hostname}/api`;
     })()
   };
