@@ -38,8 +38,14 @@ Keep responses concise but informative. If you don't find relevant information i
       if (hostname === 'localhost' || hostname === '127.0.0.1' || protocol === 'file:') {
         return 'http://localhost:3001/api';
       }
-      // Production/Preview: Use same origin for API calls
-      // This ensures preview deployments call their own API, not a different deployment
+      
+      // Custom domains: Use Vercel production URL for API
+      // (needed because jeffbrydon.com is hosted on GitHub Pages, not Vercel)
+      if (hostname === 'www.jeffbrydon.com' || hostname === 'jeffbrydon.com') {
+        return 'https://portfolio-jeff-brydons-projects.vercel.app/api';
+      }
+      
+      // Vercel preview/production deployments: Use same origin
       return `${protocol}//${hostname}/api`;
     })()
   };
