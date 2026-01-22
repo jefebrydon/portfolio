@@ -1,0 +1,50 @@
+---
+name: project-rules
+description: This is a new rule
+---
+
+## Repository Structure
+
+- `portfolio/` is a **git submodule** with its own remote (`https://github.com/jefebrydon/portfolio`)
+- Commit/push changes from within `portfolio/`, not the parent repo
+
+## Tech Stack
+
+- **Origin**: Webflow export — preserve Webflow class naming conventions
+- **Pages**: `index.html` + case study pages (`peek-pro-booking-flow.html`, `eagle-pay.html`, etc.)
+- **Design system page**: `ui.html` documents colors, typography, and components
+- **React components**: `components/` folder (TSX) — used for JeffBot UI only
+
+## Key File Locations
+
+| Purpose | Path |
+|---------|------|
+| CSS variables & main styles | `css/jeff-brydon.webflow.css` |
+| JeffBot frontend | `js/jeffbot.js` |
+| JeffBot API (serverless) | `api/chat.js` |
+| React components | `components/*.tsx` |
+
+## Design System — Colors
+
+Use CSS variables from `:root` in `css/jeff-brydon.webflow.css`:
+
+- **Primary**: `--teal-primary` (#229DB1), `--teal-dark` (#307489), `--teal-light` (#49C8D7)
+- **Hover background**: `--teal-hover-bg` (#dffcff)
+- **Greys**: `--grey-50` through `--grey-300`
+- **Gradients**: `--primary-gradient-start/end`, `--primary-gradient-hover-start/end`
+
+When modifying colors, update both the CSS and the `ui.html` documentation.
+
+## Conventions
+
+- Keep inline scripts colocated in HTML files (Webflow pattern)
+- New videos need poster frames (`*-poster-00001.jpg`)
+- Secrets (`OPENAI_API_KEY`, `VECTOR_STORE_ID`) are in Vercel env vars — never expose to browser
+- Local dev: `npm run dev` (runs live-server on port 8080)
+
+## JeffBot Architecture
+
+- Frontend: vanilla JS in `js/jeffbot.js`
+- Backend: Vercel serverless function at `/api/chat`
+- Uses OpenAI Responses API with `file_search` (RAG)
+- Config auto-detects localhost vs production in `js/jeffbot-config.js`
