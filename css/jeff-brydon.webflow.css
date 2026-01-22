@@ -607,6 +607,7 @@ blockquote {
 .button.gradient:hover {
   color: #fff;
   background-image: linear-gradient(to right, var(--primary-gradient-hover-start), var(--primary-gradient-hover-end));
+  box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.05);
 }
 
 .button.gradient.no-bottom-space {
@@ -653,6 +654,7 @@ blockquote {
 
 .button.secondary:hover {
   background-image: linear-gradient(to right, var(--primary-gradient-hover-start), var(--primary-gradient-hover-end));
+  box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.05);
 }
 
 .button.secondary:hover::before {
@@ -5361,6 +5363,10 @@ blockquote {
 .box-shadow {
   margin-bottom: 0;
   box-shadow: 0 20px 50px -10px #7584aa4d;
+}
+
+.subtle-shadow {
+  box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.05);
 }
 
 .box-shadow.bottom100 {
