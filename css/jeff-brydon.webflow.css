@@ -1,16 +1,10 @@
 :root {
-  --dark-slate-grey: #03556d;
   --para-text-on-dark: #eee;
   --black: #222;
   --number: #979797;
   --para-text-on-dark-2: lightgrey;
   --white: white;
   --silver: #becbce;
-  --aqua: #00ffd6;
-  --dark-turquoise: #00d6b4;
-  --dark-cyan: #00ad92;
-  --lighter-teal: #00576d;
-  --link: #48b5d1;
   --grey-50: #fbfbfb;
   --grey-75: #f1f1f1;
   --grey-100: #e5e8e9;
@@ -455,7 +449,7 @@ blockquote {
 .button.contact.spaced {
   float: left;
   background-color: #0000;
-  background-image: radial-gradient(circle farthest-corner at 0% 109%, var(--dark-slate-grey), #01313f);
+  background-image: radial-gradient(circle farthest-corner at 0% 109%, var(--teal-dark), #01313f);
   color: #fff;
   cursor: pointer;
   border: 0 #fff;
@@ -470,7 +464,7 @@ blockquote {
 
 .button.contact.spaced.centered {
   float: none;
-  background-image: radial-gradient(circle farthest-corner at 0% 109%, var(--dark-slate-grey), #01313f);
+  background-image: radial-gradient(circle farthest-corner at 0% 109%, var(--teal-dark), #01313f);
   width: 180px;
   margin: 60px auto;
   font-family: "Nunito Sans", sans-serif;
@@ -2612,9 +2606,13 @@ blockquote {
 }
 
 .link {
-  color: #2ab6c7;
+  color: var(--teal-primary);
   font-family: Nunito Sans, sans-serif;
   font-weight: 800;
+}
+
+.link:hover {
+  color: var(--teal-dark);
 }
 
 .text25 {
@@ -5841,7 +5839,7 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
   }
 
   .menu-button:hover {
-    color: #00d6b4;
+    color: var(--teal-dark);
   }
 
   .menu-button.w--open {
@@ -7162,7 +7160,7 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
   }
 
   .button.contact.spaced.centered {
-    background-image: radial-gradient(circle farthest-corner at 0% 109%, var(--dark-slate-grey), #01313f);
+    background-image: radial-gradient(circle farthest-corner at 0% 109%, var(--teal-dark), #01313f);
   }
 
   .button.contact.foot {
@@ -7210,7 +7208,7 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
 
   .nav-menu {
     background-color: #c8c8c800;
-    background-image: radial-gradient(circle farthest-corner at 50% 0%, var(--dark-slate-grey), #01313f);
+    background-image: radial-gradient(circle farthest-corner at 50% 0%, var(--teal-dark), #01313f);
   }
 
   .nav-menu.home {
