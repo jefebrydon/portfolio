@@ -46,8 +46,9 @@ This script will:
 - Upload all PDF files from the `jeffbot_rag/` directory to OpenAI
 - Wait for files to be processed
 - Create a vector store with the uploaded files
-- Create an Assistant (legacy, for reference)
 - Output the Vector Store ID
+
+**Note**: The script also creates an Assistant object, but this is not used by JeffBot. The live implementation uses the Responses API with inline configuration, connecting directly to the Vector Store.
 
 **Note**: The script will check for existing vector stores and warn you if one exists. You may want to delete it first if you're recreating the store.
 

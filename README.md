@@ -14,14 +14,15 @@
 ## Working With This Repo
 - Treat `portfolio/` as the project root when running git commands, builds, or local servers.
 - Keep page-specific inline scripts colocated in their HTML files unless you have a clear reason to extract them; other pages reuse the modal logic.
-- The custom domain lives in `CNAME` (`www.jeffbrydon.com`); update it if deploying to a different host.
+- The custom domain (`www.jeffbrydon.com`) is configured in Vercel (Project → Settings → Domains).
 - When adding new assets, follow existing naming conventions in `images/` and `videos/`, and ensure new videos include poster frames for Webflow background video elements.
 
 ## JeffBot Integration
-- JeffBot sidebar uses OpenAI's Assistants API with file search (RAG) functionality.
-- **Frontend**: the chat UI is rendered on all portfolio pages and runs entirely in the browser (hosted on GitHub Pages at `www.jeffbrydon.com`).
-- **Backend**: OpenAI calls are proxied through a serverless function deployed on Vercel at `/api/chat` in this repo (`api/chat.js`); the frontend talks to it via HTTPS.
-- **Secrets**: `OPENAI_API_KEY` and `ASSISTANT_ID` are stored as environment variables in Vercel (Project → Settings → Environment Variables) and **never** exposed to the browser.
+- JeffBot sidebar uses OpenAI's **Responses API** with `file_search` tool for RAG (Retrieval-Augmented Generation).
+- **Frontend**: the chat UI is rendered on all portfolio pages and runs entirely in the browser.
+- **Backend**: OpenAI calls are proxied through a serverless function at `/api/chat` (`api/chat.js`); the frontend talks to it via HTTPS.
+- **Hosting**: Both frontend and backend are deployed on Vercel at `www.jeffbrydon.com`.
+- **Secrets**: `OPENAI_API_KEY` and `VECTOR_STORE_ID` are stored as environment variables in Vercel (Project → Settings → Environment Variables) and **never** exposed to the browser.
 - **Local development**: a separate Express server for JeffBot lives in `jeffbot_rag/server.js` and uses a local `.env` (see `jeffbot_rag/README.md` for setup); the browser points to `http://localhost:3001/api` when running locally.
-- **Production config**: `js/jeffbot-config.js` detects `localhost` for dev; otherwise it calls the Vercel deployment URL (e.g. `https://portfolio-six-nu-9myb2s6fia.vercel.app/api`) so the GitHub Pages frontend can use the Vercel backend without DNS changes.
+- **Production config**: `js/jeffbot-config.js` detects `localhost` for dev; otherwise it uses the same origin (`/api`) since both frontend and backend are hosted on Vercel.
 - Chat conversations persist in `sessionStorage` for the duration of the browser session.
