@@ -161,6 +161,36 @@
       opacity: 1 !important;
       transform: translate3d(0, 0, 0) !important;
     }
+    
+    /* JeffBot Hero Button Icon */
+    .jeffbot-hero-icon {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    .jeffbot-hero-icon-base,
+    .jeffbot-hero-icon-hover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 24px;
+      height: 24px;
+    }
+    .jeffbot-hero-icon-base {
+      opacity: 1;
+      transition: opacity 0.2s ease;
+    }
+    .jeffbot-hero-icon-hover {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .jeffbot-hero-button:hover .jeffbot-hero-icon-base {
+      opacity: 0;
+    }
+    .jeffbot-hero-button:hover .jeffbot-hero-icon-hover {
+      opacity: 1;
+    }
   </style>
 </head>
 
@@ -173,6 +203,13 @@
           <h1 class="bricolage-grotesque">Jeff Brydon</h1>
           <h3 data-w-id="0b1e09b5-727f-8395-616b-8a65fdd70d40" class="subheader">AI-Savvy Product Designer</h3>
           <p>I design products people love to use. I&#x27;m AI-fluent, prototype-driven, and perpetually curious.<br></p>
+          <button type="button" class="button secondary with-icon jeffbot-hero-button" style="margin-top: 0px; margin-bottom: 0px;">
+            <span class="jeffbot-hero-icon">
+              <img src="images/JeffBot_button.svg" alt="" class="jeffbot-hero-icon-base" aria-hidden="true">
+              <img src="images/JeffBot_button_hover.svg" alt="" class="jeffbot-hero-icon-hover" aria-hidden="true">
+            </span>
+            <span>JeffBot 3000</span>
+          </button>
         </div>
         <div class="w-col w-col-8">
           <div class="hero-video-container">
@@ -833,6 +870,20 @@
         }, 3000);
       });
     }
+    
+    // JeffBot Hero Button - triggers the same action as the sparkle button
+    document.addEventListener('DOMContentLoaded', function() {
+      const heroButton = document.querySelector('.jeffbot-hero-button');
+      const sparkleButton = document.querySelector('.sparkle-button');
+      
+      if (heroButton && sparkleButton) {
+        heroButton.addEventListener('click', function(e) {
+          e.preventDefault();
+          // Trigger click on the sparkle button to activate sidebar with same animations
+          sparkleButton.click();
+        });
+      }
+    });
   </script>
 </body>
 
