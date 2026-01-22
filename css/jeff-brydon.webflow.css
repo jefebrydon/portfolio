@@ -11,9 +11,11 @@
   --grey-200: #97a4a9;
   --grey-250: #898989;
   --grey-300: #666666;
+  --teal-darkest: #275E6F;
   --teal-dark: #307489;
-  --teal-light: #49C8D7;
   --teal-primary: #229DB1;
+  --teal-light: #49C8D7;
+  --teal-lightest: #81F2F8;
   --teal-hover-bg: #dffcff;
   --primary-gradient-start: #0b5f79;
   --primary-gradient-end: #41cada;
@@ -391,6 +393,7 @@ blockquote {
   width: auto;
   margin: 0 10px 30px 0;
   padding: 8px 20px;
+  padding-left: 16px;
   font-family: Nunito Sans, sans-serif;
   font-size: 16px;
   font-weight: 700;
@@ -657,8 +660,112 @@ blockquote {
   box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.05);
 }
 
-.button.secondary:hover::before {
-  background: linear-gradient(to right, var(--primary-gradient-hover-start), var(--primary-gradient-hover-end));
+/* Hover Glow - Animated gradient border with mouse-following glow */
+@property --glow-position {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 50%;
+}
+
+@property --glow-opacity {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --base-fade {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+.button.secondary.hover-glow {
+  --glow-position: 50%;
+  --glow-x: 100px;
+  --button-width: 200px;
+  --text-offset-x: 0px;
+  --glow-spread: calc(var(--button-width) * 0.2);
+  --glow-falloff: calc(var(--button-width) * 0.3);
+  --glow-opacity: 0;
+  --base-fade: 0;
+  --glow-lightest-rgb: 73, 200, 215;
+  --glow-mid-rgb: 65, 202, 218;
+  --glow-mid-alpha: 0.8;
+  --glow-text-base: linear-gradient(90deg, var(--primary-gradient-start), var(--primary-gradient-end));
+  --glow-gradient: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(var(--glow-mid-rgb), 0) calc(var(--glow-x) - var(--glow-falloff)),
+    rgba(var(--glow-lightest-rgb), var(--glow-opacity)) var(--glow-x),
+    rgba(var(--glow-mid-rgb), calc(var(--glow-opacity) * var(--glow-mid-alpha))) calc(var(--glow-x) + var(--glow-spread)),
+    rgba(var(--glow-mid-rgb), 0) calc(var(--glow-x) + var(--glow-falloff)),
+    transparent 100%
+  );
+  transition: --glow-opacity 150ms ease-out;
+}
+
+.button.secondary.hover-glow:hover {
+  --glow-text-base: linear-gradient(90deg, var(--teal-darkest), var(--teal-darkest));
+}
+
+.button.secondary.hover-glow:not(.with-icon) {
+  background-image: var(--glow-gradient), var(--glow-text-base);
+  background-size: var(--button-width) 100%, var(--button-width) 100%;
+  background-position: 0 0, 0 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.button.secondary.hover-glow > span:not(.jeffbot-hero-icon) {
+  background-image: var(--glow-gradient), var(--glow-text-base);
+  background-size: var(--button-width) 100%, var(--button-width) 100%;
+  background-position: calc(0px - var(--text-offset-x)) 0, calc(0px - var(--text-offset-x)) 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.button.secondary.hover-glow::before {
+  /* Base gradient without glow, with hover fade overlay */
+  background:
+    linear-gradient(
+      rgba(39, 94, 111, var(--base-fade)),
+      rgba(39, 94, 111, var(--base-fade))
+    ),
+    linear-gradient(90deg, var(--primary-gradient-start), var(--primary-gradient-end)) !important;
+  transition: --base-fade 150ms ease-out;
+}
+
+/* Glow overlay on ::after pseudo-element for independent opacity control */
+.button.secondary.hover-glow::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 99px;
+  padding: 2px;
+  background: 
+    var(--glow-gradient);
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+  opacity: var(--glow-opacity);
+  transition: opacity 150ms ease-out;
+}
+
+.button.secondary.hover-glow:hover::before {
+  /* Fade to Teal Darkest on hover */
+  --base-fade: 1;
 }
 
 .button.with-icon {
