@@ -616,8 +616,10 @@ blockquote {
 
 .button.secondary {
   background-color: #fff;
-  background-image: none;
-  color: var(--teal-primary);
+  background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
   border: none;
   position: relative;
 }
@@ -630,8 +632,8 @@ blockquote {
   right: 0;
   bottom: 0;
   border-radius: 99px;
-  padding: 1px;
-  background: linear-gradient(to right, #0b5f79, #41cada);
+  padding: 2px;
+  background: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
   -webkit-mask: 
     linear-gradient(#fff 0 0) content-box, 
     linear-gradient(#fff 0 0);
@@ -650,11 +652,11 @@ blockquote {
 }
 
 .button.secondary:hover {
-  color: var(--teal-dark);
+  background-image: linear-gradient(to right, var(--primary-gradient-hover-start), var(--primary-gradient-hover-end));
 }
 
 .button.secondary:hover::before {
-  background: var(--teal-dark);
+  background: linear-gradient(to right, var(--primary-gradient-hover-start), var(--primary-gradient-hover-end));
 }
 
 .button.with-icon {
