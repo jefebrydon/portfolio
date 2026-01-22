@@ -191,12 +191,22 @@
     .jeffbot-hero-button:hover .jeffbot-hero-icon-hover {
       opacity: 1;
     }
+    
+    /* Override hero-container margin to stay consistent until 480px */
+    .padded.hero-container {
+      margin-top: 100px;
+    }
+    @media screen and (max-width: 479px) {
+      .padded.hero-container {
+        margin-top: 70px;
+      }
+    }
   </style>
 </head>
 
 <body style="background-color: #fff !important;">
   <!-- Header and Sidebar will be injected by header.js -->
-  <div class="section paralax-section">
+  <div class="section paralax-section" style="padding-top: 70px;">
     <div class="padded hero-container w-container">
       <div class="w-row">
         <div class="float-from-left w-col w-col-4">
