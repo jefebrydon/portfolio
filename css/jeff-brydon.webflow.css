@@ -8565,7 +8565,7 @@ body {
 .jeffbot-suggestions {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 }
 
 .jeffbot-suggestion-button {
@@ -8606,10 +8606,10 @@ body {
 
 .jeffbot-input {
   width: 100%;
-  /* Default: 1px border, so padding includes 1px border space */
+  /* Default: 2px border */
   padding: 12px 48px 12px 16px;
   background: var(--white);
-  border: 1px solid transparent;
+  border: 2px solid var(--teal-primary);
   border-radius: 20px;
   font-family: 'Nunito Sans', sans-serif;
   font-size: 15px;
@@ -8617,41 +8617,51 @@ body {
   line-height: 24px;
   color: var(--grey-200);
   outline: none;
-  transition: background-image 0.2s ease, color 0.2s ease, border-width 0.2s ease, padding 0.2s ease;
+  transition: border-color 0.2s ease, background-image 0.2s ease, color 0.2s ease, padding 0.2s ease;
   box-sizing: border-box;
-  /* Default state: 1px gradient border */
-  background-image: linear-gradient(var(--white), var(--white)), 
-                    linear-gradient(to right, var(--teal-dark), var(--teal-light));
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
+}
+
+.jeffbot-input:hover:not(:focus) {
+  border-color: var(--teal-dark);
 }
 
 .jeffbot-input::placeholder {
   color: var(--grey-200);
 }
 
-/* Selected state (focus): 3px inner gradient border */
+/* Selected state (focus): 2px gradient border */
 .jeffbot-input:focus {
-  border: 3px solid transparent;
+  border: 2px solid transparent;
   background-image: linear-gradient(var(--white), var(--white)), 
-                    linear-gradient(to right, var(--teal-dark), var(--teal-light));
+                    linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
   background-origin: border-box;
   background-clip: padding-box, border-box;
   color: var(--grey-200);
-  /* Adjust padding to maintain outer dimensions: reduce by 2px (3px - 1px border difference) */
-  padding: 10px 46px 10px 14px;
+  padding: 12px 48px 12px 16px;
 }
 
-/* Filled state: 3px inner gradient border, darker text */
-.jeffbot-input:not(:placeholder-shown) {
-  border: 3px solid transparent;
+/* Filled state: 2px Teal border, darker text */
+.jeffbot-input:not(:placeholder-shown):not(:focus) {
+  border: 2px solid var(--teal-primary);
+  background-image: none;
+  color: var(--grey-300);
+  padding: 12px 48px 12px 16px;
+}
+
+/* Filled + hover state: 2px Teal Dark border */
+.jeffbot-input:not(:placeholder-shown):hover:not(:focus) {
+  border-color: var(--teal-dark);
+}
+
+/* Filled + focus state: 2px gradient border */
+.jeffbot-input:not(:placeholder-shown):focus {
+  border: 2px solid transparent;
   background-image: linear-gradient(var(--white), var(--white)), 
-                    linear-gradient(to right, var(--teal-dark), var(--teal-light));
+                    linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
   background-origin: border-box;
   background-clip: padding-box, border-box;
   color: var(--grey-300);
-  /* Adjust padding to maintain outer dimensions: reduce by 2px (3px - 1px border difference) */
-  padding: 10px 46px 10px 14px;
+  padding: 12px 48px 12px 16px;
 }
 
 /* Submit button container - positioned absolutely to not affect input layout */

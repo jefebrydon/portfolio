@@ -201,6 +201,18 @@
         margin-top: 70px;
       }
     }
+    
+    /* Hero video loading animation - fade in and slide left */
+    .hero-video {
+      opacity: 0;
+      transform: translateX(60px);
+      transition: opacity 1s ease-out, transform 1s ease-out;
+    }
+    
+    .hero-video.loaded {
+      opacity: 1;
+      transform: translateX(0);
+    }
   </style>
 </head>
 
@@ -213,12 +225,12 @@
           <h1 class="bricolage-grotesque">Jeff Brydon</h1>
           <h3 data-w-id="0b1e09b5-727f-8395-616b-8a65fdd70d40" class="subheader">AI-Savvy Product Designer</h3>
           <p>I design products people love to use. I&#x27;m AI-fluent, prototype-driven, and perpetually curious.<br></p>
-          <button type="button" class="button secondary with-icon jeffbot-hero-button" style="margin-top: 0px; margin-bottom: 0px;">
+          <button type="button" class="button secondary hover-glow with-icon jeffbot-hero-button" style="margin-top: 0px; margin-bottom: 0px;">
             <span class="jeffbot-hero-icon">
               <img src="images/JeffBot_button.svg" alt="" class="jeffbot-hero-icon-base" aria-hidden="true">
               <img src="images/JeffBot_button_hover.svg" alt="" class="jeffbot-hero-icon-hover" aria-hidden="true">
             </span>
-            <span>JeffBot 3000</span>
+            <span>Ask JeffBot</span>
           </button>
         </div>
         <div class="w-col w-col-8">
@@ -870,6 +882,20 @@
     }
   </script>
   <script>
+    // Hero video loading animation - fade in and scale up when ready
+    const heroVideo = document.querySelector('.hero-video');
+    if (heroVideo) {
+      // Trigger animation when video has enough data to play
+      if (heroVideo.readyState >= 3) {
+        // Video is already ready
+        heroVideo.classList.add('loaded');
+      } else {
+        heroVideo.addEventListener('canplay', function() {
+          heroVideo.classList.add('loaded');
+        }, { once: true });
+      }
+    }
+    
     // Pause RA teaser video on final frame for 3 seconds before looping
     const raTeaserVideo = document.getElementById('ra-teaser-video');
     if (raTeaserVideo) {
@@ -893,6 +919,37 @@
           sparkleButton.click();
         });
       }
+    });
+
+    // Hover Glow - mouse tracking for secondary buttons with hover-glow
+    document.addEventListener('DOMContentLoaded', function() {
+      const buttons = document.querySelectorAll('.button.secondary.hover-glow');
+      if (!buttons.length) return;
+
+      function setGlowVars(button, e) {
+        const rect = button.getBoundingClientRect();
+        const x = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
+        const textSpan = button.querySelector('span:not(.jeffbot-hero-icon)');
+        const textOffset = textSpan ? textSpan.offsetLeft : 0;
+        button.style.setProperty('--glow-x', x + 'px');
+        button.style.setProperty('--button-width', rect.width + 'px');
+        button.style.setProperty('--text-offset-x', textOffset + 'px');
+      }
+
+      buttons.forEach(function(button) {
+        button.addEventListener('mouseenter', function(e) {
+          setGlowVars(button, e);
+          button.style.setProperty('--glow-opacity', '1');
+        });
+
+        button.addEventListener('mousemove', function(e) {
+          setGlowVars(button, e);
+        });
+
+        button.addEventListener('mouseleave', function() {
+          button.style.setProperty('--glow-opacity', '0');
+        });
+      });
     });
   </script>
 </body>
