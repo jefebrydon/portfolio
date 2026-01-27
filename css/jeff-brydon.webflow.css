@@ -3889,8 +3889,8 @@ blockquote {
   object-fit: fill;
   background-color: #00576d;
   background-image: linear-gradient(100deg, #0b5f79, #41cada);
-  width: 60px;
-  height: 5px;
+  width: 92px;
+  height: 3px;
   margin-bottom: 0;
 }
 
@@ -3904,6 +3904,8 @@ blockquote {
 .gradient-div.tab-highlight {
   background-image: linear-gradient(100deg, #0b5f79, #41cada);
   width: 75px;
+  height: 3px;
+  margin-top: 2px;
   margin-left: 29px;
   transition: margin-left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -4277,7 +4279,7 @@ blockquote {
 
 .card-highlight {
   background-image: linear-gradient(#2684ff, #0052cc);
-  width: 5px;
+  width: 3px;
   display: inline-block;
 }
 
