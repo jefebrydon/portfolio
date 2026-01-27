@@ -781,16 +781,12 @@ blockquote {
   -webkit-background-clip: border-box;
 }
 
-/* Text inside secondary icon buttons still gets gradient */
-.button.secondary.with-icon > span {
+/* Text inside secondary icon buttons still gets gradient (non-hover-glow only) */
+.button.secondary.with-icon:not(.hover-glow) > span {
   background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
-}
-
-.button.secondary.with-icon.hover-glow:hover > span {
-  background-image: linear-gradient(to right, var(--teal-darkest), var(--teal-darkest));
 }
 
 .button-icon-inline {
