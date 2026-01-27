@@ -97,6 +97,15 @@
   </style>
 </head>
 <body>
+  <!-- Hidden SVG for shared gradient definitions -->
+  <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
+    <defs>
+      <linearGradient id="button-icon-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#0b5f79"/>
+        <stop offset="100%" stop-color="#41cada"/>
+      </linearGradient>
+    </defs>
+  </svg>
 
   <div class="section">
     <!-- Header will be injected by header.js -->
@@ -105,9 +114,8 @@
         <div><img src="images/logo_compass.png" alt="" class="image-27 top--20">
           <h1 class="bricolage-grotesque-solid heading-17">Rules Atlas</h1>
         </div>
-        <a href="https://rules-atlas.vercel.app/" target="_blank" class="button secondary with-icon" style="margin: 0;">
-          Try the App
-          <svg class="button-icon-inline" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+        <a href="https://rules-atlas.vercel.app/" target="_blank" class="button secondary hover-glow" style="margin: 0;">
+          <span>Try It</span>
         </a>
       </div>
     </div>
@@ -154,7 +162,7 @@
           <source src="videos/RA-Chat.mov" type="video/quicktime">
           <source src="videos/RA-Chat.mov" type="video/mp4">
         </video>
-        <button id="ra-chat-replay" class="button secondary with-icon replay-btn-hidden" style="position: absolute; top: 50%; left: 50%; margin: 0; z-index: 10; transition: opacity 0.4s ease, transform 0.4s ease; box-shadow: 3px 7px 20px -2px #5a757d40;">
+        <button id="ra-chat-replay" class="button secondary with-icon hover-glow replay-btn-hidden" style="position: absolute; top: 50%; left: 50%; margin: 0; z-index: 10; transition: opacity 0.4s ease, transform 0.4s ease; box-shadow: 3px 7px 20px -2px #5a757d40;">
           <svg class="button-icon-inline" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
         </button>
       </div>
@@ -245,9 +253,8 @@
       <p class="max-width-600 bottom_80">Errors are the norm. If a few rounds of telling Opus 4.5 to debug didn't work, I could always roll back to the last stable version in GitHub.</p>
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px;">
         <h2 class="bricolage-grotesque-solid" style="margin-bottom: 0;">Solution</h2>
-        <a href="https://rules-atlas.vercel.app/" target="_blank" class="button secondary with-icon" style="margin: 0; padding-top: 8px; padding-bottom: 8px;">
-          Try the App
-          <svg class="button-icon-inline" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 19H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+        <a href="https://rules-atlas.vercel.app/" target="_blank" class="button secondary hover-glow" style="margin: 0; padding-top: 8px; padding-bottom: 8px;">
+          <span>Try It</span>
         </a>
       </div>
       
@@ -256,7 +263,7 @@
           <source src="videos/RA-Overview.mov" type="video/quicktime">
           <source src="videos/RA-Overview.mov" type="video/mp4">
         </video>
-        <button id="ra-overview-replay" class="button secondary with-icon replay-btn-hidden" style="position: absolute; top: 50%; left: 50%; margin: 0; z-index: 10; transition: opacity 0.4s ease, transform 0.4s ease; box-shadow: 3px 7px 20px -2px #5a757d40;">
+        <button id="ra-overview-replay" class="button secondary with-icon hover-glow replay-btn-hidden" style="position: absolute; top: 50%; left: 50%; margin: 0; z-index: 10; transition: opacity 0.4s ease, transform 0.4s ease; box-shadow: 3px 7px 20px -2px #5a757d40;">
           <svg class="button-icon-inline" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
         </button>
       </div>
@@ -391,6 +398,39 @@
       }
     });
     
+  </script>
+  
+  <!-- Hover Glow Button - Mouse tracking script -->
+  <script type="text/javascript">
+    (function() {
+      const buttons = document.querySelectorAll('.button.secondary.hover-glow');
+      if (!buttons.length) return;
+      
+      function setGlowVars(button, e) {
+        const rect = button.getBoundingClientRect();
+        const x = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
+        const textSpan = button.querySelector('span:not(.jeffbot-hero-icon)');
+        const textOffset = textSpan ? textSpan.offsetLeft : 0;
+        button.style.setProperty('--glow-x', x + 'px');
+        button.style.setProperty('--button-width', rect.width + 'px');
+        button.style.setProperty('--text-offset-x', textOffset + 'px');
+      }
+      
+      buttons.forEach(function(button) {
+        button.addEventListener('mouseenter', function(e) {
+          setGlowVars(button, e);
+          button.style.setProperty('--glow-opacity', '1');
+        });
+        
+        button.addEventListener('mousemove', function(e) {
+          setGlowVars(button, e);
+        });
+        
+        button.addEventListener('mouseleave', function() {
+          button.style.setProperty('--glow-opacity', '0');
+        });
+      });
+    })();
   </script>
 </body>
 </html>

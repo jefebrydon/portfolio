@@ -782,6 +782,15 @@ blockquote {
   fill: currentColor;
 }
 
+/* Icon gradient fill for secondary buttons (since color: transparent) */
+.button.secondary .button-icon-inline {
+  fill: url(#button-icon-gradient);
+}
+
+.button.secondary.hover-glow:hover .button-icon-inline {
+  fill: var(--teal-darkest);
+}
+
 .button._100-side-pad {
   margin-right: 0;
   padding: 10px 95px;
