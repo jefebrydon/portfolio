@@ -3255,7 +3255,7 @@ blockquote {
 
 .brand,
 .brand.w-nav-brand {
-  max-width: 30px;
+  max-width: 27px;
   margin: 0;
   display: flex;
   align-items: center;
@@ -3276,7 +3276,7 @@ blockquote {
 
 .brand.w--current,
 .brand.w--current.w-nav-brand {
-  max-width: 30px;
+  max-width: 27px;
   margin: 0;
   display: flex;
   align-items: center;
@@ -5302,7 +5302,7 @@ blockquote {
   max-width: none;
   height: auto;
   margin-top: 200px;
-  margin-bottom: 50px;
+  margin-bottom: 0px;
   display: grid;
 }
 
