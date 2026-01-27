@@ -392,8 +392,7 @@ blockquote {
   align-items: center;
   width: auto;
   margin: 0 10px 30px 0;
-  padding: 8px 20px;
-  padding-left: 16px;
+  padding: 8px 16px;
   font-family: Nunito Sans, sans-serif;
   font-size: 16px;
   font-weight: 700;
@@ -773,6 +772,25 @@ blockquote {
   align-items: center;
   gap: 8px;
   text-transform: none;
+}
+
+/* Secondary buttons with icons need white background (not clipped to text) */
+.button.secondary.with-icon {
+  background: #fff;
+  background-clip: border-box;
+  -webkit-background-clip: border-box;
+}
+
+/* Text inside secondary icon buttons still gets gradient */
+.button.secondary.with-icon > span {
+  background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.button.secondary.with-icon.hover-glow:hover > span {
+  background-image: linear-gradient(to right, var(--teal-darkest), var(--teal-darkest));
 }
 
 .button-icon-inline {
