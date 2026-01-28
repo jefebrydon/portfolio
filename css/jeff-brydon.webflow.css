@@ -5891,6 +5891,11 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
 }
 
 @media screen and (max-width: 991px) {
+  /* Override webflow.css container width change at this breakpoint */
+  .w-container {
+    max-width: 940px;
+  }
+
   .hero {
     background-position: 0 0, 50%;
     min-height: 520px;
@@ -7246,6 +7251,11 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
 }
 
 @media screen and (max-width: 479px) {
+  /* Override webflow.css container width change at this breakpoint */
+  .w-container {
+    max-width: 940px;
+  }
+
   h1, h1.bricolage-grotesque, h1.bricolage-grotesque-solid {
     font-size: 40px !important;
   }

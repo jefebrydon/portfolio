@@ -223,7 +223,7 @@
       <p class="max-width-600 bottom30">I handled styling using <strong>Tailwind CSS</strong> (colors, radius, typography). I started from <strong>shadcn-style components</strong> (buttons, inputs, etc.) and created a hidden <code>/ui</code> page that acted as a component sandbox—showing all components, variants, text styles, and colors in one place.</p>
       <h3 class="subheader bottom30">Branding</h3>
       <p class="max-width-600 bottom30">With the name and logo, I tried to convey “authoritative” and “comprehensive” to match the product’s promise.</p>
-      <img src="images/RA-logo.png" alt="Rules Atlas Logo" style="width: 296px; margin-top: 30px; margin-bottom: 80px; display: block;">
+      <video id="ra-logo-video" src="videos/RA-Logo.mp4" muted playsinline style="width: 296px; height: 118px; margin-top: 30px; margin-bottom: 80px; display: block; cursor: pointer;"></video>
 
       <h2 class="bricolage-grotesque-solid" style="margin-bottom: 50px;">Vibe Coding Learnings</h2>
       <p class="max-width-600 bottom30">As a product designer with a high-level understanding of code, vibe coding still feels like flying blind. While much of the code was unfamiliar, I did learn some tricks to get better results.</p>
@@ -429,6 +429,41 @@
         button.addEventListener('mouseleave', function() {
           button.style.setProperty('--glow-opacity', '0');
         });
+      });
+    })();
+  </script>
+
+  <!-- RA Logo Video - Play on scroll, replay on hover -->
+  <script type="text/javascript">
+    (function() {
+      const video = document.getElementById('ra-logo-video');
+      if (!video) return;
+
+      let hasPlayedOnScroll = false;
+
+      // Play once when 100px into viewport
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting && !hasPlayedOnScroll) {
+            hasPlayedOnScroll = true;
+            video.currentTime = 0;
+            video.play();
+            observer.disconnect();
+          }
+        });
+      }, {
+        rootMargin: '-100px 0px 0px 0px',
+        threshold: 0
+      });
+
+      observer.observe(video);
+
+      // Replay on hover (after initial play has finished)
+      video.addEventListener('mouseenter', function() {
+        if (hasPlayedOnScroll && video.paused) {
+          video.currentTime = 0;
+          video.play();
+        }
       });
     })();
   </script>
