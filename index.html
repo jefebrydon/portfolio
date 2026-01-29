@@ -64,6 +64,7 @@
     /* Hero text: hide initially, show after fonts load */
     .hero-container .float-from-left.w-col-4 {
       opacity: 0;
+      padding-left: 0;
     }
     
     /* Animate in after fonts are loaded (matches Case Studies h1 animation) */
@@ -209,7 +210,7 @@
     .hero-video {
       opacity: 0;
       transform: translateX(60px);
-      transition: opacity 1s ease-out, transform 1s ease-out;
+      transition: opacity 1.5s ease-out, transform 1s ease-out;
     }
     
     .hero-video.loaded {
@@ -238,7 +239,7 @@
         </div>
         <div class="w-col w-col-8">
           <div class="hero-video-container">
-            <video class="hero-video" src="videos/Show_reel_2025.m4v" autoplay muted loop playsinline preload="metadata"></video>
+            <video class="hero-video" src="videos/Show_reel_2025.m4v?v=2" muted loop playsinline preload="metadata"></video>
           </div>
         </div>
       </div>
@@ -889,16 +890,24 @@
     }
   </script>
   <script>
-    // Hero video loading animation - fade in and scale up when ready
+    // Hero video loading animation - fade in, pause on first frame, then play
     const heroVideo = document.querySelector('.hero-video');
     if (heroVideo) {
+      function startVideoWithDelay() {
+        heroVideo.classList.add('loaded');
+        // Wait for fade-in animation + pause on first frame, then play
+        setTimeout(function() {
+          heroVideo.play();
+        }, 1500);
+      }
+      
       // Trigger animation when video has enough data to play
       if (heroVideo.readyState >= 3) {
         // Video is already ready
-        heroVideo.classList.add('loaded');
+        startVideoWithDelay();
       } else {
         heroVideo.addEventListener('canplay', function() {
-          heroVideo.classList.add('loaded');
+          startVideoWithDelay();
         }, { once: true });
       }
     }
