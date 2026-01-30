@@ -59,18 +59,33 @@
   <script
     type="text/javascript">window.dataLayer = window.dataLayer || []; function gtag() {dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'UA-173352983-1', {'anonymize_ip': false});</script>
   <style>
-    /* Header slide-down animation moved to jeff-brydon.webflow.css */
+    /* 
+     * Coordinated hero loading animations
+     * All elements (header, hero text, video) animate together when fonts load
+     */
     
-    /* Hero text: hide initially, show after fonts load */
+    /* Hero text: hide initially with visibility to prevent layout shift */
     .hero-container .float-from-left.w-col-4 {
       opacity: 0;
       padding-left: 0;
+      /* Ensure font is applied immediately to prevent FOUT flash */
+      font-family: "Bricolage Grotesque", sans-serif;
     }
     
-    /* Animate in after fonts are loaded (matches Case Studies h1 animation) */
+    /* Animate in after fonts are loaded */
     .fonts-loaded .hero-container .float-from-left.w-col-4 {
       opacity: 1;
-      transition: opacity 0.6s ease;
+      transition: opacity 0.8s ease-out;
+    }
+    
+    /* Keep h1 invisible until fonts load to prevent font swap flash */
+    .hero-container h1.bricolage-grotesque {
+      opacity: 0;
+    }
+    
+    .fonts-loaded .hero-container h1.bricolage-grotesque {
+      opacity: 1;
+      transition: opacity 0.8s ease-out;
     }
     
     .experience-table-container {
@@ -210,10 +225,11 @@
     .hero-video {
       opacity: 0;
       transform: translateX(60px);
-      transition: opacity 1.5s ease-out, transform 1s ease-out;
+      transition: opacity 1s ease-out, transform 1s ease-out;
     }
     
-    .hero-video.loaded {
+    /* Video animates when fonts are loaded (coordinated with hero text) */
+    .fonts-loaded .hero-video {
       opacity: 1;
       transform: translateX(0);
     }
@@ -226,9 +242,8 @@
     <div class="padded hero-container w-container">
       <div class="w-row">
         <div class="float-from-left w-col w-col-4">
-          <h1 class="bricolage-grotesque">Jeff Brydon</h1>
-          <h3 data-w-id="0b1e09b5-727f-8395-616b-8a65fdd70d40" class="subheader">AI-Savvy Product Designer</h3>
-          <p>I design products people love to use. I&#x27;m AI-fluent, prototype-driven, and perpetually curious.<br></p>
+          <h1 class="bricolage-grotesque">Build the Right Product</h1>
+          <p>AI lets us build fast. But understanding users, prototyping to gather feedback, and finding clarity on what to build next—that's still human work. That's what I do.<br></p>
           <button type="button" class="button secondary hover-glow with-icon jeffbot-hero-button" style="margin-top: 0px; margin-bottom: 0px;">
             <span class="jeffbot-hero-icon">
               <img src="images/JeffBot_button.svg" alt="" class="jeffbot-hero-icon-base" aria-hidden="true">
@@ -890,25 +905,28 @@
     }
   </script>
   <script>
-    // Hero video loading animation - fade in, pause on first frame, then play
+    // Hero video - play when fonts are loaded (animation handled by CSS)
     const heroVideo = document.querySelector('.hero-video');
     if (heroVideo) {
-      function startVideoWithDelay() {
-        heroVideo.classList.add('loaded');
-        // Wait for fade-in animation + pause on first frame, then play
+      function playVideoWhenReady() {
+        // Wait for fade-in animation to mostly complete, then play
         setTimeout(function() {
           heroVideo.play();
-        }, 1500);
+        }, 800);
       }
       
-      // Trigger animation when video has enough data to play
-      if (heroVideo.readyState >= 3) {
-        // Video is already ready
-        startVideoWithDelay();
+      // Check if fonts are already loaded
+      if (document.documentElement.classList.contains('fonts-loaded')) {
+        playVideoWhenReady();
       } else {
-        heroVideo.addEventListener('canplay', function() {
-          startVideoWithDelay();
-        }, { once: true });
+        // Wait for fonts-loaded class to be added
+        const observer = new MutationObserver(function(mutations) {
+          if (document.documentElement.classList.contains('fonts-loaded')) {
+            observer.disconnect();
+            playVideoWhenReady();
+          }
+        });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
       }
     }
     
