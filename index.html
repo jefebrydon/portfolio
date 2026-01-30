@@ -70,12 +70,14 @@
       padding-left: 0;
       /* Ensure font is applied immediately to prevent FOUT flash */
       font-family: "Bricolage Grotesque", sans-serif;
+      text-align: left;
     }
     
     /* Animate in after fonts are loaded */
     .fonts-loaded .hero-container .float-from-left.w-col-4 {
       opacity: 1;
       transition: opacity 0.8s ease-out;
+      text-align: left;
     }
     
     /* Keep h1 invisible until fonts load to prevent font swap flash */
@@ -244,13 +246,16 @@
         <div class="float-from-left w-col w-col-4">
           <h1 class="bricolage-grotesque">Build the Right Product</h1>
           <p>AI lets us build fast. But understanding users, prototyping to gather feedback, and finding clarity on what to build next—that's still human work. That's what I do.<br></p>
-          <button type="button" class="button secondary hover-glow with-icon jeffbot-hero-button" style="margin-top: 0px; margin-bottom: 0px;">
-            <span class="jeffbot-hero-icon">
-              <img src="images/JeffBot_button.svg" alt="" class="jeffbot-hero-icon-base" aria-hidden="true">
-              <img src="images/JeffBot_button_hover.svg" alt="" class="jeffbot-hero-icon-hover" aria-hidden="true">
-            </span>
-            <span>Ask JeffBot</span>
-          </button>
+          <div style="display: flex; flex-direction: column; gap: 16px; align-items: flex-start;">
+            <a href="#Contact" class="button secondary" style="margin: 0; float: none; align-self: flex-start;">Contact Jeff</a>
+            <button type="button" class="button ghost with-icon jeffbot-hero-button" style="margin: 0; float: none; align-self: flex-start;">
+              <span class="jeffbot-hero-icon">
+                <img src="images/JeffBot_button.svg" alt="" class="jeffbot-hero-icon-base" aria-hidden="true">
+                <img src="images/JeffBot_button_hover.svg" alt="" class="jeffbot-hero-icon-hover" aria-hidden="true">
+              </span>
+              <span>Ask JeffBot</span>
+            </button>
+          </div>
         </div>
         <div class="w-col w-col-8">
           <div class="hero-video-container">

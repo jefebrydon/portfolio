@@ -659,6 +659,80 @@ blockquote {
   box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.05);
 }
 
+/* Teal Glow shadow: used for pressed/active states */
+/* box-shadow: 0 0 16px 0 rgba(129, 242, 248, 0.2) */
+
+.button.secondary:active {
+  background-image: none;
+  background-color: #fff;
+  color: var(--teal-light);
+  box-shadow: 0 0 16px 0 rgba(129, 242, 248, 0.2);
+}
+
+.button.secondary:active::before {
+  background: var(--teal-light) !important;
+}
+
+.button.secondary:active .button-icon-inline {
+  fill: var(--teal-light);
+}
+
+/* Ghost Button - Like secondary but without border */
+.button.ghost {
+  background: transparent;
+  border: none;
+  position: relative;
+  z-index: 0; /* Creates stacking context so ::before with z-index: -1 stays in front of page background */
+}
+
+/* Grey 50 background fill via pseudo-element */
+.button.ghost::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 99px;
+  background-color: var(--grey-50);
+  z-index: -1;
+  transition: background-color 0.15s ease;
+}
+
+/* Text inside ghost buttons gets gradient (must be wrapped in span) */
+.button.ghost > span {
+  background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.button.ghost:hover > span {
+  background-image: linear-gradient(to right, var(--primary-gradient-hover-start), var(--primary-gradient-hover-end));
+}
+
+.button.ghost:active {
+  box-shadow: 0 0 16px 0 rgba(129, 242, 248, 0.2);
+}
+
+.button.ghost:active::before {
+  background-color: var(--white);
+}
+
+.button.ghost:active > span {
+  background-image: none;
+  color: var(--teal-light);
+}
+
+/* Icon gradient fill for ghost buttons */
+.button.ghost .button-icon-inline {
+  fill: url(#button-icon-gradient);
+}
+
+.button.ghost:active .button-icon-inline {
+  fill: var(--teal-light);
+}
+
 /* Hover Glow - Animated gradient border with mouse-following glow */
 @property --glow-position {
   syntax: '<percentage>';
@@ -802,6 +876,32 @@ blockquote {
 
 .button.secondary.hover-glow:hover .button-icon-inline {
   fill: var(--teal-darkest);
+}
+
+/* Pressed/active state for hover-glow secondary buttons */
+.button.secondary.hover-glow:active {
+  background-image: none !important;
+  background-color: #fff;
+  color: var(--teal-light);
+  box-shadow: 0 0 16px 0 rgba(129, 242, 248, 0.2);
+}
+
+.button.secondary.hover-glow:active > span:not(.jeffbot-hero-icon) {
+  background-image: none !important;
+  color: var(--teal-light);
+}
+
+.button.secondary.hover-glow:active::before {
+  background: var(--teal-light) !important;
+  --base-fade: 0;
+}
+
+.button.secondary.hover-glow:active::after {
+  opacity: 0 !important;
+}
+
+.button.secondary.hover-glow:active .button-icon-inline {
+  fill: var(--teal-light);
 }
 
 .button._100-side-pad {
