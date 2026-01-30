@@ -683,7 +683,7 @@ blockquote {
   --glow-x: 100px;
   --button-width: 200px;
   --text-offset-x: 0px;
-  --glow-spread: calc(var(--button-width) * 0.2);
+  --glow-spread: calc(var(--button-width) * 0.5);
   --glow-falloff: calc(var(--button-width) * 0.3);
   --glow-opacity: 0;
   --base-fade: 0;
@@ -694,10 +694,9 @@ blockquote {
   --glow-gradient: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(var(--glow-mid-rgb), 0) calc(var(--glow-x) - var(--glow-falloff)),
+    rgba(var(--glow-mid-rgb), 0) calc(var(--glow-x) - var(--glow-spread)),
     rgba(var(--glow-lightest-rgb), var(--glow-opacity)) var(--glow-x),
-    rgba(var(--glow-mid-rgb), calc(var(--glow-opacity) * var(--glow-mid-alpha))) calc(var(--glow-x) + var(--glow-spread)),
-    rgba(var(--glow-mid-rgb), 0) calc(var(--glow-x) + var(--glow-falloff)),
+    rgba(var(--glow-mid-rgb), 0) calc(var(--glow-x) + var(--glow-spread)),
     transparent 100%
   );
   transition: --glow-opacity 150ms ease-out;
