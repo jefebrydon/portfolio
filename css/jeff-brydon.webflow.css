@@ -711,6 +711,10 @@ blockquote {
   background-image: linear-gradient(to right, var(--primary-gradient-hover-start), var(--primary-gradient-hover-end));
 }
 
+.button.ghost:hover {
+  box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.05);
+}
+
 .button.ghost:active {
   box-shadow: 0 0 16px 0 rgba(129, 242, 248, 0.2);
 }
