@@ -62,32 +62,24 @@
     /* 
      * Coordinated hero loading animations
      * All elements (header, hero text, video) animate together when fonts load
+     * Animation is applied to containers so any new content inherits automatically
      */
     
-    /* Hero text: hide initially with visibility to prevent layout shift */
+    /* Hide entire left column until fonts load - prevents FOUT and button flash */
     .hero-container .float-from-left.w-col-4 {
       opacity: 0;
+      visibility: hidden;
       padding-left: 0;
-      /* Ensure font is applied immediately to prevent FOUT flash */
       font-family: "Bricolage Grotesque", sans-serif;
       text-align: left;
     }
     
-    /* Animate in after fonts are loaded */
+    /* Fade in left column after fonts load */
     .fonts-loaded .hero-container .float-from-left.w-col-4 {
       opacity: 1;
-      transition: opacity 0.8s ease-out;
+      visibility: visible;
+      transition: opacity 0.8s ease-out, visibility 0s;
       text-align: left;
-    }
-    
-    /* Keep h1 invisible until fonts load to prevent font swap flash */
-    .hero-container h1.bricolage-grotesque {
-      opacity: 0;
-    }
-    
-    .fonts-loaded .hero-container h1.bricolage-grotesque {
-      opacity: 1;
-      transition: opacity 0.8s ease-out;
     }
     
     .experience-table-container {
@@ -226,14 +218,16 @@
     /* Hero video loading animation - fade in and slide left */
     .hero-video {
       opacity: 0;
+      visibility: hidden;
       transform: translateX(60px);
-      transition: opacity 1s ease-out, transform 1s ease-out;
     }
     
     /* Video animates when fonts are loaded (coordinated with hero text) */
     .fonts-loaded .hero-video {
       opacity: 1;
+      visibility: visible;
       transform: translateX(0);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out, visibility 0s;
     }
   </style>
 </head>
