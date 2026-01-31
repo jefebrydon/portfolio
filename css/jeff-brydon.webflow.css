@@ -920,7 +920,6 @@ blockquote {
   --glow-lightest-rgb: 73, 200, 215;
   --glow-mid-rgb: 65, 202, 218;
   --glow-mid-alpha: 0.8;
-  --glow-text-base: linear-gradient(90deg, var(--primary-gradient-start), var(--primary-gradient-end));
   --glow-gradient: linear-gradient(
     90deg,
     transparent 0%,
@@ -932,17 +931,19 @@ blockquote {
   transition: --glow-opacity 150ms ease-out;
 }
 
-.button.ghost.hover-glow:hover {
-  --glow-text-base: linear-gradient(90deg, var(--teal-darkest), var(--teal-darkest));
-}
-
 .button.ghost.hover-glow > span:not(.jeffbot-hero-icon) {
-  background-image: var(--glow-gradient), var(--glow-text-base);
-  background-size: var(--button-width) 100%, var(--button-width) 100%;
-  background-position: calc(0px - var(--text-offset-x)) 0, calc(0px - var(--text-offset-x)) 0;
+  /* Use simpler gradient on initial load - glow gradient added on hover via JS */
+  background-image: linear-gradient(90deg, var(--primary-gradient-start), var(--primary-gradient-end));
+  background-size: 100% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+.button.ghost.hover-glow:hover > span:not(.jeffbot-hero-icon) {
+  background-image: var(--glow-gradient), linear-gradient(90deg, var(--teal-darkest), var(--teal-darkest));
+  background-size: var(--button-width) 100%, var(--button-width) 100%;
+  background-position: calc(0px - var(--text-offset-x)) 0, calc(0px - var(--text-offset-x)) 0;
 }
 
 .button.ghost.hover-glow:hover .button-icon-inline {
