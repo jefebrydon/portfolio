@@ -175,62 +175,69 @@
   
   // Handle smooth scrolling with offset for fixed header
   function initSmoothScroll() {
-    const navbar = document.querySelector('.navbar');
-    if (!navbar) {
-      // Retry if navbar isn't ready yet
-      setTimeout(initSmoothScroll, 100);
-      return;
+    var headerOffset = 80; // Fixed header height + buffer
+    var scrollDuration = 600; // Animation duration in ms
+    
+    // Detect motion preference
+    function prefersReducedMotion() {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }
     
-    // Get navbar height (default to 76px if not found)
-    const navbarHeight = navbar.offsetHeight || 76;
-    
-    // Function to scroll to element with offset
-    function scrollToElement(element, smooth) {
-      if (!element) return;
+    // Custom smooth scroll with linear easing (constant speed)
+    // Native CSS scroll-behavior uses ease-in-out which starts slowly
+    function smoothScrollTo(targetY, duration, onComplete) {
+      var startY = window.scrollY;
+      var distance = targetY - startY;
+      var startTime = null;
       
-      // For Contact section, scroll to the bottom of the page
-      if (element.id === 'Contact') {
-        const documentHeight = document.documentElement.scrollHeight;
-        const windowHeight = window.innerHeight;
-        const targetScroll = documentHeight - windowHeight;
-        
-        window.scrollTo({
-          top: targetScroll,
-          behavior: smooth ? 'smooth' : 'auto'
-        });
-        
-        // After initial scroll, do correction scrolls to account for document height changes
-        // The document height changes as Webflow animations expand content during scroll
-        var correctionAttempts = 0;
-        var maxCorrections = 5;
-        var correctionInterval = setInterval(function() {
-          correctionAttempts++;
-          var trueBottom = document.documentElement.scrollHeight - window.innerHeight;
-          var currentScroll = window.scrollY;
-          
-          // If we're not at the true bottom (with 50px tolerance), scroll again
-          if (trueBottom - currentScroll > 50) {
-            window.scrollTo({
-              top: trueBottom,
-              behavior: 'smooth'
-            });
-          }
-          
-          if (correctionAttempts >= maxCorrections) {
-            clearInterval(correctionInterval);
-          }
-        }, 400);
-        
-        return;
+      // Linear easing - constant speed throughout
+      function linear(t) {
+        return t;
       }
       
-      const targetPosition = element.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+      function step(currentTime) {
+        if (!startTime) startTime = currentTime;
+        var elapsed = currentTime - startTime;
+        var progress = Math.min(elapsed / duration, 1);
+        
+        window.scrollTo(0, startY + distance * linear(progress));
+        
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else if (onComplete) {
+          onComplete();
+        }
+      }
       
-      window.scrollTo({
-        top: Math.max(0, targetPosition),
-        behavior: smooth ? 'smooth' : 'auto'
-      });
+      requestAnimationFrame(step);
+    }
+    
+    // Focus element for accessibility (called after scroll completes)
+    function focusElement(element) {
+      if (!element.hasAttribute('tabindex')) {
+        element.setAttribute('tabindex', '-1');
+      }
+      element.focus({ preventScroll: true });
+    }
+    
+    function scrollToElement(element) {
+      if (!element) return;
+      
+      // Calculate target position accounting for header offset
+      var elementRect = element.getBoundingClientRect();
+      var targetY = window.scrollY + elementRect.top - headerOffset;
+      targetY = Math.max(0, targetY); // Don't scroll above page top
+      
+      if (prefersReducedMotion()) {
+        // Instant scroll for users who prefer reduced motion
+        window.scrollTo(0, targetY);
+        focusElement(element);
+      } else {
+        // Custom smooth scroll with linear easing
+        smoothScrollTo(targetY, scrollDuration, function() {
+          focusElement(element);
+        });
+      }
     }
     
     // Handle clicks on anchor links
@@ -248,15 +255,13 @@
       if (targetElement) {
         e.preventDefault();
         
-        // Scroll to target with offset
-        scrollToElement(targetElement, true);
-        
-        // Update URL hash without triggering scroll
+        // Update URL hash first (pushState doesn't trigger scroll)
         if (history.pushState) {
           history.pushState(null, null, href);
-        } else {
-          window.location.hash = href;
         }
+        
+        // Then scroll to target
+        scrollToElement(targetElement);
       }
     });
     
@@ -266,7 +271,7 @@
         const targetId = window.location.hash.substring(1);
         const targetElement = document.getElementById(targetId);
         if (targetElement) {
-          scrollToElement(targetElement, false); // Use instant scroll on page load
+          scrollToElement(targetElement);
         }
       }, 200);
     }
