@@ -189,6 +189,42 @@
     function scrollToElement(element, smooth) {
       if (!element) return;
       
+      // For Contact section, scroll to the bottom of the page
+      if (element.id === 'Contact') {
+        const documentHeight = document.documentElement.scrollHeight;
+        const windowHeight = window.innerHeight;
+        const targetScroll = documentHeight - windowHeight;
+        
+        window.scrollTo({
+          top: targetScroll,
+          behavior: smooth ? 'smooth' : 'auto'
+        });
+        
+        // After initial scroll, do correction scrolls to account for document height changes
+        // The document height changes as Webflow animations expand content during scroll
+        var correctionAttempts = 0;
+        var maxCorrections = 5;
+        var correctionInterval = setInterval(function() {
+          correctionAttempts++;
+          var trueBottom = document.documentElement.scrollHeight - window.innerHeight;
+          var currentScroll = window.scrollY;
+          
+          // If we're not at the true bottom (with 50px tolerance), scroll again
+          if (trueBottom - currentScroll > 50) {
+            window.scrollTo({
+              top: trueBottom,
+              behavior: 'smooth'
+            });
+          }
+          
+          if (correctionAttempts >= maxCorrections) {
+            clearInterval(correctionInterval);
+          }
+        }, 400);
+        
+        return;
+      }
+      
       const targetPosition = element.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
       
       window.scrollTo({
