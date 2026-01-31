@@ -908,6 +908,63 @@ blockquote {
   fill: var(--teal-light);
 }
 
+/* Ghost Button Hover Glow - Same text glow as secondary, no border effects */
+.button.ghost.hover-glow {
+  --glow-position: 50%;
+  --glow-x: 100px;
+  --button-width: 200px;
+  --text-offset-x: 0px;
+  --glow-spread: calc(var(--button-width) * 0.5);
+  --glow-falloff: calc(var(--button-width) * 0.3);
+  --glow-opacity: 0;
+  --glow-lightest-rgb: 73, 200, 215;
+  --glow-mid-rgb: 65, 202, 218;
+  --glow-mid-alpha: 0.8;
+  --glow-text-base: linear-gradient(90deg, var(--primary-gradient-start), var(--primary-gradient-end));
+  --glow-gradient: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(var(--glow-mid-rgb), 0) calc(var(--glow-x) - var(--glow-spread)),
+    rgba(var(--glow-lightest-rgb), var(--glow-opacity)) var(--glow-x),
+    rgba(var(--glow-mid-rgb), 0) calc(var(--glow-x) + var(--glow-spread)),
+    transparent 100%
+  );
+  transition: --glow-opacity 150ms ease-out;
+}
+
+.button.ghost.hover-glow:hover {
+  --glow-text-base: linear-gradient(90deg, var(--teal-darkest), var(--teal-darkest));
+}
+
+.button.ghost.hover-glow > span:not(.jeffbot-hero-icon) {
+  background-image: var(--glow-gradient), var(--glow-text-base);
+  background-size: var(--button-width) 100%, var(--button-width) 100%;
+  background-position: calc(0px - var(--text-offset-x)) 0, calc(0px - var(--text-offset-x)) 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.button.ghost.hover-glow:hover .button-icon-inline {
+  fill: var(--teal-darkest);
+}
+
+/* Pressed/active state for hover-glow ghost buttons */
+.button.ghost.hover-glow:active {
+  background-image: none !important;
+  color: var(--teal-light);
+  box-shadow: 0 0 16px 0 rgba(129, 242, 248, 0.2);
+}
+
+.button.ghost.hover-glow:active > span:not(.jeffbot-hero-icon) {
+  background-image: none !important;
+  color: var(--teal-light);
+}
+
+.button.ghost.hover-glow:active .button-icon-inline {
+  fill: var(--teal-light);
+}
+
 .button._100-side-pad {
   margin-right: 0;
   padding: 10px 95px;
