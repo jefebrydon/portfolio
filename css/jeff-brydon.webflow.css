@@ -5655,7 +5655,7 @@ blockquote {
 }
 
 .subtle-shadow {
-  box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.07);
 }
 
 .box-shadow.bottom100 {
