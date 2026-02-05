@@ -97,6 +97,8 @@
   </style>
 </head>
 <body>
+  <!-- Custom cursor for sharp rendering on high-res screens -->
+  <div class="custom-cursor"><img src="images/Cursor_Teal.png" alt=""></div>
   <!-- Hidden SVG for shared gradient definitions -->
   <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
     <defs>
@@ -463,6 +465,36 @@
         if (hasPlayedOnScroll && video.paused) {
           video.currentTime = 0;
           video.play();
+        }
+      });
+    })();
+  </script>
+  <!-- Custom cursor script -->
+  <script>
+    (function() {
+      const cursor = document.querySelector('.custom-cursor');
+      if (!cursor) return;
+      
+      // Interactive elements that should show native cursor
+      const interactiveSelectors = 'a, button, input, textarea, select, [role="button"], [onclick], label, .w-button';
+      
+      document.addEventListener('mousemove', function(e) {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        
+        // Check if hovering over interactive or text-editable element
+        const target = e.target;
+        const isInteractive = target.closest(interactiveSelectors);
+        const computedCursor = window.getComputedStyle(target).cursor;
+        const isTextCursor = computedCursor === 'text';
+        const isPointerCursor = computedCursor === 'pointer';
+        
+        if (isInteractive || isTextCursor || isPointerCursor) {
+          cursor.classList.add('hidden');
+          document.body.style.cursor = '';
+        } else {
+          cursor.classList.remove('hidden');
+          document.body.style.cursor = 'none';
         }
       });
     })();

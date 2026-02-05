@@ -27,6 +27,8 @@
   <script type="text/javascript">window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-173352983-1', {'anonymize_ip': false});</script>
 </head>
 <body>
+  <!-- Custom cursor for sharp rendering on high-res screens -->
+  <div class="custom-cursor"><img src="images/Cursor_Teal.png" alt=""></div>
   <!-- Header will be injected by header.js -->
   <div class="section">
     <div data-w-id="d024d3b0-e746-d8d1-d2b6-0dd43390d5ae" style="opacity:0" class="padded top50 w-container"><img src="images/Jira_logo_color.png" alt="" class="image-27 top--30">
@@ -340,6 +342,36 @@
         }
       });
     });
+  </script>
+  <!-- Custom cursor script -->
+  <script>
+    (function() {
+      const cursor = document.querySelector('.custom-cursor');
+      if (!cursor) return;
+      
+      // Interactive elements that should show native cursor
+      const interactiveSelectors = 'a, button, input, textarea, select, [role="button"], [onclick], label, .w-button';
+      
+      document.addEventListener('mousemove', function(e) {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        
+        // Check if hovering over interactive or text-editable element
+        const target = e.target;
+        const isInteractive = target.closest(interactiveSelectors);
+        const computedCursor = window.getComputedStyle(target).cursor;
+        const isTextCursor = computedCursor === 'text';
+        const isPointerCursor = computedCursor === 'pointer';
+        
+        if (isInteractive || isTextCursor || isPointerCursor) {
+          cursor.classList.add('hidden');
+          document.body.style.cursor = '';
+        } else {
+          cursor.classList.remove('hidden');
+          document.body.style.cursor = 'none';
+        }
+      });
+    })();
   </script>
 </body>
 </html>

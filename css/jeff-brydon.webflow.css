@@ -23,6 +23,30 @@
   --primary-gradient-hover-end: #35a8b8;
 }
 
+/* Custom cursor - JavaScript-based for sharp rendering on high-res screens */
+/* Only hide default cursor; preserve pointer/text cursors on interactive elements */
+html, body {
+  cursor: none;
+}
+
+.custom-cursor {
+  position: fixed;
+  pointer-events: none;
+  height: 24px;
+  width: auto;
+  z-index: 99999;
+  transform: translate(0, 0);
+}
+
+.custom-cursor.hidden {
+  opacity: 0;
+}
+
+.custom-cursor img {
+  height: 100%;
+  width: auto;
+}
+
 .w-backgroundvideo-backgroundvideoplaypausebutton:focus-visible {
   outline-offset: 2px;
   border-radius: 50%;
