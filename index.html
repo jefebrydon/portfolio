@@ -63,25 +63,58 @@
     /* Note: scroll-behavior: smooth removed - using custom JS animation for better easing control */
     
     /* 
+     * Logo Loader Overlay
+     * Shows Logo_Loader.mov video centered on white background before page content reveals
+     */
+    .logo-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      opacity: 1;
+      transition: opacity 0.5s ease-out;
+    }
+    
+    .logo-loader.loader-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    .logo-loader-video {
+      height: 140px;
+      width: auto;
+      object-fit: contain;
+    }
+    
+    /* 
      * Coordinated hero loading animations
-     * All elements (header, hero text, video) animate together when fonts load
+     * All elements (header, hero text, video) animate together when loader completes
      * Animation is applied to containers so any new content inherits automatically
      */
     
-    /* Hide entire left column until fonts load - prevents FOUT and button flash */
+    /* Hide entire left column until loader completes - prevents FOUT and button flash */
+    /* Using !important to override Webflow's inline styles added by webflow.js */
     .hero-container .float-from-left.w-col-5 {
-      opacity: 0;
-      visibility: hidden;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      transform: translateX(-50px) !important;
       padding-left: 0;
       font-family: "Bricolage Grotesque", sans-serif;
       text-align: left;
     }
     
-    /* Fade in left column after fonts load */
-    .fonts-loaded .hero-container .float-from-left.w-col-5 {
-      opacity: 1;
-      visibility: visible;
-      transition: opacity 0.8s ease-out, visibility 0s;
+    /* Fade in and slide from left after loader completes */
+    .content-visible .hero-container .float-from-left.w-col-5 {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: translateX(0) !important;
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out, visibility 0s;
       text-align: left;
     }
     
@@ -225,8 +258,8 @@
       transform: translateX(60px);
     }
     
-    /* Video animates when fonts are loaded (coordinated with hero text) */
-    .fonts-loaded .hero-video {
+    /* Video animates when loader completes (coordinated with hero text) */
+    .content-visible .hero-video {
       opacity: 1;
       visibility: visible;
       transform: translateX(0);
@@ -236,6 +269,12 @@
 </head>
 
 <body style="background-color: #fff !important;">
+  <!-- Logo Loader Overlay -->
+  <div id="logo-loader" class="logo-loader">
+    <video id="logo-loader-video" class="logo-loader-video" autoplay muted playsinline>
+      <source src="videos/Logo_Loader.mov" type="video/mp4">
+    </video>
+  </div>
   <!-- Custom cursor for sharp rendering on high-res screens -->
   <div class="custom-cursor"><img src="images/Cursor_Teal.png" alt=""></div>
   <!-- Header and Sidebar will be injected by header.js -->
@@ -909,7 +948,69 @@
     }
   </script>
   <script>
-    // Hero video - play when fonts are loaded (animation handled by CSS)
+    // Logo Loader Controller
+    // Plays video once, holds last frame, fades out, then reveals content
+    (function() {
+      const loader = document.getElementById('logo-loader');
+      const loaderVideo = document.getElementById('logo-loader-video');
+      
+      if (!loader || !loaderVideo) {
+        // No loader present, show content immediately
+        document.documentElement.classList.add('content-visible');
+        return;
+      }
+      
+      function completeLoader() {
+        // Prevent running twice
+        if (document.documentElement.classList.contains('content-visible')) return;
+        
+        // Hold on last frame for 200ms
+        setTimeout(function() {
+          // Start fade out (0.5s transition defined in CSS)
+          loader.classList.add('loader-hidden');
+          
+          // After fade completes, reveal content and remove loader
+          setTimeout(function() {
+            document.documentElement.classList.add('content-visible');
+            if (loader.parentNode) loader.remove();
+          }, 500);
+        }, 200);
+      }
+      
+      // Handle video end event
+      loaderVideo.addEventListener('ended', completeLoader);
+      
+      // Try to play video explicitly (in case autoplay doesn't work)
+      loaderVideo.addEventListener('canplaythrough', function() {
+        loaderVideo.play().catch(function(err) {
+          // Autoplay blocked or failed - skip loader
+          console.log('Loader video autoplay blocked:', err);
+          completeLoader();
+        });
+      });
+      
+      // Fallback: if video fails to load, reveal content
+      loaderVideo.addEventListener('error', function(e) {
+        console.log('Loader video error:', e);
+        document.documentElement.classList.add('content-visible');
+        if (loader.parentNode) loader.remove();
+      });
+      
+      // Fallback timeout (5 seconds) in case video doesn't play/end properly
+      setTimeout(function() {
+        if (!document.documentElement.classList.contains('content-visible')) {
+          console.log('Loader timeout - forcing content reveal');
+          loader.classList.add('loader-hidden');
+          setTimeout(function() {
+            document.documentElement.classList.add('content-visible');
+            if (loader.parentNode) loader.remove();
+          }, 500);
+        }
+      }, 5000);
+    })();
+  </script>
+  <script>
+    // Hero video - play when loader completes (animation handled by CSS)
     const heroVideo = document.querySelector('.hero-video');
     if (heroVideo) {
       function playVideoWhenReady() {
@@ -919,13 +1020,13 @@
         }, 800);
       }
       
-      // Check if fonts are already loaded
-      if (document.documentElement.classList.contains('fonts-loaded')) {
+      // Check if content is already visible
+      if (document.documentElement.classList.contains('content-visible')) {
         playVideoWhenReady();
       } else {
-        // Wait for fonts-loaded class to be added
+        // Wait for content-visible class to be added
         const observer = new MutationObserver(function(mutations) {
-          if (document.documentElement.classList.contains('fonts-loaded')) {
+          if (document.documentElement.classList.contains('content-visible')) {
             observer.disconnect();
             playVideoWhenReady();
           }
