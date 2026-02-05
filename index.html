@@ -265,6 +265,79 @@
       transform: translateX(0);
       transition: opacity 0.8s ease-out, transform 0.8s ease-out, visibility 0s;
     }
+    
+    /* 
+     * FlipWords Animation Styles
+     * Cycles through words with letter-stagger entry and blur/fade exit
+     */
+    .hero-headline {
+      margin-bottom: 30px;
+    }
+    
+    .flip-words-container {
+      display: block;
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--teal-primary);
+      min-height: 1.3em;
+      position: relative;
+    }
+    
+    .flip-word {
+      display: inline-block;
+      position: relative;
+    }
+    
+    .flip-word.exiting {
+      position: absolute;
+      top: 0;
+      left: 0;
+      animation: flipWordOut 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    
+    .flip-letter {
+      display: inline-block;
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+    }
+    
+    /* Entry animation - letters appear staggered with blur resolving */
+    .flip-word.entering .flip-letter {
+      opacity: 0;
+      filter: blur(8px);
+      transform: translateY(10px);
+      animation: flipLetterIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    
+    @keyframes flipLetterIn {
+      0% {
+        opacity: 0;
+        filter: blur(8px);
+        transform: translateY(10px);
+      }
+      100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+      }
+    }
+    
+    /* Exit animation - word blurs, moves up, fades */
+    @keyframes flipWordOut {
+      0% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+      }
+      100% {
+        opacity: 0;
+        filter: blur(8px);
+        transform: translateY(-40px);
+      }
+    }
   </style>
 </head>
 
@@ -282,7 +355,10 @@
     <div class="padded hero-container w-container">
       <div class="w-row">
         <div class="float-from-left w-col w-col-5">
-          <h1 class="bricolage-grotesque">Let's Build the Right Product</h1>
+          <div class="hero-headline">
+            <h1 class="bricolage-grotesque" style="margin-bottom: 0;">Let's Build</h1>
+            <div id="flip-words" class="flip-words-container"></div>
+          </div>
           <p style="font-size: 15px; line-height: 1.5;">AI lets you build fast. But 80% of software features are rarely or never used!<br><br>Understanding users, testing prototypes, finding the <em>right</em> solutions—that's still human work. That's what I do.<br><br>I'm Jeff, a Product Designer with 10 years of experience building products people love.</p>
           <div style="display: flex; flex-direction: row; gap: 12px; align-items: center;">
             <a href="#Contact" class="button secondary hover-glow" style="margin: 0; float: none;">Get in Touch</a>
@@ -1034,7 +1110,143 @@
         observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
       }
     }
-    
+  </script>
+  <script>
+    // FlipWords - Vanilla JS text cycling animation
+    // Cycles through words with letter-stagger entry and blur/fade exit
+    (function() {
+      'use strict';
+      
+      class FlipWords {
+        constructor(element, options = {}) {
+          this.element = element;
+          this.words = options.words || [];
+          this.duration = options.duration || 3000;
+          this.letterStagger = Math.min(options.letterStagger || 50, 50);
+          this.runOnce = options.runOnce || false;
+          this.startDelay = options.startDelay || 0;
+          
+          this.currentIndex = 0;
+          this.isAnimating = false;
+          this.timeoutId = null;
+          this.hasCompleted = false;
+          
+          if (this.words.length > 0) {
+            this.showWord(this.words[0], false);
+          }
+        }
+        
+        createLetterSpans(word) {
+          const container = document.createElement('span');
+          container.className = 'flip-word';
+          
+          word.split('').forEach((char, index) => {
+            const letterSpan = document.createElement('span');
+            letterSpan.className = 'flip-letter';
+            letterSpan.textContent = char === ' ' ? '\u00A0' : char;
+            letterSpan.style.animationDelay = `${index * this.letterStagger}ms`;
+            container.appendChild(letterSpan);
+          });
+          
+          return container;
+        }
+        
+        showWord(word, animate = true) {
+          const wordElement = this.createLetterSpans(word);
+          
+          if (animate) {
+            wordElement.classList.add('entering');
+            const totalAnimTime = word.length * this.letterStagger + 400;
+            setTimeout(() => {
+              wordElement.classList.remove('entering');
+            }, totalAnimTime);
+          }
+          
+          this.element.appendChild(wordElement);
+        }
+        
+        flipToNext() {
+          if (this.isAnimating || this.words.length <= 1) return;
+          if (this.runOnce && this.hasCompleted) return;
+          
+          this.isAnimating = true;
+          const currentWordEl = this.element.querySelector('.flip-word:not(.exiting)');
+          
+          if (currentWordEl) {
+            currentWordEl.classList.add('exiting');
+            setTimeout(() => {
+              currentWordEl.remove();
+            }, 500);
+          }
+          
+          this.currentIndex = (this.currentIndex + 1) % this.words.length;
+          
+          // Check if we've completed the cycle
+          if (this.runOnce && this.currentIndex === this.words.length - 1) {
+            this.hasCompleted = true;
+          }
+          
+          setTimeout(() => {
+            this.showWord(this.words[this.currentIndex], true);
+            this.isAnimating = false;
+            
+            // Schedule next flip if not done
+            if (!this.runOnce || !this.hasCompleted) {
+              this.timeoutId = setTimeout(() => this.flipToNext(), this.duration);
+            }
+          }, 100);
+        }
+        
+        start() {
+          if (this.words.length <= 1) return;
+          
+          // Wait for startDelay, then begin cycling
+          setTimeout(() => {
+            this.flipToNext();
+          }, this.startDelay);
+        }
+        
+        stop() {
+          if (this.timeoutId) {
+            clearTimeout(this.timeoutId);
+            this.timeoutId = null;
+          }
+        }
+      }
+      
+      // Initialize FlipWords when content becomes visible
+      function initFlipWords() {
+        const flipWordsEl = document.getElementById('flip-words');
+        if (!flipWordsEl) return;
+        
+        const flipWords = new FlipWords(flipWordsEl, {
+          words: ['The Right Product', 'What Sells', 'What Users Need'],
+          duration: 3000,
+          letterStagger: 50,
+          runOnce: true,
+          // Start 3 seconds after fade-in animation completes (0.8s)
+          startDelay: 3800
+        });
+        
+        flipWords.start();
+      }
+      
+      // Check if content is already visible
+      if (document.documentElement.classList.contains('content-visible')) {
+        initFlipWords();
+      } else {
+        // Wait for content-visible class to be added
+        const observer = new MutationObserver(function(mutations) {
+          if (document.documentElement.classList.contains('content-visible')) {
+            observer.disconnect();
+            initFlipWords();
+          }
+        });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+      }
+    })();
+  </script>
+  <script>
     // Pause RA teaser video on final frame for 3 seconds before looping
     const raTeaserVideo = document.getElementById('ra-teaser-video');
     if (raTeaserVideo) {
