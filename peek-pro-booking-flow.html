@@ -507,6 +507,16 @@
           document.body.style.cursor = 'none';
         }
       });
+      
+      // Hide cursor when mouse leaves viewport
+      document.addEventListener('mouseleave', function() {
+        cursor.classList.add('hidden');
+      });
+      
+      // Show cursor when mouse enters viewport
+      document.addEventListener('mouseenter', function() {
+        cursor.classList.remove('hidden');
+      });
     })();
   </script>
 </body>
