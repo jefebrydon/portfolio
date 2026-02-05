@@ -167,6 +167,10 @@
     // Initialize gradient bar scroll after header is ready
     if (isIndexPage()) {
       setTimeout(initGradientBarScroll, 50);
+    } else {
+      // On non-index pages, immediately show header (no loader animation)
+      // The content-visible class triggers the navbar to become visible via CSS
+      document.documentElement.classList.add('content-visible');
     }
     
     // Initialize smooth scroll with offset for anchor links

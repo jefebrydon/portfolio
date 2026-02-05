@@ -500,22 +500,17 @@
         const isPointerCursor = computedCursor === 'pointer';
         
         if (isInteractive || isTextCursor || isPointerCursor) {
-          cursor.classList.add('hidden');
+          cursor.classList.remove('active');
           document.body.style.cursor = '';
         } else {
-          cursor.classList.remove('hidden');
+          cursor.classList.add('active');
           document.body.style.cursor = 'none';
         }
       });
       
       // Hide cursor when mouse leaves viewport
       document.addEventListener('mouseleave', function() {
-        cursor.classList.add('hidden');
-      });
-      
-      // Show cursor when mouse enters viewport
-      document.addEventListener('mouseenter', function() {
-        cursor.classList.remove('hidden');
+        cursor.classList.remove('active');
       });
     })();
   </script>

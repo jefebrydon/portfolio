@@ -36,10 +36,11 @@ html, body {
   width: auto;
   z-index: 99999;
   transform: translate(0, 0);
+  visibility: hidden; /* Start hidden until mouse enters viewport */
 }
 
-.custom-cursor.hidden {
-  opacity: 0;
+.custom-cursor.active {
+  visibility: visible;
 }
 
 .custom-cursor img {
