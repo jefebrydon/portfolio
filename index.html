@@ -1136,13 +1136,29 @@
           }
         }
         
-        createLetterSpans(word) {
+        createLetterSpans(wordData) {
           const container = document.createElement('span');
           container.className = 'flip-word';
           
-          word.split('').forEach((char, index) => {
+          // Support both string and object with highlight
+          const text = typeof wordData === 'string' ? wordData : wordData.text;
+          const highlight = typeof wordData === 'object' ? wordData.highlight : null;
+          
+          // Find highlight word position if specified
+          let highlightStart = -1;
+          let highlightEnd = -1;
+          if (highlight) {
+            highlightStart = text.indexOf(highlight);
+            highlightEnd = highlightStart + highlight.length;
+          }
+          
+          text.split('').forEach((char, index) => {
             const letterSpan = document.createElement('span');
             letterSpan.className = 'flip-letter';
+            // Apply teal-dark color to highlighted letters
+            if (highlightStart !== -1 && index >= highlightStart && index < highlightEnd) {
+              letterSpan.style.color = 'var(--teal-dark)';
+            }
             letterSpan.textContent = char === ' ' ? '\u00A0' : char;
             letterSpan.style.animationDelay = `${index * this.letterStagger}ms`;
             container.appendChild(letterSpan);
@@ -1151,12 +1167,13 @@
           return container;
         }
         
-        showWord(word, animate = true) {
-          const wordElement = this.createLetterSpans(word);
+        showWord(wordData, animate = true) {
+          const wordElement = this.createLetterSpans(wordData);
+          const text = typeof wordData === 'string' ? wordData : wordData.text;
           
           if (animate) {
             wordElement.classList.add('entering');
-            const totalAnimTime = word.length * this.letterStagger + 400;
+            const totalAnimTime = text.length * this.letterStagger + 400;
             setTimeout(() => {
               wordElement.classList.remove('entering');
             }, totalAnimTime);
@@ -1220,7 +1237,11 @@
         if (!flipWordsEl) return;
         
         const flipWords = new FlipWords(flipWordsEl, {
-          words: ['The Right Product', 'What Sells', 'What Users Need'],
+          words: [
+            { text: 'The Right Product', highlight: 'Right' },
+            { text: 'What Sells', highlight: 'Sells' },
+            { text: 'What Users Need', highlight: 'Need' }
+          ],
           duration: 3000,
           letterStagger: 50,
           runOnce: true,
