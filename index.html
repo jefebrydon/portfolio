@@ -253,6 +253,7 @@
     
     /* Hero video loading animation - fade in and slide left */
     .hero-video {
+      max-width: 600px;
       opacity: 0;
       visibility: hidden;
       transform: translateX(60px);
@@ -277,7 +278,7 @@
     .flip-words-container {
       display: block;
       font-family: "Bricolage Grotesque", sans-serif;
-      font-size: 34px;
+      font-size: 36px;
       font-weight: 800;
       line-height: 1.2;
       color: var(--teal-primary);
@@ -338,6 +339,31 @@
         transform: translateY(-40px);
       }
     }
+    
+    .padded.hero-container .w-row .w-col-5 {
+      margin-bottom: 30px;
+    }
+    
+    /* Tablet and below: stack hero columns */
+    @media screen and (max-width: 991px) {
+      .padded.hero-container .w-row {
+        flex-direction: column;
+      }
+      .padded.hero-container .w-row .w-col-5,
+      .padded.hero-container .w-row .w-col-7 {
+        width: 100%;
+      }
+    }
+    
+    /* Mobile: smaller hero headline */
+    @media screen and (max-width: 479px) {
+      .hero-headline h1.bricolage-grotesque-solid {
+        font-size: 32px !important;
+      }
+      .flip-words-container {
+        font-size: 32px;
+      }
+    }
   </style>
 </head>
 
@@ -356,10 +382,10 @@
       <div class="w-row">
         <div class="float-from-left w-col w-col-5">
           <div class="hero-headline">
-            <h1 class="bricolage-grotesque-solid" style="color: var(--teal-primary) !important; margin-bottom: 0;">Let's Build</h1>
+            <h1 class="bricolage-grotesque-solid" style="color: var(--teal-primary) !important; margin-bottom: 0; font-size: 36px;">Let's Build</h1>
             <div id="flip-words" class="flip-words-container"></div>
           </div>
-          <p style="font-size: 15px; line-height: 1.5;">AI lets you build fast. But 80% of software features are rarely or never used!<br><br>Understanding users, testing prototypes, finding the <em>right</em> solutions—that's still human work. That's what I do.<br><br>I'm Jeff, a Product Designer with 10 years of experience building products people love.</p>
+          <p class="max-width-600" style="font-size: 15px; line-height: 1.5;">AI lets you build fast. But 80% of software features are rarely or never used!<br><br>Understanding users, testing prototypes, finding the <em>right</em> solutions—that's still human work. That's what I do.<br><br>I'm Jeff, a Product Designer with 10 years of experience building products people love.</p>
           <div style="display: flex; flex-direction: row; gap: 12px; align-items: center;">
             <a href="#Contact" class="button secondary hover-glow" style="margin: 0; float: none;">Get in Touch</a>
             <button type="button" class="button ghost with-icon hover-glow jeffbot-hero-button" style="margin: 0; float: none;">

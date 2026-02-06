@@ -2570,8 +2570,8 @@ blockquote {
   flex-direction: column;
   margin-top: 0;
   margin-bottom: 0;
-  padding-left: 40px;
-  padding-right: 40px;
+  padding-left: 64px;
+  padding-right: 64px;
   transition: opacity .35s;
   display: block;
 }
@@ -5790,8 +5790,8 @@ blockquote {
   flex-direction: column;
   margin-top: 0;
   margin-bottom: 0;
-  padding-left: 40px;
-  padding-right: 40px;
+  padding-left: 64px;
+  padding-right: 64px;
   font-family: Nunito Sans, sans-serif;
   transition: opacity .35s;
   display: block;
@@ -6374,8 +6374,8 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
   }
 
   .padded {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 64px;
+    padding-right: 64px;
   }
 
   .padded.hero-section {
@@ -7117,8 +7117,8 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
   }
 
   .padded {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 64px;
+    padding-right: 64px;
   }
 
   .padded.top40 {
@@ -7397,8 +7397,8 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
   }
 
   .padded-2 {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 64px;
+    padding-right: 64px;
   }
 
   .hover-text-2 {
@@ -7829,6 +7829,8 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
   .padded {
     flex-flow: column;
     justify-content: space-around;
+    padding-left: 20px;
+    padding-right: 20px;
     display: block;
   }
 
@@ -8520,6 +8522,8 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
   .padded-2 {
     flex-flow: column;
     justify-content: space-around;
+    padding-left: 20px;
+    padding-right: 20px;
     display: block;
     overflow: hidden;
   }
@@ -8560,7 +8564,7 @@ html.w-mod-js [data-ix="rise-fade"], html.w-mod-js [data-ix="rise-fade-2"], html
   /* Remove 30px right shift on mobile/tablet */
   .hero-video-container {
     transform: translateX(0);
-    margin-top: 40px;
+    margin-top: 0;
     margin-bottom: 40px;
   }
 }
