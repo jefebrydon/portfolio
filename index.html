@@ -1236,7 +1236,8 @@
           
           // Reset state
           this.hasCompleted = false;
-          this.currentIndex = 0;
+          // Set to last index so flipToNext() wraps to 0 (first phrase)
+          this.currentIndex = this.words.length - 1;
           
           // Start the cycle immediately (no startDelay on restart)
           this.flipToNext();
