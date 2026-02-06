@@ -1229,6 +1229,18 @@
             this.timeoutId = null;
           }
         }
+        
+        restart() {
+          // Only allow restart if cycle has completed and not currently animating
+          if (!this.hasCompleted || this.isAnimating) return;
+          
+          // Reset state
+          this.hasCompleted = false;
+          this.currentIndex = 0;
+          
+          // Start the cycle immediately (no startDelay on restart)
+          this.flipToNext();
+        }
       }
       
       // Initialize FlipWords when content becomes visible
@@ -1250,6 +1262,14 @@
         });
         
         flipWords.start();
+        
+        // Restart cycle on hover over hero-headline (only if completed)
+        const heroHeadline = document.querySelector('.hero-headline');
+        if (heroHeadline) {
+          heroHeadline.addEventListener('mouseenter', () => {
+            flipWords.restart();
+          });
+        }
       }
       
       // Check if content is already visible
