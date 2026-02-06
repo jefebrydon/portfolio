@@ -251,9 +251,13 @@
       }
     }
     
+    /* Hero video container max-width so it doesn't grow too large when stacked */
+    .hero-video-container {
+      max-width: 600px;
+    }
+    
     /* Hero video loading animation - fade in and slide left */
     .hero-video {
-      max-width: 600px;
       opacity: 0;
       visibility: hidden;
       transform: translateX(60px);
@@ -352,6 +356,9 @@
       .padded.hero-container .w-row .w-col-5,
       .padded.hero-container .w-row .w-col-7 {
         width: 100%;
+      }
+      .hero-video-container {
+        transform: translateX(0);
       }
     }
     
