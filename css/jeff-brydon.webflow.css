@@ -664,15 +664,17 @@ blockquote {
     rgba(var(--glow-mid-rgb), 0) calc(var(--glow-x) + 2 * var(--glow-spread)),
     transparent 100%
   );
+  /* Solid under glow: teal-dark when --base-fade is 1 (hover). #307489 = 48, 116, 137 */
   background-image:
     var(--glow-gradient),
-    linear-gradient(rgba(39, 94, 111, var(--base-fade)), rgba(39, 94, 111, var(--base-fade))),
+    linear-gradient(rgba(48, 116, 137, var(--base-fade)), rgba(48, 116, 137, var(--base-fade))),
     linear-gradient(90deg, var(--primary-gradient-start), var(--primary-gradient-end));
   background-size: calc(var(--button-width) + 2 * var(--glow-spread)) 100%, 100% 100%, 100% 100%;
   background-position: calc(-1 * var(--glow-spread)) 0, 0 0, 0 0;
-  transition: --glow-opacity 150ms ease-out, --base-fade 150ms ease-out;
+  transition: --glow-opacity 150ms ease-out, --base-fade 150ms ease-out, box-shadow 150ms ease-out;
 }
 
+/* Same shadow as secondary button hover; disappears on pressed */
 .button.gradient.hover-glow:hover {
   --glow-opacity: 1;
   --base-fade: 1;
@@ -682,9 +684,10 @@ blockquote {
 .button.gradient.hover-glow:active {
   --base-fade: 0;
   --glow-opacity: 0;
-  background-image:
-    linear-gradient(90deg, var(--primary-gradient-start), var(--primary-gradient-end));
+  background-image: none;
+  background-color: var(--teal-light);
   background-size: 100% 100%;
+  /* Hover shadow removed; only teal glow on pressed */
   box-shadow: 0 0 16px 0 rgba(129, 242, 248, 0.2);
 }
 
