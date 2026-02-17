@@ -642,6 +642,52 @@ blockquote {
   font-size: 17px;
 }
 
+/* Primary Hover Glow - Cursor-following gradient fill (same glow as secondary border) */
+.button.gradient.hover-glow {
+  position: relative;
+  --glow-x: 100px;
+  --button-width: 200px;
+  --text-offset-x: 0px;
+  --glow-spread: calc(var(--button-width) * 0.5);
+  --glow-falloff: calc(var(--button-width) * 0.3);
+  --glow-opacity: 0;
+  --base-fade: 0;
+  --glow-lightest-rgb: 73, 200, 215;
+  --glow-mid-rgb: 65, 202, 218;
+  /* Glow gradient is wider than the button (+ glow-spread on each side) so the
+     fade distance stays consistent even when the cursor is near an edge. */
+  --glow-gradient: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(var(--glow-mid-rgb), 0) var(--glow-x),
+    rgba(var(--glow-lightest-rgb), var(--glow-opacity)) calc(var(--glow-x) + var(--glow-spread)),
+    rgba(var(--glow-mid-rgb), 0) calc(var(--glow-x) + 2 * var(--glow-spread)),
+    transparent 100%
+  );
+  background-image:
+    var(--glow-gradient),
+    linear-gradient(rgba(39, 94, 111, var(--base-fade)), rgba(39, 94, 111, var(--base-fade))),
+    linear-gradient(90deg, var(--primary-gradient-start), var(--primary-gradient-end));
+  background-size: calc(var(--button-width) + 2 * var(--glow-spread)) 100%, 100% 100%, 100% 100%;
+  background-position: calc(-1 * var(--glow-spread)) 0, 0 0, 0 0;
+  transition: --glow-opacity 150ms ease-out, --base-fade 150ms ease-out;
+}
+
+.button.gradient.hover-glow:hover {
+  --glow-opacity: 1;
+  --base-fade: 1;
+  box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.05);
+}
+
+.button.gradient.hover-glow:active {
+  --base-fade: 0;
+  --glow-opacity: 0;
+  background-image:
+    linear-gradient(90deg, var(--primary-gradient-start), var(--primary-gradient-end));
+  background-size: 100% 100%;
+  box-shadow: 0 0 16px 0 rgba(129, 242, 248, 0.2);
+}
+
 .button.secondary {
   background-color: #fff;
   background-image: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
